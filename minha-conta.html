@@ -5,20 +5,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="theme-color" content="#4A2C18">
 
-  <!-- ===== SEO ===== -->
   <title>Minha Conta | Doce Fefê.21</title>
-  <meta name="description" content="Acesse sua conta na Doce Fefê.21 para ver histórico de compras e acompanhar pedidos.">
-  <link rel="canonical" href="https://docefefe21.com.br/minha-conta.html">
+  <meta name="description" content="Acesse sua conta na Doce Fefê.21 para ver seus dados e o histórico de compras.">
 
-  <!-- ===== Open Graph ===== -->
-  <meta property="og:type" content="website">
-  <meta property="og:site_name" content="Doce Fefê.21">
-  <meta property="og:locale" content="pt_BR">
-  <meta property="og:title" content="Minha Conta | Doce Fefê.21">
-  <meta property="og:description" content="Acesse sua conta na Doce Fefê.21 para ver histórico de compras e acompanhar pedidos.">
-  <meta property="og:image" content="./assets/images/logo.jpeg">
-  <meta property="og:url" content="https://docefefe21.com.br/minha-conta.html">
-  <meta name="twitter:card" content="summary_large_image">
+  <!-- Área privada: não deve aparecer nos resultados de busca. -->
+  <meta name="robots" content="noindex, nofollow">
 
   <link rel="icon" type="image/jpeg" href="./assets/images/logo.jpeg">
   <link rel="apple-touch-icon" href="./assets/images/logo.jpeg">
@@ -30,16 +21,18 @@
   <link rel="stylesheet" href="./css/global.css">
   <link rel="stylesheet" href="./css/header.css">
   <link rel="stylesheet" href="./css/footer.css">
+  <link rel="stylesheet" href="./css/conta.css">
 </head>
 
 <body>
   <div id="cabecalho"></div>
 
   <main id="conteudo">
+
     <section class="capa-pagina">
       <div class="container">
         <h1>Minha Conta</h1>
-        <p class="subtitulo">Seus dados, seus pedidos e seu histórico de compras.</p>
+        <p class="subtitulo">Seus dados e seu histórico de compras.</p>
       </div>
     </section>
 
@@ -52,27 +45,294 @@
       </nav>
     </div>
 
-    <!--
-      ATENÇÃO: bloco temporário da Fase 1.
-      O conteúdo real desta página será implementado na FASE 6.
-      Este aviso deve ser REMOVIDO quando aquela fase for concluída.
-    -->
-    <div class="container">
-      <div class="em-construcao">
-        <div class="em-construcao__icone" aria-hidden="true">🧁</div>
-        <h2>Esta página chega na Fase 6</h2>
-        <p>O cadastro, login, edição de dados, histórico de compras e acompanhamento de pedidos.</p>
-        <p class="texto-pequeno">
-          A estrutura, o cabeçalho, o rodapé e a identidade visual já estão
-          funcionando — é a fundação sobre a qual esta página será construída.
-        </p>
-        <a href="./index.html" class="btn btn--primario">Voltar para o início</a>
+    <section class="secao" style="padding-top:0">
+      <div class="container">
+
+        <!-- =================================================================
+             ÁREA DE ACESSO — visível sem sessão
+             ============================================================== -->
+        <div class="acesso" data-area-acesso>
+          <div class="acesso__caixa">
+
+            <!-- ----- Abas ----- -->
+            <div class="abas" role="tablist" aria-label="Entrar ou criar conta">
+              <button type="button" class="abas__botao" role="tab"
+                      data-aba="entrar" aria-selected="true"
+                      aria-controls="painel-entrar">
+                Entrar
+              </button>
+              <button type="button" class="abas__botao" role="tab"
+                      data-aba="cadastrar" aria-selected="false"
+                      aria-controls="painel-cadastrar">
+                Criar conta
+              </button>
+            </div>
+
+            <!-- ----- Entrar ----- -->
+            <div id="painel-entrar" role="tabpanel" data-painel-aba="entrar">
+              <h2 class="acesso__titulo">Que bom te ver de novo</h2>
+              <p class="acesso__texto">Entre para acompanhar seus pedidos.</p>
+
+              <!-- `method="post"`: se o JavaScript falhar, a senha vai no
+                   corpo da requisição, nunca na URL. Ver admin/pedidos.html. -->
+              <form data-formulario-login method="post" novalidate>
+                <div class="campo">
+                  <label class="campo__rotulo" for="login-email">E-mail</label>
+                  <input type="email" id="login-email" name="email"
+                         autocomplete="email" placeholder="seu@email.com" required>
+                  <span class="campo__erro"></span>
+                </div>
+
+                <div class="campo">
+                  <label class="campo__rotulo" for="login-senha">Senha</label>
+                  <div class="campo-senha">
+                    <input type="password" id="login-senha" name="senha"
+                           autocomplete="current-password" placeholder="Sua senha" required>
+                  </div>
+                  <span class="campo__erro"></span>
+                </div>
+
+                <button type="submit" class="btn btn--primario btn--grande btn--bloco">
+                  Entrar
+                </button>
+              </form>
+
+              <div class="acesso__rodape">
+                <p>
+                  Esqueceu a senha?
+                  <button type="button" class="acesso__link" data-ir-aba="recuperar">
+                    Recuperar acesso
+                  </button>
+                </p>
+                <p class="mt-2">
+                  Ainda não tem conta?
+                  <button type="button" class="acesso__link" data-ir-aba="cadastrar">
+                    Criar agora
+                  </button>
+                </p>
+              </div>
+            </div>
+
+            <!-- ----- Criar conta ----- -->
+            <div id="painel-cadastrar" role="tabpanel" data-painel-aba="cadastrar" hidden>
+              <h2 class="acesso__titulo">Criar minha conta</h2>
+              <p class="acesso__texto">É rápido — só precisamos do essencial.</p>
+
+              <form data-formulario-cadastro method="post" novalidate>
+                <div class="campo">
+                  <label class="campo__rotulo" for="cad-nome">
+                    Nome <span class="campo__obrigatorio" aria-hidden="true">*</span>
+                  </label>
+                  <input type="text" id="cad-nome" name="nome"
+                         autocomplete="name" placeholder="Como podemos te chamar?" required>
+                  <span class="campo__erro"></span>
+                </div>
+
+                <div class="campo">
+                  <label class="campo__rotulo" for="cad-email">
+                    E-mail <span class="campo__obrigatorio" aria-hidden="true">*</span>
+                  </label>
+                  <input type="email" id="cad-email" name="email"
+                         autocomplete="email" placeholder="seu@email.com" required>
+                  <span class="campo__erro"></span>
+                </div>
+
+                <div class="campo">
+                  <label class="campo__rotulo" for="cad-telefone">WhatsApp</label>
+                  <input type="tel" id="cad-telefone" name="telefone"
+                         autocomplete="tel" placeholder="(11) 99999-9999"
+                         data-mascara="telefone" inputmode="numeric">
+                  <span class="campo__ajuda">Opcional — ajuda a combinar sua entrega.</span>
+                  <span class="campo__erro"></span>
+                </div>
+
+                <div class="campo">
+                  <label class="campo__rotulo" for="cad-senha">
+                    Senha <span class="campo__obrigatorio" aria-hidden="true">*</span>
+                  </label>
+                  <div class="campo-senha">
+                    <input type="password" id="cad-senha" name="senha"
+                           autocomplete="new-password"
+                           placeholder="Pelo menos 8 caracteres" required>
+                  </div>
+
+                  <div class="forca-senha" data-forca-senha>
+                    <div class="forca-senha__barra">
+                      <div class="forca-senha__preenchimento"></div>
+                    </div>
+                    <span class="forca-senha__rotulo" data-forca-rotulo aria-live="polite"></span>
+                  </div>
+
+                  <span class="campo__erro"></span>
+                </div>
+
+                <div class="campo">
+                  <label class="campo-marcavel" for="cad-aceite">
+                    <input type="checkbox" id="cad-aceite" name="aceite" required>
+                    <span>
+                      Li e aceito a
+                      <a href="./politica-privacidade.html">Política de Privacidade</a>.
+                      <span class="campo__obrigatorio" aria-hidden="true">*</span>
+                    </span>
+                  </label>
+                  <span class="campo__erro"></span>
+                </div>
+
+                <button type="submit" class="btn btn--primario btn--grande btn--bloco">
+                  Criar conta
+                </button>
+              </form>
+
+              <div class="acesso__rodape">
+                <p>
+                  Já tem conta?
+                  <button type="button" class="acesso__link" data-ir-aba="entrar">
+                    Entrar
+                  </button>
+                </p>
+              </div>
+            </div>
+
+            <!-- ----- Recuperar senha ----- -->
+            <div id="painel-recuperar" role="tabpanel" data-painel-aba="recuperar" hidden>
+              <h2 class="acesso__titulo">Recuperar acesso</h2>
+              <p class="acesso__texto">
+                Informe seu e-mail e enviaremos o link para criar uma senha nova.
+              </p>
+
+              <form data-formulario-recuperar novalidate>
+                <div class="campo">
+                  <label class="campo__rotulo" for="rec-email">E-mail</label>
+                  <input type="email" id="rec-email" name="email"
+                         autocomplete="email" placeholder="seu@email.com" required>
+                  <span class="campo__erro"></span>
+                </div>
+
+                <button type="submit" class="btn btn--primario btn--grande btn--bloco">
+                  Enviar link
+                </button>
+              </form>
+
+              <div class="acesso__rodape">
+                <p>
+                  Lembrou a senha?
+                  <button type="button" class="acesso__link" data-ir-aba="entrar">
+                    Voltar para entrar
+                  </button>
+                </p>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- =================================================================
+             ÁREA DO CLIENTE — visível com sessão
+             ============================================================== -->
+        <div class="conta-layout" data-area-cliente hidden>
+
+          <!-- ----- Barra lateral ----- -->
+          <aside>
+            <div class="conta-perfil" data-cartao-perfil></div>
+
+            <nav class="conta-menu" aria-label="Navegação da conta">
+              <button type="button" class="conta-menu__item"
+                      data-painel="dados" aria-current="true">
+                <span data-icone="usuario" aria-hidden="true"></span>
+                Meus dados
+              </button>
+              <button type="button" class="conta-menu__item" data-painel="pedidos">
+                <span data-icone="caixa" aria-hidden="true"></span>
+                Meus pedidos
+              </button>
+              <a href="./seja-revendedor.html" class="conta-menu__item">
+                <span data-icone="coracao" aria-hidden="true"></span>
+                Seja revendedor
+              </a>
+              <button type="button" class="conta-menu__item conta-menu__item--sair"
+                      data-sair>
+                Sair da conta
+              </button>
+            </nav>
+          </aside>
+
+          <!-- ----- Conteúdo ----- -->
+          <div>
+
+            <!-- Meus dados -->
+            <section class="conta-painel" data-conteudo-painel="dados">
+              <h2 class="conta-painel__titulo">Meus dados</h2>
+
+              <form data-formulario-dados novalidate>
+                <div class="campo">
+                  <label class="campo__rotulo" for="perfil-nome">Nome</label>
+                  <input type="text" id="perfil-nome" name="nome"
+                         autocomplete="name" required>
+                  <span class="campo__erro"></span>
+                </div>
+
+                <div class="campo">
+                  <label class="campo__rotulo" for="perfil-email">E-mail</label>
+                  <input type="email" id="perfil-email" name="email" readonly disabled>
+                  <span class="campo__ajuda">
+                    Para trocar de e-mail, fale com a gente pelo WhatsApp.
+                  </span>
+                </div>
+
+                <div class="campo-linha">
+                  <div class="campo">
+                    <label class="campo__rotulo" for="perfil-telefone">WhatsApp</label>
+                    <input type="tel" id="perfil-telefone" name="telefone"
+                           autocomplete="tel" data-mascara="telefone" inputmode="numeric">
+                    <span class="campo__erro"></span>
+                  </div>
+
+                  <div class="campo">
+                    <label class="campo__rotulo" for="perfil-nascimento">
+                      Data de nascimento
+                    </label>
+                    <input type="date" id="perfil-nascimento" name="data_nascimento">
+                    <span class="campo__ajuda">Para a gente te mandar um mimo.</span>
+                    <span class="campo__erro"></span>
+                  </div>
+                </div>
+
+                <div class="campo">
+                  <label class="campo-marcavel" for="perfil-marketing">
+                    <input type="checkbox" id="perfil-marketing" name="aceita_marketing">
+                    <span>Quero receber novidades e promoções.</span>
+                  </label>
+                </div>
+
+                <button type="submit" class="btn btn--primario">
+                  Salvar alterações
+                </button>
+              </form>
+            </section>
+
+            <!-- Meus pedidos -->
+            <section class="conta-painel" data-conteudo-painel="pedidos" hidden>
+              <h2 class="conta-painel__titulo">Meus pedidos</h2>
+              <div data-lista-pedidos></div>
+            </section>
+
+            <p class="texto-pequeno texto-centro texto-suave mt-6" style="max-width:none">
+              Precisa de ajuda?
+              <a href="#" data-ajuda-conta target="_blank" rel="noopener noreferrer"
+                 class="negrito">Fale com a gente</a>
+            </p>
+
+          </div>
+        </div>
+
       </div>
-    </div>
+    </section>
+
   </main>
 
   <div id="rodape"></div>
 
   <script type="module" src="./js/main.js"></script>
+  <script type="module" src="./js/conta.js"></script>
 </body>
 </html>
