@@ -1,0 +1,336 @@
+/* =============================================================================
+   DOCE FEFÊ.21 — pagamento.css
+   Escolha da forma de pagamento, QR Code do Pix e envio do comprovante.
+
+   Carregada por: pagamento.html
+   ========================================================================== */
+
+/* =============================================================================
+   1. BLOCO DO PASSO ATUAL
+   ========================================================================== */
+
+.pagamento-passo {
+  padding: var(--esp-6);
+  background-color: var(--cor-branco);
+  border: 1px solid var(--cor-borda);
+  border-radius: var(--raio-lg);
+  box-shadow: var(--sombra-sm);
+  text-align: center;
+}
+
+@media (min-width: 640px) {
+  .pagamento-passo {
+    padding: var(--esp-8);
+  }
+}
+
+.pagamento-passo__icone {
+  width: 66px;
+  height: 66px;
+  margin: 0 auto var(--esp-5);
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background-color: var(--cor-creme-200);
+  font-size: 1.9rem;
+  line-height: 1;
+}
+
+.pagamento-passo__titulo {
+  font-size: var(--txt-xl);
+  margin-bottom: var(--esp-2);
+}
+
+.pagamento-passo__texto {
+  color: var(--cor-texto-suave);
+  font-size: var(--txt-sm);
+  margin-inline: auto;
+  margin-bottom: var(--esp-6);
+}
+
+/* =============================================================================
+   2. VALOR A PAGAR
+   ========================================================================== */
+
+.pagamento-total {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--esp-1);
+  padding: var(--esp-5);
+  border-radius: var(--raio-md);
+  background-color: var(--cor-creme-200);
+  border: 1.5px dashed var(--cor-dourado-400);
+}
+
+.pagamento-total span:first-child {
+  font-size: var(--txt-xs);
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--cor-texto-claro);
+}
+
+/* =============================================================================
+   3. ESCOLHA DA FORMA DE PAGAMENTO
+   ========================================================================== */
+
+.formas-pagamento {
+  display: flex;
+  flex-direction: column;
+  gap: var(--esp-3);
+}
+
+.forma-pagamento {
+  display: flex;
+  align-items: center;
+  gap: var(--esp-4);
+  width: 100%;
+  padding: var(--esp-5);
+  border: 2px solid var(--cor-borda);
+  border-radius: var(--raio-md);
+  background-color: var(--cor-branco);
+  text-align: left;
+  transition: border-color var(--transicao), background-color var(--transicao),
+    transform var(--transicao-rapida);
+  /* Alvo de toque confortável no celular. */
+  min-height: 84px;
+}
+
+.forma-pagamento:hover {
+  border-color: var(--cor-dourado-400);
+  background-color: var(--cor-creme-200);
+  transform: translateY(-2px);
+}
+
+/* O Pix é o caminho recomendado: confirma mais rápido e sem taxa. */
+.forma-pagamento--destaque {
+  border-color: var(--cor-chocolate-700);
+}
+
+.forma-pagamento--destaque:hover {
+  border-color: var(--cor-chocolate-800);
+}
+
+.forma-pagamento__icone {
+  flex-shrink: 0;
+  display: grid;
+  place-items: center;
+  width: 48px;
+  height: 48px;
+  border-radius: var(--raio-md);
+  background-color: var(--cor-bege-300);
+  font-size: 1.5rem;
+  line-height: 1;
+}
+
+.forma-pagamento__info {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.forma-pagamento__info strong {
+  font-size: var(--txt-base);
+  color: var(--cor-chocolate-800);
+}
+
+.forma-pagamento__info span {
+  font-size: var(--txt-sm);
+  line-height: 1.45;
+  color: var(--cor-texto-suave);
+}
+
+.forma-pagamento__seta {
+  flex-shrink: 0;
+  font-size: var(--txt-lg);
+  color: var(--cor-dourado-700);
+  transition: transform var(--transicao);
+}
+
+.forma-pagamento:hover .forma-pagamento__seta {
+  transform: translateX(4px);
+}
+
+/* =============================================================================
+   4. QR CODE DO PIX
+   ========================================================================== */
+
+.pix-qrcode {
+  margin-top: var(--esp-6);
+  border-radius: var(--raio-lg);
+  overflow: hidden;
+  background-color: var(--cor-creme);
+  border: 1px solid var(--cor-borda);
+  /* A arte é alta (1143x1600): limitar a largura evita que ela domine a tela
+     no desktop. `contain` garante que o QR apareça inteiro — um QR cortado
+     simplesmente não é lido pelo aplicativo do banco. */
+  max-width: 340px;
+  margin-inline: auto;
+}
+
+.pix-qrcode img {
+  display: block;
+  width: 100%;
+  height: auto;
+  object-fit: contain;
+}
+
+/* =============================================================================
+   5. DIVISOR
+   ========================================================================== */
+
+.pagamento-divisor {
+  display: flex;
+  align-items: center;
+  gap: var(--esp-4);
+  margin-block: var(--esp-8) var(--esp-6);
+  color: var(--cor-texto-claro);
+  font-size: var(--txt-xs);
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.pagamento-divisor::before,
+.pagamento-divisor::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background-color: var(--cor-borda);
+}
+
+/* =============================================================================
+   6. ENVIO DO COMPROVANTE
+   ========================================================================== */
+
+.envio-comprovante {
+  padding: var(--esp-6);
+  border-radius: var(--raio-md);
+  background-color: var(--cor-creme-200);
+  border: 1px solid var(--cor-borda);
+  text-align: left;
+}
+
+.envio-comprovante__titulo {
+  font-size: var(--txt-lg);
+  margin-bottom: var(--esp-2);
+}
+
+.envio-comprovante__texto {
+  font-size: var(--txt-sm);
+  color: var(--cor-texto-suave);
+  margin-bottom: var(--esp-5);
+  max-width: none;
+}
+
+/* -----------------------------------------------------------------------------
+   6.1 Botão de escolher arquivo
+
+   O <input type="file"> fica escondido com `.apenas-leitor-tela`, e não com
+   `display: none`: assim continua acessível pelo teclado e o <label> age
+   como botão. Esconder com display:none o tiraria da ordem de tabulação.
+   -------------------------------------------------------------------------- */
+.escolher-arquivo {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--esp-1);
+  padding: var(--esp-6);
+  border: 2px dashed var(--cor-bege-500);
+  border-radius: var(--raio-md);
+  background-color: var(--cor-branco);
+  cursor: pointer;
+  text-align: center;
+  transition: border-color var(--transicao), background-color var(--transicao);
+}
+
+.escolher-arquivo:hover {
+  border-color: var(--cor-dourado-600);
+  background-color: var(--cor-creme);
+}
+
+/* O anel de foco precisa aparecer no label, já que o input é invisível. */
+.escolher-arquivo:focus-within {
+  outline: 3px solid var(--cor-dourado-600);
+  outline-offset: 2px;
+  border-color: var(--cor-dourado-600);
+}
+
+.escolher-arquivo__icone {
+  font-size: 1.8rem;
+  line-height: 1;
+  opacity: 0.7;
+}
+
+.escolher-arquivo__texto {
+  font-size: var(--txt-base);
+  font-weight: 700;
+  color: var(--cor-chocolate-700);
+}
+
+.escolher-arquivo__dica {
+  font-size: var(--txt-xs);
+  color: var(--cor-texto-claro);
+}
+
+/* -----------------------------------------------------------------------------
+   6.2 Prévia do arquivo escolhido
+   -------------------------------------------------------------------------- */
+.comprovante-previa {
+  margin-top: var(--esp-4);
+  border-radius: var(--raio-md);
+  overflow: hidden;
+  background-color: var(--cor-branco);
+  border: 1px solid var(--cor-borda);
+}
+
+.comprovante-previa img {
+  display: block;
+  width: 100%;
+  max-height: 280px;
+  object-fit: contain;
+  padding: var(--esp-2);
+}
+
+.comprovante-previa__pdf {
+  display: flex;
+  align-items: center;
+  gap: var(--esp-3);
+  padding: var(--esp-4);
+}
+
+.comprovante-previa__pdf span:first-child {
+  font-size: 1.6rem;
+  line-height: 1;
+}
+
+/* -----------------------------------------------------------------------------
+   6.3 Comprovante já enviado
+   -------------------------------------------------------------------------- */
+.comprovante-enviado {
+  text-align: center;
+  background-color: var(--cor-sucesso-fundo);
+  border-color: rgba(47, 125, 79, 0.3);
+}
+
+.comprovante-enviado__icone {
+  width: 54px;
+  height: 54px;
+  margin: 0 auto var(--esp-4);
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background-color: var(--cor-sucesso);
+  color: #fff;
+  font-size: 1.5rem;
+  line-height: 1;
+  font-weight: 700;
+}
+
+.comprovante-enviado .envio-comprovante__texto,
+.comprovante-enviado .alerta {
+  text-align: left;
+}
