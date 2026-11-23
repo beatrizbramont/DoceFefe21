@@ -1,9 +1,11 @@
 /* =============================================================================
    DOCE FEFÊ.21 — admin.css
-   Estilos do painel administrativo.
+   Painel administrativo: login, pedidos e conferência de comprovantes.
 
-   O layout completo (barra lateral, tabelas, formulários e gráficos) será
-   implementado na FASE 9. Por ora, apenas o essencial para as telas-base.
+   ESCOPO
+     Cobre as telas construídas: login e pedidos. As demais páginas do admin
+     seguem com o aviso de "em construção" — produtos, preços e estoque são
+     geridos pelo painel do Supabase por enquanto.
    ========================================================================== */
 
 body.admin {
@@ -11,10 +13,346 @@ body.admin {
   min-height: 100vh;
 }
 
-body.admin main {
+/* =============================================================================
+   1. LOGIN
+   ========================================================================== */
+
+.admin-login {
   display: flex;
   align-items: center;
   justify-content: center;
   min-height: 100vh;
-  padding-block: var(--esp-10);
+  padding: var(--esp-6);
+}
+
+.admin-login__caixa {
+  width: 100%;
+  max-width: 420px;
+  padding: var(--esp-8);
+  background-color: var(--cor-branco);
+  border: 1px solid var(--cor-borda);
+  border-radius: var(--raio-lg);
+  box-shadow: var(--sombra-lg);
+  text-align: center;
+}
+
+.admin-login__logo {
+  border-radius: 50%;
+  margin: 0 auto var(--esp-5);
+  object-fit: contain;
+}
+
+.admin-login__titulo {
+  font-size: var(--txt-xl);
+  margin-bottom: var(--esp-2);
+}
+
+.admin-login__texto {
+  font-size: var(--txt-sm);
+  color: var(--cor-texto-suave);
+  margin-inline: auto;
+  margin-bottom: var(--esp-6);
+}
+
+.admin-login__caixa form {
+  text-align: left;
+}
+
+.admin-login__voltar {
+  display: inline-block;
+  margin-top: var(--esp-6);
+  font-size: var(--txt-sm);
+  color: var(--cor-texto-claro);
+}
+
+/* =============================================================================
+   2. ESTRUTURA DO PAINEL
+   ========================================================================== */
+
+.admin-topo {
+  position: sticky;
+  top: 0;
+  z-index: var(--z-header);
+  background-color: var(--cor-chocolate-800);
+  color: var(--cor-creme);
+  box-shadow: var(--sombra-md);
+}
+
+.admin-topo__interno {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--esp-4);
+  max-width: var(--largura-max);
+  margin-inline: auto;
+  padding: var(--esp-4) var(--esp-5);
+}
+
+.admin-topo__marca {
+  display: flex;
+  align-items: center;
+  gap: var(--esp-3);
+  min-width: 0;
+}
+
+.admin-topo__marca img {
+  border-radius: 50%;
+  flex-shrink: 0;
+  object-fit: contain;
+  background-color: var(--cor-creme);
+  padding: 1px;
+}
+
+.admin-topo__marca strong {
+  display: block;
+  color: var(--cor-creme);
+  font-family: var(--fonte-titulo);
+  font-size: var(--txt-base);
+  line-height: 1.2;
+}
+
+.admin-topo__marca span {
+  font-size: var(--txt-xs);
+  color: var(--cor-bege-500);
+}
+
+/* Os botões do topo precisam aparecer sobre o fundo escuro. */
+.admin-topo .btn--secundario {
+  color: var(--cor-creme);
+  border-color: rgba(255, 249, 241, 0.45);
+}
+
+.admin-topo .btn--secundario:hover {
+  background-color: var(--cor-creme);
+  color: var(--cor-chocolate-800);
+}
+
+.admin-conteudo {
+  max-width: var(--largura-max);
+  margin-inline: auto;
+  padding: var(--esp-6) var(--esp-5) var(--esp-16);
+}
+
+/* =============================================================================
+   3. MÉTRICAS
+   ========================================================================== */
+
+.admin-metricas {
+  display: grid;
+  gap: var(--esp-4);
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 170px), 1fr));
+}
+
+.admin-metrica {
+  padding: var(--esp-5);
+  background-color: var(--cor-branco);
+  border: 1px solid var(--cor-borda);
+  border-radius: var(--raio-md);
+  text-align: center;
+}
+
+/* O contador de "a conferir" é o que exige ação — ganha destaque. */
+.admin-metrica--destaque {
+  background-color: var(--cor-aviso-fundo);
+  border-color: var(--cor-aviso);
+}
+
+.admin-metrica__valor {
+  display: block;
+  font-family: var(--fonte-titulo);
+  font-size: var(--txt-3xl);
+  font-weight: 700;
+  line-height: 1;
+  color: var(--cor-chocolate-800);
+}
+
+.admin-metrica--destaque .admin-metrica__valor {
+  color: var(--cor-aviso);
+}
+
+.admin-metrica__rotulo {
+  display: block;
+  margin-top: var(--esp-2);
+  font-size: var(--txt-xs);
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--cor-texto-claro);
+}
+
+/* =============================================================================
+   4. CARD DE PEDIDO
+   ========================================================================== */
+
+.admin-pedido {
+  padding: var(--esp-5);
+  background-color: var(--cor-branco);
+  border: 1px solid var(--cor-borda);
+  border-radius: var(--raio-lg);
+  box-shadow: var(--sombra-sm);
+}
+
+.admin-pedido + .admin-pedido {
+  margin-top: var(--esp-4);
+}
+
+@media (min-width: 640px) {
+  .admin-pedido {
+    padding: var(--esp-6);
+  }
+}
+
+.admin-pedido__cabecalho {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--esp-3);
+  padding-bottom: var(--esp-4);
+  border-bottom: 1px solid var(--cor-borda);
+}
+
+.admin-pedido__codigo {
+  display: block;
+  font-size: var(--txt-lg);
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  color: var(--cor-chocolate-800);
+}
+
+.admin-pedido__data {
+  font-size: var(--txt-xs);
+  color: var(--cor-texto-claro);
+}
+
+/* -----------------------------------------------------------------------------
+   4.1 Dados do cliente
+   -------------------------------------------------------------------------- */
+.admin-pedido__dados {
+  display: grid;
+  gap: var(--esp-3);
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 200px), 1fr));
+  padding-block: var(--esp-4);
+  font-size: var(--txt-sm);
+}
+
+/* Endereço e observações ocupam a linha inteira. */
+.admin-dado--largo {
+  grid-column: 1 / -1;
+}
+
+.admin-dado__rotulo {
+  display: block;
+  font-size: var(--txt-xs);
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--cor-texto-claro);
+  margin-bottom: 2px;
+}
+
+/* -----------------------------------------------------------------------------
+   4.2 Itens
+   -------------------------------------------------------------------------- */
+.admin-pedido__itens {
+  padding-block: var(--esp-3);
+  border-top: 1px solid var(--cor-borda);
+  font-size: var(--txt-sm);
+}
+
+.admin-pedido__itens li {
+  display: flex;
+  align-items: center;
+  gap: var(--esp-3);
+  padding-block: var(--esp-1);
+}
+
+.admin-pedido__itens li strong {
+  margin-left: auto;
+  font-variant-numeric: tabular-nums;
+}
+
+.admin-pedido__qtd {
+  min-width: 32px;
+  font-weight: 800;
+  color: var(--cor-dourado-700);
+  font-variant-numeric: tabular-nums;
+}
+
+.admin-pedido__total {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  padding-top: var(--esp-3);
+  border-top: 2px solid var(--cor-bege-400);
+  font-weight: 800;
+  color: var(--cor-chocolate-800);
+}
+
+/* =============================================================================
+   5. PAGAMENTO E CONFERÊNCIA
+   ========================================================================== */
+
+.admin-pagamento {
+  margin-top: var(--esp-5);
+  padding: var(--esp-5);
+  background-color: var(--cor-creme-200);
+  border-radius: var(--raio-md);
+  border: 1px solid var(--cor-borda);
+}
+
+.admin-pagamento__topo {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--esp-3);
+}
+
+.admin-conferencia {
+  padding-top: var(--esp-4);
+  border-top: 1px dashed var(--cor-bege-500);
+}
+
+.admin-conferencia input {
+  margin-top: var(--esp-2);
+}
+
+.admin-avanco {
+  padding-top: var(--esp-4);
+  margin-top: var(--esp-4);
+  border-top: 1px solid var(--cor-borda);
+}
+
+/* -----------------------------------------------------------------------------
+   5.1 Visor do comprovante
+   -------------------------------------------------------------------------- */
+.comprovante-area:empty {
+  display: none;
+}
+
+.comprovante-visor {
+  margin-top: var(--esp-3);
+  padding: var(--esp-3);
+  background-color: var(--cor-branco);
+  border: 1px solid var(--cor-borda);
+  border-radius: var(--raio-md);
+  text-align: center;
+}
+
+/* `contain` e altura limitada: o comprovante precisa ser lido por inteiro,
+   e um print de celular pode ser muito alto. */
+.comprovante-visor img {
+  display: block;
+  width: 100%;
+  max-height: 560px;
+  object-fit: contain;
+  margin-inline: auto;
+}
+
+/* =============================================================================
+   6. TELAS AINDA NÃO CONSTRUÍDAS
+   ========================================================================== */
+
+body.admin .em-construcao {
+  margin: var(--esp-16) auto;
 }
