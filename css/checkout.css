@@ -1,8 +1,384 @@
 /* =============================================================================
    DOCE FEFÊ.21 — checkout.css
-   Etapas do checkout, endereço, entrega e confirmação.
+   Finalização do pedido: contato, entrega, data e confirmação.
 
-   Esta folha será preenchida na FASE 7.
-   O arquivo já existe e é carregado pelas páginas correspondentes, para que
-   nenhum <link> aponte para um endereço inexistente.
+   Carregada por: checkout.html
+   Depende de produtos.css (.preco) e carrinho.css (.resumo__*)
    ========================================================================== */
+
+/* =============================================================================
+   1. LAYOUT
+   ========================================================================== */
+
+.checkout-layout {
+  display: grid;
+  gap: var(--esp-8);
+  grid-template-columns: 1fr;
+  align-items: start;
+}
+
+@media (min-width: 960px) {
+  .checkout-layout {
+    grid-template-columns: 1.6fr 1fr;
+    gap: var(--esp-10);
+  }
+}
+
+/* =============================================================================
+   2. BLOCOS DO FORMULÁRIO
+   ========================================================================== */
+
+.bloco-checkout {
+  padding: var(--esp-6);
+  background-color: var(--cor-branco);
+  border: 1px solid var(--cor-borda);
+  border-radius: var(--raio-lg);
+  box-shadow: var(--sombra-sm);
+}
+
+@media (min-width: 640px) {
+  .bloco-checkout {
+    padding: var(--esp-8);
+  }
+}
+
+.bloco-checkout + .bloco-checkout {
+  margin-top: var(--esp-5);
+}
+
+.bloco-checkout__cabecalho {
+  display: flex;
+  align-items: center;
+  gap: var(--esp-3);
+  padding-bottom: var(--esp-4);
+  margin-bottom: var(--esp-6);
+  border-bottom: 1px solid var(--cor-borda);
+}
+
+/* Número da etapa, em círculo. */
+.bloco-checkout__numero {
+  flex-shrink: 0;
+  width: 30px;
+  height: 30px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background-color: var(--cor-chocolate-700);
+  color: var(--cor-creme);
+  font-size: var(--txt-sm);
+  font-weight: 800;
+  line-height: 1;
+}
+
+.bloco-checkout__titulo {
+  font-size: var(--txt-lg);
+  margin: 0;
+}
+
+/* =============================================================================
+   3. ESCOLHA DE ENTREGA OU RETIRADA
+   ========================================================================== */
+
+.opcoes-entrega {
+  display: grid;
+  gap: var(--esp-4);
+  grid-template-columns: 1fr;
+}
+
+@media (min-width: 520px) {
+  .opcoes-entrega {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* O <input type="radio"> fica escondido mas FUNCIONAL: continua recebendo
+   foco e respondendo ao teclado. Esconder com `display:none` o tiraria da
+   ordem de tabulação e quebraria a acessibilidade. */
+.opcao-entrega {
+  position: relative;
+  display: block;
+  cursor: pointer;
+}
+
+.opcao-entrega input {
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.opcao-entrega__conteudo {
+  display: flex;
+  flex-direction: column;
+  gap: var(--esp-2);
+  height: 100%;
+  padding: var(--esp-5);
+  border: 2px solid var(--cor-borda);
+  border-radius: var(--raio-md);
+  background-color: var(--cor-branco);
+  transition: border-color var(--transicao), background-color var(--transicao);
+}
+
+.opcao-entrega:hover .opcao-entrega__conteudo {
+  border-color: var(--cor-dourado-400);
+}
+
+.opcao-entrega input:checked + .opcao-entrega__conteudo {
+  border-color: var(--cor-chocolate-700);
+  background-color: var(--cor-creme-200);
+}
+
+/* O anel de foco precisa aparecer no cartão, já que o input é invisível. */
+.opcao-entrega input:focus-visible + .opcao-entrega__conteudo {
+  outline: 3px solid var(--cor-dourado-600);
+  outline-offset: 2px;
+}
+
+.opcao-entrega__icone {
+  font-size: 1.6rem;
+  line-height: 1;
+}
+
+.opcao-entrega__titulo {
+  font-family: var(--fonte-corpo);
+  font-size: var(--txt-base);
+  font-weight: 800;
+  color: var(--cor-chocolate-800);
+}
+
+.opcao-entrega__texto {
+  font-size: var(--txt-sm);
+  color: var(--cor-texto-suave);
+  max-width: none;
+}
+
+.opcao-entrega__valor {
+  margin-top: auto;
+  padding-top: var(--esp-2);
+  font-size: var(--txt-sm);
+  font-weight: 700;
+  color: var(--cor-sucesso);
+}
+
+/* =============================================================================
+   4. RESUMO DO PEDIDO
+   ========================================================================== */
+
+.checkout-resumo {
+  position: sticky;
+  top: calc(var(--altura-header) + var(--esp-5));
+  padding: var(--esp-6);
+  background-color: var(--cor-branco);
+  border: 1px solid var(--cor-borda);
+  border-radius: var(--raio-lg);
+  box-shadow: var(--sombra-sm);
+}
+
+@media (max-width: 959px) {
+  .checkout-resumo {
+    position: static;
+  }
+}
+
+.resumo-item {
+  display: flex;
+  gap: var(--esp-3);
+  align-items: flex-start;
+  padding-block: var(--esp-3);
+  font-size: var(--txt-sm);
+}
+
+.resumo-item + .resumo-item {
+  border-top: 1px solid var(--cor-borda);
+}
+
+.resumo-item__quantidade {
+  flex-shrink: 0;
+  min-width: 26px;
+  height: 26px;
+  display: grid;
+  place-items: center;
+  border-radius: var(--raio-sm);
+  background-color: var(--cor-bege-300);
+  color: var(--cor-chocolate-700);
+  font-size: var(--txt-xs);
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+}
+
+.resumo-item__nome {
+  flex: 1;
+  min-width: 0;
+  line-height: 1.35;
+  color: var(--cor-texto);
+}
+
+.resumo-item__valor {
+  flex-shrink: 0;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  color: var(--cor-chocolate-800);
+}
+
+.checkout-resumo__valores {
+  padding-top: var(--esp-4);
+  margin-top: var(--esp-4);
+  border-top: 1px solid var(--cor-borda);
+}
+
+/* =============================================================================
+   5. CONFIRMAÇÃO DO PEDIDO
+   ========================================================================== */
+
+.pedido-confirmado {
+  max-width: 640px;
+  margin-inline: auto;
+  text-align: center;
+  padding: var(--esp-10) var(--esp-6);
+}
+
+.pedido-confirmado__icone {
+  width: 76px;
+  height: 76px;
+  margin: 0 auto var(--esp-6);
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background-color: var(--cor-sucesso-fundo);
+  color: var(--cor-sucesso);
+  font-size: 2.2rem;
+  line-height: 1;
+}
+
+.pedido-confirmado__codigo {
+  display: inline-block;
+  padding: var(--esp-4) var(--esp-8);
+  margin-block: var(--esp-6);
+  border-radius: var(--raio-md);
+  background-color: var(--cor-creme-200);
+  border: 2px dashed var(--cor-dourado-400);
+}
+
+.pedido-confirmado__codigo-rotulo {
+  display: block;
+  font-size: var(--txt-xs);
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--cor-texto-claro);
+  margin-bottom: var(--esp-2);
+}
+
+.pedido-confirmado__codigo-valor {
+  font-family: var(--fonte-corpo);
+  font-size: var(--txt-2xl);
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  color: var(--cor-chocolate-800);
+}
+
+.pedido-confirmado__acoes {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--esp-4);
+  margin-top: var(--esp-8);
+}
+
+/* =============================================================================
+   6. LINHA DO TEMPO DO STATUS
+   ========================================================================== */
+
+.status-pedido {
+  max-width: 420px;
+  margin: var(--esp-8) auto 0;
+  text-align: left;
+}
+
+.status-etapa {
+  position: relative;
+  display: flex;
+  gap: var(--esp-4);
+  padding-bottom: var(--esp-6);
+}
+
+.status-etapa:last-child {
+  padding-bottom: 0;
+}
+
+/* Linha vertical ligando as etapas. */
+.status-etapa:not(:last-child)::before {
+  content: '';
+  position: absolute;
+  left: 13px;
+  top: 28px;
+  bottom: 0;
+  width: 2px;
+  background-color: var(--cor-bege-400);
+}
+
+.status-etapa__marca {
+  flex-shrink: 0;
+  width: 28px;
+  height: 28px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background-color: var(--cor-bege-300);
+  color: var(--cor-texto-claro);
+  font-size: var(--txt-xs);
+  font-weight: 800;
+  line-height: 1;
+  z-index: var(--z-base);
+}
+
+.status-etapa--concluida .status-etapa__marca {
+  background-color: var(--cor-sucesso);
+  color: #fff;
+}
+
+.status-etapa--atual .status-etapa__marca {
+  background-color: var(--cor-dourado-600);
+  color: #fff;
+}
+
+.status-etapa__titulo {
+  font-size: var(--txt-sm);
+  font-weight: 700;
+  color: var(--cor-texto-claro);
+  line-height: 1.6;
+}
+
+.status-etapa--concluida .status-etapa__titulo,
+.status-etapa--atual .status-etapa__titulo {
+  color: var(--cor-chocolate-800);
+}
+
+/* =============================================================================
+   7. AVISO SOBRE PAGAMENTO
+   ========================================================================== */
+
+.aviso-pagamento {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--esp-3);
+  padding: var(--esp-5);
+  margin-top: var(--esp-6);
+  border-radius: var(--raio-md);
+  background-color: var(--cor-info-fundo);
+  border-left: 4px solid var(--cor-info);
+  color: #174A70;
+  font-size: var(--txt-sm);
+  text-align: left;
+}
+
+.aviso-pagamento p {
+  max-width: none;
+  color: inherit;
+}
+
+.aviso-pagamento span[aria-hidden] {
+  font-size: 1.2rem;
+  line-height: 1.3;
+  flex-shrink: 0;
+}

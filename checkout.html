@@ -5,20 +5,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="theme-color" content="#4A2C18">
 
-  <!-- ===== SEO ===== -->
   <title>Finalizar Pedido | Doce Fefê.21</title>
   <meta name="description" content="Conclua seu pedido na Doce Fefê.21 com entrega ou retirada.">
-  <link rel="canonical" href="https://docefefe21.com.br/checkout.html">
 
-  <!-- ===== Open Graph ===== -->
-  <meta property="og:type" content="website">
-  <meta property="og:site_name" content="Doce Fefê.21">
-  <meta property="og:locale" content="pt_BR">
-  <meta property="og:title" content="Finalizar Pedido | Doce Fefê.21">
-  <meta property="og:description" content="Conclua seu pedido na Doce Fefê.21 com entrega ou retirada.">
-  <meta property="og:image" content="./assets/images/logo.jpeg">
-  <meta property="og:url" content="https://docefefe21.com.br/checkout.html">
-  <meta name="twitter:card" content="summary_large_image">
+  <!-- Página de compra: não deve aparecer nos resultados de busca. -->
+  <meta name="robots" content="noindex, nofollow">
 
   <link rel="icon" type="image/jpeg" href="./assets/images/logo.jpeg">
   <link rel="apple-touch-icon" href="./assets/images/logo.jpeg">
@@ -30,6 +21,9 @@
   <link rel="stylesheet" href="./css/global.css">
   <link rel="stylesheet" href="./css/header.css">
   <link rel="stylesheet" href="./css/footer.css">
+  <!-- Reaproveita .preco do catálogo e .resumo__* do carrinho. -->
+  <link rel="stylesheet" href="./css/produtos.css">
+  <link rel="stylesheet" href="./css/carrinho.css">
   <link rel="stylesheet" href="./css/checkout.css">
 </head>
 
@@ -37,43 +31,284 @@
   <div id="cabecalho"></div>
 
   <main id="conteudo">
-    <section class="capa-pagina">
+
+    <!-- =====================================================================
+         CHECKOUT
+
+         Ao registrar o pedido, a pessoa é levada para pagamento.html —
+         não há tela de confirmação aqui.
+         ================================================================== -->
+    <div data-area-checkout hidden>
+
+      <section class="capa-pagina">
+        <div class="container">
+          <h1>Finalizar Pedido</h1>
+          <p class="subtitulo">Poucos passos e seus doces já estão a caminho.</p>
+        </div>
+      </section>
+
       <div class="container">
-        <h1>Finalizar Pedido</h1>
-        <p class="subtitulo">Poucos passos e seus doces já estão a caminho.</p>
+        <nav aria-label="Você está aqui">
+          <ol class="migalhas">
+            <li><a href="./index.html">Início</a></li>
+            <li><a href="./carrinho.html">Carrinho</a></li>
+            <li><span aria-current="page">Finalizar</span></li>
+          </ol>
+        </nav>
       </div>
-    </section>
 
-    <div class="container">
-      <nav aria-label="Você está aqui">
-        <ol class="migalhas">
-          <li><a href="./index.html">Início</a></li>
-          <li><span aria-current="page">Finalizar Pedido</span></li>
-        </ol>
-      </nav>
+      <section class="secao" style="padding-top:0">
+        <div class="container">
+
+          <!-- Avisos da validação: item esgotado, quantidade ajustada… -->
+          <div data-avisos-checkout></div>
+
+          <form data-formulario-checkout novalidate>
+            <div class="checkout-layout">
+
+              <!-- =========================================================
+                   COLUNA ESQUERDA — formulário
+                   ====================================================== -->
+              <div>
+
+                <!-- ----- 1. Contato ----- -->
+                <section class="bloco-checkout">
+                  <div class="bloco-checkout__cabecalho">
+                    <span class="bloco-checkout__numero" aria-hidden="true">1</span>
+                    <h2 class="bloco-checkout__titulo">Seus dados</h2>
+                  </div>
+
+                  <div class="campo">
+                    <label class="campo__rotulo" for="ck-nome">
+                      Nome completo
+                      <span class="campo__obrigatorio" aria-hidden="true">*</span>
+                    </label>
+                    <input type="text" id="ck-nome" name="nome"
+                           autocomplete="name" placeholder="Quem vai receber os doces?"
+                           required>
+                    <span class="campo__erro"></span>
+                  </div>
+
+                  <div class="campo-linha">
+                    <div class="campo">
+                      <label class="campo__rotulo" for="ck-whatsapp">
+                        WhatsApp
+                        <span class="campo__obrigatorio" aria-hidden="true">*</span>
+                      </label>
+                      <input type="tel" id="ck-whatsapp" name="whatsapp"
+                             autocomplete="tel" placeholder="(11) 99999-9999"
+                             data-mascara="telefone" inputmode="numeric" required>
+                      <span class="campo__ajuda">É por aqui que combinamos tudo.</span>
+                      <span class="campo__erro"></span>
+                    </div>
+
+                    <div class="campo">
+                      <label class="campo__rotulo" for="ck-email">E-mail</label>
+                      <input type="email" id="ck-email" name="email"
+                             autocomplete="email" placeholder="seu@email.com">
+                      <span class="campo__ajuda">Opcional.</span>
+                      <span class="campo__erro"></span>
+                    </div>
+                  </div>
+                </section>
+
+                <!-- ----- 2. Entrega ou retirada ----- -->
+                <section class="bloco-checkout">
+                  <div class="bloco-checkout__cabecalho">
+                    <span class="bloco-checkout__numero" aria-hidden="true">2</span>
+                    <h2 class="bloco-checkout__titulo">Como você quer receber</h2>
+                  </div>
+
+                  <fieldset style="border:none">
+                    <legend class="apenas-leitor-tela">Forma de recebimento</legend>
+
+                    <div class="opcoes-entrega">
+                      <label class="opcao-entrega">
+                        <input type="radio" name="tipoEntrega" value="retirada" checked>
+                        <span class="opcao-entrega__conteudo">
+                          <span class="opcao-entrega__icone" aria-hidden="true">🏠</span>
+                          <span class="opcao-entrega__titulo">Retirar</span>
+                          <span class="opcao-entrega__texto">
+                            Você combina o local e o horário com a gente pelo WhatsApp.
+                          </span>
+                          <span class="opcao-entrega__valor">Sem custo</span>
+                        </span>
+                      </label>
+
+                      <label class="opcao-entrega">
+                        <input type="radio" name="tipoEntrega" value="entrega">
+                        <span class="opcao-entrega__conteudo">
+                          <span class="opcao-entrega__icone" aria-hidden="true">🛵</span>
+                          <span class="opcao-entrega__titulo">Receber em casa</span>
+                          <span class="opcao-entrega__texto">
+                            Informe o endereço e combinamos o frete no atendimento.
+                          </span>
+                          <span class="opcao-entrega__valor">Frete a combinar</span>
+                        </span>
+                      </label>
+                    </div>
+                  </fieldset>
+
+                  <!-- ----- Endereço (só para entrega) ----- -->
+                  <div class="mt-6" data-bloco-endereco hidden>
+                    <h3 class="texto-pequeno negrito mb-4">Endereço de entrega</h3>
+
+                    <div class="campo-linha">
+                      <div class="campo">
+                        <label class="campo__rotulo" for="ck-cep">
+                          CEP <span class="campo__obrigatorio" aria-hidden="true">*</span>
+                        </label>
+                        <input type="text" id="ck-cep" name="cep"
+                               autocomplete="postal-code" placeholder="00000-000"
+                               inputmode="numeric" maxlength="9">
+                        <span class="campo__ajuda" data-aviso-cep></span>
+                        <span class="campo__erro"></span>
+                      </div>
+
+                      <div class="campo">
+                        <label class="campo__rotulo" for="ck-numero">
+                          Número <span class="campo__obrigatorio" aria-hidden="true">*</span>
+                        </label>
+                        <input type="text" id="ck-numero" name="numero"
+                               placeholder="123" maxlength="20">
+                        <span class="campo__erro"></span>
+                      </div>
+                    </div>
+
+                    <div class="campo">
+                      <label class="campo__rotulo" for="ck-logradouro">
+                        Rua <span class="campo__obrigatorio" aria-hidden="true">*</span>
+                      </label>
+                      <input type="text" id="ck-logradouro" name="logradouro"
+                             autocomplete="street-address" placeholder="Nome da rua">
+                      <span class="campo__erro"></span>
+                    </div>
+
+                    <div class="campo">
+                      <label class="campo__rotulo" for="ck-complemento">Complemento</label>
+                      <input type="text" id="ck-complemento" name="complemento"
+                             placeholder="Apartamento, bloco, casa…" maxlength="100">
+                    </div>
+
+                    <div class="campo-linha">
+                      <div class="campo">
+                        <label class="campo__rotulo" for="ck-bairro">
+                          Bairro <span class="campo__obrigatorio" aria-hidden="true">*</span>
+                        </label>
+                        <input type="text" id="ck-bairro" name="bairro" placeholder="Bairro">
+                        <span class="campo__erro"></span>
+                      </div>
+
+                      <div class="campo">
+                        <label class="campo__rotulo" for="ck-cidade">
+                          Cidade <span class="campo__obrigatorio" aria-hidden="true">*</span>
+                        </label>
+                        <input type="text" id="ck-cidade" name="cidade" placeholder="Cidade">
+                        <span class="campo__erro"></span>
+                      </div>
+
+                      <div class="campo" style="max-width:120px">
+                        <label class="campo__rotulo" for="ck-estado">
+                          UF <span class="campo__obrigatorio" aria-hidden="true">*</span>
+                        </label>
+                        <input type="text" id="ck-estado" name="estado"
+                               placeholder="SP" maxlength="2" style="text-transform:uppercase">
+                        <span class="campo__erro"></span>
+                      </div>
+                    </div>
+
+                    <div class="campo">
+                      <label class="campo__rotulo" for="ck-referencia">
+                        Ponto de referência
+                      </label>
+                      <input type="text" id="ck-referencia" name="referencia"
+                             placeholder="Perto de…" maxlength="200">
+                      <span class="campo__ajuda">Ajuda a encontrar mais rápido.</span>
+                    </div>
+                  </div>
+                </section>
+
+                <!-- ----- 3. Data e observações ----- -->
+                <section class="bloco-checkout">
+                  <div class="bloco-checkout__cabecalho">
+                    <span class="bloco-checkout__numero" aria-hidden="true">3</span>
+                    <h2 class="bloco-checkout__titulo">Quando e detalhes</h2>
+                  </div>
+
+                  <div class="campo">
+                    <label class="campo__rotulo" for="ck-data">Data desejada</label>
+                    <input type="date" id="ck-data" name="dataDesejada">
+                    <span class="campo__ajuda">
+                      Opcional. Confirmamos a disponibilidade no atendimento.
+                    </span>
+                    <span class="campo__erro"></span>
+                  </div>
+
+                  <div class="campo">
+                    <label class="campo__rotulo" for="ck-observacoes">Observações</label>
+                    <textarea id="ck-observacoes" name="observacoes" maxlength="500"
+                              placeholder="Alguma preferência, restrição alimentar ou recado especial?"></textarea>
+                    <span class="campo__erro"></span>
+                  </div>
+
+                  <!-- Consentimento explícito — exigência da LGPD -->
+                  <div class="campo">
+                    <label class="campo-marcavel" for="ck-consentimento">
+                      <input type="checkbox" id="ck-consentimento" name="consentimento" required>
+                      <span>
+                        Autorizo a Doce Fefê.21 a usar meus dados para processar e
+                        entregar este pedido. Consulte a
+                        <a href="./politica-privacidade.html">Política de Privacidade</a>.
+                        <span class="campo__obrigatorio" aria-hidden="true">*</span>
+                      </span>
+                    </label>
+                    <span class="campo__erro"></span>
+                  </div>
+                </section>
+              </div>
+
+              <!-- =========================================================
+                   COLUNA DIREITA — resumo
+                   ====================================================== -->
+              <aside class="checkout-resumo" aria-label="Resumo do pedido">
+                <div data-resumo-checkout></div>
+
+                <button type="submit" class="btn btn--primario btn--grande btn--bloco mt-6">
+                  Registrar pedido
+                </button>
+
+                <!--
+                  Honestidade sobre o que acontece a seguir: o pagamento online
+                  chega na Fase 8. Prometer "pagar agora" seria enganoso.
+                -->
+                <div class="carrinho-garantia">
+                  <span aria-hidden="true">🔒</span>
+                  <p>
+                    O pedido é registrado e o pagamento combinado no atendimento.
+                    Preços e estoque são conferidos no servidor antes de confirmar.
+                  </p>
+                </div>
+
+                <a href="./carrinho.html" class="btn btn--secundario btn--bloco mt-4">
+                  ← Voltar ao carrinho
+                </a>
+              </aside>
+
+            </div>
+          </form>
+
+        </div>
+      </section>
     </div>
 
-    <!--
-      ATENÇÃO: bloco temporário da Fase 1.
-      O conteúdo real desta página será implementado na FASE 7.
-      Este aviso deve ser REMOVIDO quando aquela fase for concluída.
-    -->
-    <div class="container">
-      <div class="em-construcao">
-        <div class="em-construcao__icone" aria-hidden="true">🧁</div>
-        <h2>Esta página chega na Fase 7</h2>
-        <p>A identificação do cliente, endereço de entrega ou retirada, data desejada, observações, resumo do pedido e confirmação.</p>
-        <p class="texto-pequeno">
-          A estrutura, o cabeçalho, o rodapé e a identidade visual já estão
-          funcionando — é a fundação sobre a qual esta página será construída.
-        </p>
-        <a href="./index.html" class="btn btn--primario">Voltar para o início</a>
-      </div>
-    </div>
+    <!-- ===== Carrinho vazio ===== -->
+    <div class="container" data-checkout-vazio hidden></div>
+
   </main>
 
   <div id="rodape"></div>
 
   <script type="module" src="./js/main.js"></script>
+  <script type="module" src="./js/checkout.js"></script>
 </body>
 </html>
