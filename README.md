@@ -104,7 +104,6 @@ DoceFefe21/
 ├── carrinho.html                Carrinho de compras
 ├── checkout.html                Finalização do pedido
 ├── minha-conta.html             Área do cliente
-├── acompanhar-pedido.html       Acompanhamento de pedidos
 ├── politica-privacidade.html    LGPD e políticas
 │
 ├── admin/                       Painel administrativo (9 páginas)
@@ -119,6 +118,7 @@ DoceFefe21/
 │   ├── header.css               Cabeçalho e menu do celular
 │   ├── footer.css               Rodapé
 │   ├── home.css                 Página inicial
+│   ├── institucional.css        Nossa História e Contato
 │   ├── produtos.css             Catálogo            (Fase 3)
 │   ├── carrinho.css             Carrinho            (Fase 4)
 │   ├── checkout.css             Checkout            (Fase 7)
@@ -129,6 +129,7 @@ DoceFefe21/
 │   ├── main.js                  Ponto de entrada das páginas públicas
 │   ├── navigation.js            Menu, página atual, rolagem
 │   ├── whatsapp.js              Links e botão flutuante do WhatsApp
+│   ├── contato.js               Formulário de contato e FAQ
 │   ├── products.js              Catálogo            (Fase 3)
 │   ├── cart.js                  Carrinho            (Fase 4)
 │   ├── auth.js                  Autenticação        (Fase 6)
@@ -142,6 +143,7 @@ DoceFefe21/
 │   ├── components/
 │   │   ├── site-header.js       Cabeçalho compartilhado
 │   │   ├── site-footer.js       Rodapé compartilhado
+│   │   ├── accordion.js         Sanfona acessível (FAQ)
 │   │   └── icons.js             Ícones SVG inline
 │   │
 │   └── admin/                   Scripts do painel  (Fase 9)
@@ -279,13 +281,13 @@ registrado no banco.
 | Fase | Escopo | Situação |
 |---|---|---|
 | 1 | Configuração do projeto e identidade visual | ✅ Concluída |
-| 2 | Páginas institucionais e layout | ⬜ |
-| 3 | Catálogo e produtos | ⬜ |
-| 4 | Carrinho | ⬜ |
-| 5 | Backend e banco de dados | ⬜ |
-| 6 | Autenticação e cadastro de clientes | ⬜ |
-| 7 | Checkout e pedidos | ⬜ |
-| 8 | Pagamentos | ⬜ |
+| 2 | Páginas institucionais e layout | ✅ Concluída |
+| 3 | Catálogo e produtos | ✅ Concluída |
+| 4 | Carrinho | ✅ Concluída |
+| 5 | Backend e banco de dados | ✅ Concluída |
+| 6 | Autenticação e cadastro de clientes | ✅ Concluída |
+| 7 | Checkout e pedidos | ✅ Concluída |
+| 8 | Pagamentos | ✅ Concluída |
 | 9 | Painel administrativo | ⬜ |
 | 10 | Revendedores e atacado | ⬜ |
 | 11 | Marketing e relatórios | ⬜ |
@@ -313,6 +315,19 @@ inteiro.
 
 - **Títulos:** Playfair Display — serifada, elegante, remete a confeitaria fina
 - **Texto:** Nunito Sans — arredondada, acolhedora, ótima legibilidade
+
+### ⚠️ Sobre a história da marca
+
+O texto publicado em `nossa-historia.html` foi **escrito pela família** e está
+no site na íntegra, palavra por palavra.
+
+**Nenhuma informação biográfica pode ser criada, interpretada, resumida ou
+ampliada.** Datas, diagnósticos e acontecimentos só entram no site se vierem
+da família. Os marcos da linha do tempo foram extraídos exclusivamente desse
+texto.
+
+Há um teste automatizado que compara o texto publicado com o original e
+falha se alguma palavra for alterada.
 
 ### ⚠️ Sobre a logomarca
 
