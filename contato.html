@@ -7,7 +7,7 @@
 
   <!-- ===== SEO ===== -->
   <title>Contato | Doce Fefê.21</title>
-  <meta name="description" content="Fale com a Doce Fefê.21 pelo WhatsApp (11) 97978-8231 ou pelo Instagram @docefefe.21.">
+  <meta name="description" content="Fale com a Doce Fefê.21 pelo WhatsApp (11) 97978-8231 ou pelo Instagram @docefefe.21. Encomendas, dúvidas e parcerias.">
   <link rel="canonical" href="https://docefefe21.com.br/contato.html">
 
   <!-- ===== Open Graph ===== -->
@@ -15,7 +15,7 @@
   <meta property="og:site_name" content="Doce Fefê.21">
   <meta property="og:locale" content="pt_BR">
   <meta property="og:title" content="Contato | Doce Fefê.21">
-  <meta property="og:description" content="Fale com a Doce Fefê.21 pelo WhatsApp (11) 97978-8231 ou pelo Instagram @docefefe.21.">
+  <meta property="og:description" content="Dúvidas, encomendas ou só um oi — estamos por aqui.">
   <meta property="og:image" content="./assets/images/logo.jpeg">
   <meta property="og:url" content="https://docefefe21.com.br/contato.html">
   <meta name="twitter:card" content="summary_large_image">
@@ -30,12 +30,33 @@
   <link rel="stylesheet" href="./css/global.css">
   <link rel="stylesheet" href="./css/header.css">
   <link rel="stylesheet" href="./css/footer.css">
+  <link rel="stylesheet" href="./css/institucional.css">
+
+  <!-- Dados estruturados da página de contato -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "ContactPage",
+    "name": "Contato — Doce Fefê.21",
+    "url": "https://docefefe21.com.br/contato.html",
+    "mainEntity": {
+      "@type": "Bakery",
+      "name": "Doce Fefê.21",
+      "telephone": "+5511979788231",
+      "sameAs": ["https://instagram.com/docefefe.21"]
+    }
+  }
+  </script>
 </head>
 
 <body>
   <div id="cabecalho"></div>
 
   <main id="conteudo">
+
+    <!-- =====================================================================
+         CAPA
+         ================================================================== -->
     <section class="capa-pagina">
       <div class="container">
         <h1>Fale com a gente</h1>
@@ -47,32 +68,344 @@
       <nav aria-label="Você está aqui">
         <ol class="migalhas">
           <li><a href="./index.html">Início</a></li>
-          <li><span aria-current="page">Fale com a gente</span></li>
+          <li><span aria-current="page">Contato</span></li>
         </ol>
       </nav>
     </div>
 
-    <!--
-      ATENÇÃO: bloco temporário da Fase 1.
-      O conteúdo real desta página será implementado na FASE 2.
-      Este aviso deve ser REMOVIDO quando aquela fase for concluída.
-    -->
-    <div class="container">
-      <div class="em-construcao">
-        <div class="em-construcao__icone" aria-hidden="true">🧁</div>
-        <h2>Esta página chega na Fase 2</h2>
-        <p>O formulário de contato com validação e os canais diretos de atendimento.</p>
-        <p class="texto-pequeno">
-          A estrutura, o cabeçalho, o rodapé e a identidade visual já estão
-          funcionando — é a fundação sobre a qual esta página será construída.
-        </p>
-        <a href="./index.html" class="btn btn--primario">Voltar para o início</a>
+    <!-- =====================================================================
+         CANAIS DE ATENDIMENTO
+         ================================================================== -->
+    <section class="secao">
+      <div class="container">
+        <div class="secao__cabecalho secao__cabecalho--centro">
+          <span class="sobretitulo">Atendimento direto</span>
+          <h2>Nossos canais</h2>
+          <span class="filete-dourado filete-dourado--centro"></span>
+        </div>
+
+        <div class="canais">
+          <article class="canal canal--whatsapp" data-revelar>
+            <div class="canal__icone" data-icone="whatsapp" aria-hidden="true"></div>
+            <h3 class="canal__titulo">WhatsApp</h3>
+            <p class="canal__valor">(11) 97978-8231</p>
+            <p class="canal__texto">
+              O jeito mais rápido de falar com a gente. Encomendas, dúvidas
+              sobre sabores e prazos.
+            </p>
+            <a href="#" data-whatsapp="geral" class="btn btn--whatsapp btn--bloco">
+              Conversar agora
+            </a>
+          </article>
+
+          <article class="canal canal--instagram" data-revelar data-revelar-atraso="1">
+            <div class="canal__icone" data-icone="instagram" aria-hidden="true"></div>
+            <h3 class="canal__titulo">Instagram</h3>
+            <p class="canal__valor">@docefefe.21</p>
+            <p class="canal__texto">
+              Bastidores da produção, novidades e as fotos que dão água na
+              boca.
+            </p>
+            <a href="https://instagram.com/docefefe.21"
+               target="_blank" rel="noopener noreferrer"
+               class="btn btn--secundario btn--bloco">
+              Seguir perfil
+            </a>
+          </article>
+
+          <article class="canal" data-revelar data-revelar-atraso="2">
+            <div class="canal__icone" data-icone="caixa" aria-hidden="true"></div>
+            <h3 class="canal__titulo">Encomendas</h3>
+            <p class="canal__valor">Personalizadas</p>
+            <p class="canal__texto">
+              Festas, lembrancinhas ou um presente especial? Montamos do jeito
+              que você imaginou.
+            </p>
+            <a href="#" data-whatsapp="encomenda" class="btn btn--primario btn--bloco">
+              Pedir orçamento
+            </a>
+          </article>
+        </div>
       </div>
-    </div>
+    </section>
+
+    <!-- =====================================================================
+         FORMULÁRIO
+         ================================================================== -->
+    <section class="secao secao--creme">
+      <div class="container">
+        <div class="contato-grade">
+
+          <!-- ----- Formulário ----- -->
+          <div data-revelar>
+            <div class="secao__cabecalho">
+              <span class="sobretitulo">Deixe sua mensagem</span>
+              <h2>Escreva para nós</h2>
+              <span class="filete-dourado"></span>
+            </div>
+
+            <div class="formulario-caixa">
+              <!--
+                O envio abre o WhatsApp com a mensagem já montada.
+                Ver a explicação completa em js/contato.js.
+              -->
+              <form data-formulario-contato novalidate>
+
+                <div class="campo-linha">
+                  <div class="campo">
+                    <label class="campo__rotulo" for="nome">
+                      Seu nome <span class="campo__obrigatorio" aria-hidden="true">*</span>
+                    </label>
+                    <input type="text" id="nome" name="nome"
+                           autocomplete="name" placeholder="Como podemos te chamar?"
+                           required>
+                    <span class="campo__erro"></span>
+                  </div>
+
+                  <div class="campo">
+                    <label class="campo__rotulo" for="whatsapp">
+                      WhatsApp <span class="campo__obrigatorio" aria-hidden="true">*</span>
+                    </label>
+                    <input type="tel" id="whatsapp" name="whatsapp"
+                           autocomplete="tel" placeholder="(11) 99999-9999"
+                           data-mascara="telefone" inputmode="numeric" required>
+                    <span class="campo__erro"></span>
+                  </div>
+                </div>
+
+                <div class="campo">
+                  <label class="campo__rotulo" for="email">E-mail</label>
+                  <input type="email" id="email" name="email"
+                         autocomplete="email" placeholder="seu@email.com">
+                  <span class="campo__ajuda">Opcional — só se preferir resposta por e-mail.</span>
+                  <span class="campo__erro"></span>
+                </div>
+
+                <div class="campo">
+                  <label class="campo__rotulo" for="assunto">
+                    Assunto <span class="campo__obrigatorio" aria-hidden="true">*</span>
+                  </label>
+                  <select id="assunto" name="assunto" required>
+                    <option value="">Escolha uma opção</option>
+                    <option value="encomenda">Fazer uma encomenda</option>
+                    <option value="duvida-produto">Dúvida sobre um produto</option>
+                    <option value="pedido">Dúvida sobre um pedido</option>
+                    <option value="revenda">Quero ser revendedor</option>
+                    <option value="elogio">Elogio ou sugestão</option>
+                    <option value="outro">Outro assunto</option>
+                  </select>
+                  <span class="campo__erro"></span>
+                </div>
+
+                <div class="campo">
+                  <label class="campo__rotulo" for="mensagem">
+                    Mensagem <span class="campo__obrigatorio" aria-hidden="true">*</span>
+                  </label>
+                  <textarea id="mensagem" name="mensagem"
+                            placeholder="Conte pra gente o que você precisa…"
+                            required></textarea>
+                  <span class="contador-caracteres" data-contador aria-live="polite"></span>
+                  <span class="campo__erro"></span>
+                </div>
+
+                <!-- Consentimento explícito — exigência da LGPD -->
+                <div class="campo">
+                  <label class="campo-marcavel" for="consentimento">
+                    <input type="checkbox" id="consentimento" name="consentimento" required>
+                    <span>
+                      Autorizo a Doce Fefê.21 a usar meus dados para responder
+                      esta mensagem. Consulte nossa
+                      <a href="./politica-privacidade.html">Política de Privacidade</a>.
+                      <span class="campo__obrigatorio" aria-hidden="true">*</span>
+                    </span>
+                  </label>
+                  <span class="campo__erro"></span>
+                </div>
+
+                <button type="submit" class="btn btn--primario btn--grande btn--bloco">
+                  Enviar mensagem
+                </button>
+
+                <p class="texto-mini texto-suave mt-4 texto-centro" style="max-width:none">
+                  Registramos sua mensagem e abrimos o WhatsApp com ela pronta.
+                </p>
+              </form>
+            </div>
+          </div>
+
+          <!-- ----- Informações laterais ----- -->
+          <aside data-revelar data-revelar-atraso="1">
+            <div class="info-lateral">
+              <h3>Bom saber</h3>
+
+              <ul class="info-lateral__lista">
+                <li>
+                  <span data-icone="whatsapp" aria-hidden="true"></span>
+                  <span>
+                    <strong style="color:var(--cor-creme)">WhatsApp</strong><br>
+                    <a href="#" data-whatsapp="geral">(11) 97978-8231</a>
+                  </span>
+                </li>
+                <li>
+                  <span data-icone="instagram" aria-hidden="true"></span>
+                  <span>
+                    <strong style="color:var(--cor-creme)">Instagram</strong><br>
+                    <a href="https://instagram.com/docefefe.21"
+                       target="_blank" rel="noopener noreferrer">@docefefe.21</a>
+                  </span>
+                </li>
+              </ul>
+
+              <div class="info-lateral__separador"></div>
+
+              <h3>Encomendas</h3>
+              <p>
+                Doces artesanais são feitos sob encomenda, em pequenas
+                quantidades. Fale com a gente para combinar sabores, quantidade
+                e a data que você precisa.
+              </p>
+
+              <div class="info-lateral__separador"></div>
+
+              <h3>Já fez um pedido?</h3>
+              <p class="mb-4">
+                Fale com a gente pelo WhatsApp informando seu nome — a gente
+                te conta em que etapa ele está.
+              </p>
+              <a href="#" data-whatsapp="geral" class="btn btn--claro btn--pequeno">
+                Consultar meu pedido
+              </a>
+            </div>
+          </aside>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- =====================================================================
+         PERGUNTAS FREQUENTES
+         ================================================================== -->
+    <section class="secao">
+      <div class="container">
+        <div class="secao__cabecalho secao__cabecalho--centro">
+          <span class="sobretitulo">Tire suas dúvidas</span>
+          <h2>Perguntas frequentes</h2>
+          <span class="filete-dourado filete-dourado--centro"></span>
+        </div>
+
+        <!--
+          As respostas abaixo tratam apenas do funcionamento do site e do
+          atendimento. Prazos, preços e área de entrega serão preenchidos
+          com as informações que a Doce Fefê.21 confirmar — nada foi
+          inventado aqui.
+        -->
+        <div class="faq" data-acordeao>
+
+          <div class="faq__item">
+            <h3>
+              <button class="faq__gatilho">
+                <span>Como faço uma encomenda?</span>
+                <span class="faq__sinal" aria-hidden="true">+</span>
+              </button>
+            </h3>
+            <div class="faq__resposta">
+              <div class="faq__resposta-interno">
+                <p>
+                  Você pode falar com a gente pelo WhatsApp (11) 97978-8231,
+                  usar o formulário desta página, ou — em breve — montar seu
+                  pedido direto pelo site e finalizar pelo carrinho.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div class="faq__item">
+            <h3>
+              <button class="faq__gatilho">
+                <span>Quais doces vocês fazem?</span>
+                <span class="faq__sinal" aria-hidden="true">+</span>
+              </button>
+            </h3>
+            <div class="faq__resposta">
+              <div class="faq__resposta-interno">
+                <p>
+                  Trabalhamos com brownies, pães de mel, alfajores, a linha
+                  Doce Fefê Fit e produtos sazonais. Os sabores disponíveis
+                  variam — fale com a gente para saber o que tem hoje.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div class="faq__item">
+            <h3>
+              <button class="faq__gatilho">
+                <span>Posso revender os produtos da Doce Fefê.21?</span>
+                <span class="faq__sinal" aria-hidden="true">+</span>
+              </button>
+            </h3>
+            <div class="faq__resposta">
+              <div class="faq__resposta-interno">
+                <p>
+                  Sim! Trabalhamos com condições especiais de atacado para
+                  parceiros aprovados. Preencha o cadastro na página
+                  <a href="./seja-revendedor.html">Seja Revendedor</a> e
+                  entraremos em contato.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div class="faq__item">
+            <h3>
+              <button class="faq__gatilho">
+                <span>Como acompanho meu pedido?</span>
+                <span class="faq__sinal" aria-hidden="true">+</span>
+              </button>
+            </h3>
+            <div class="faq__resposta">
+              <div class="faq__resposta-interno">
+                <p>
+                  É só falar com a gente pelo
+                  <a href="#" data-whatsapp="geral">WhatsApp</a> que te
+                  contamos em que etapa seu pedido está.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div class="faq__item">
+            <h3>
+              <button class="faq__gatilho">
+                <span>O que significa o ".21" no nome da marca?</span>
+                <span class="faq__sinal" aria-hidden="true">+</span>
+              </button>
+            </h3>
+            <div class="faq__resposta">
+              <div class="faq__resposta-interno">
+                <p>
+                  A marca leva o nome do Fernando, o nosso Fefê. Conheça
+                  a trajetória dele e o propósito que move a Doce Fefê em
+                  <a href="./nossa-historia.html">Nossa História</a>.
+                </p>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <p class="texto-centro texto-suave mt-8" style="max-width:none">
+          Não encontrou sua dúvida?
+          <a href="#" data-whatsapp="geral" class="negrito">Fale com a gente no WhatsApp</a>.
+        </p>
+      </div>
+    </section>
+
   </main>
 
   <div id="rodape"></div>
 
   <script type="module" src="./js/main.js"></script>
+  <script type="module" src="./js/contato.js"></script>
 </body>
 </html>

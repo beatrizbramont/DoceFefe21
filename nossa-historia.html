@@ -7,15 +7,15 @@
 
   <!-- ===== SEO ===== -->
   <title>Nossa História | Doce Fefê.21</title>
-  <meta name="description" content="A história da Doce Fefê.21: amor, família, superação e o sonho de levar doces artesanais até você.">
+  <meta name="description" content="A história da Doce Fefê.21 começou com o Fernando, nosso Fefê. Um sonho que nasceu do amor e cresce com esperança — doces artesanais com propósito de autonomia, trabalho e inclusão.">
   <link rel="canonical" href="https://docefefe21.com.br/nossa-historia.html">
 
   <!-- ===== Open Graph ===== -->
-  <meta property="og:type" content="website">
+  <meta property="og:type" content="article">
   <meta property="og:site_name" content="Doce Fefê.21">
   <meta property="og:locale" content="pt_BR">
   <meta property="og:title" content="Nossa História | Doce Fefê.21">
-  <meta property="og:description" content="A história da Doce Fefê.21: amor, família, superação e o sonho de levar doces artesanais até você.">
+  <meta property="og:description" content="Um sonho que nasceu do amor e cresce com esperança.">
   <meta property="og:image" content="./assets/images/logo.jpeg">
   <meta property="og:url" content="https://docefefe21.com.br/nossa-historia.html">
   <meta name="twitter:card" content="summary_large_image">
@@ -30,16 +30,21 @@
   <link rel="stylesheet" href="./css/global.css">
   <link rel="stylesheet" href="./css/header.css">
   <link rel="stylesheet" href="./css/footer.css">
+  <link rel="stylesheet" href="./css/institucional.css">
 </head>
 
 <body>
   <div id="cabecalho"></div>
 
   <main id="conteudo">
+
+    <!-- =====================================================================
+         CAPA
+         ================================================================== -->
     <section class="capa-pagina">
       <div class="container">
         <h1>Nossa História</h1>
-        <p class="subtitulo">Muito mais que doces, uma história de amor em cada pedaço.</p>
+        <p class="subtitulo">Um sonho que nasceu do amor e cresce com esperança.</p>
       </div>
     </section>
 
@@ -52,23 +57,389 @@
       </nav>
     </div>
 
-    <!--
-      ATENÇÃO: bloco temporário da Fase 1.
-      O conteúdo real desta página será implementado na FASE 2.
-      Este aviso deve ser REMOVIDO quando aquela fase for concluída.
-    -->
-    <div class="container">
-      <div class="em-construcao">
-        <div class="em-construcao__icone" aria-hidden="true">🧁</div>
-        <h2>Esta página chega na Fase 2</h2>
-        <p>A linha do tempo da marca com espaço para as fotografias e o texto definitivo da história do Fernando — que será fornecido pela família. Nenhuma informação biográfica será inventada.</p>
-        <p class="texto-pequeno">
-          A estrutura, o cabeçalho, o rodapé e a identidade visual já estão
-          funcionando — é a fundação sobre a qual esta página será construída.
-        </p>
-        <a href="./index.html" class="btn btn--primario">Voltar para o início</a>
+    <!-- =====================================================================
+         ABERTURA
+
+         IMPORTANTE: todo o texto desta página foi fornecido pela família.
+         Nenhuma informação biográfica foi criada, interpretada ou ampliada.
+         Qualquer alteração futura deve vir da família.
+         ================================================================== -->
+    <section class="secao">
+      <div class="container historia-abertura">
+        <!--
+          Fotografia do Fernando, fornecida pela família.
+          A imagem é exibida INTEIRA (sem recorte) para preservar o crédito
+          da fotógrafa impresso no canto. Não aplicar object-fit: cover aqui.
+        -->
+        <div data-revelar>
+          <figure class="sem-margem">
+            <div class="historia-foto">
+              <img
+                src="./assets/images/FotoFefe.jpeg"
+                alt="Fernando, o Fefê, sorrindo em uma piscina de bolinhas"
+                width="683" height="1024"
+                loading="eager" fetchpriority="high" decoding="async">
+            </div>
+            <figcaption class="historia-foto__credito">
+              Foto: Ivete Siqueira Fotografia
+            </figcaption>
+          </figure>
+        </div>
+
+        <div class="historia-abertura__texto" data-revelar data-revelar-atraso="1">
+          <span class="sobretitulo">Quem é o Fefê</span>
+          <h2>Tudo começou com ele</h2>
+          <span class="filete-dourado"></span>
+
+          <p class="mt-6">
+            Fernando, nosso Fefê, nasceu em 15 de janeiro de 2023, prematuro,
+            com Síndrome de Down e cardiopatia congênita.
+          </p>
+
+          <p class="mt-4">
+            A Doce Fefê.21 nasceu no meio dessa caminhada — e é dele que a
+            marca leva o nome.
+          </p>
+
+          <a href="#historia-completa" class="btn btn--secundario mt-8">
+            Ler a história completa
+          </a>
+        </div>
       </div>
-    </div>
+    </section>
+
+    <!-- =====================================================================
+         A HISTÓRIA COMPLETA
+         Texto integral, na íntegra, como foi escrito pela família.
+         ================================================================== -->
+    <section class="secao secao--creme" id="historia-completa">
+      <div class="container">
+        <div class="secao__cabecalho secao__cabecalho--centro">
+          <span class="sobretitulo">Na nossa voz</span>
+          <h2>A história da Doce Fefê</h2>
+          <span class="filete-dourado filete-dourado--centro"></span>
+        </div>
+
+        <article class="historia-texto" data-revelar>
+          <p>
+            Fernando, nosso Fefê, nasceu em 15 de janeiro de 2023, prematuro,
+            com Síndrome de Down e cardiopatia congênita.
+          </p>
+
+          <p>
+            Desde os primeiros meses, sua vida foi marcada por grandes
+            desafios. Aos três meses, enfrentou uma cirurgia no coração e,
+            mesmo tendo ficado em estado grave, superou essa batalha. Também
+            venceu a catarata congênita e, em julho, enfrentou um novo
+            desafio: o diagnóstico de leucemia. Graças a Deus, alcançou a
+            remissão e segue seu tratamento com muita coragem e esperança.
+          </p>
+
+          <p class="destaque">
+            Foi justamente dois dias antes da descoberta da leucemia que
+            nasceu a ideia da Doce Fefê: uma pequena produção de pães de mel
+            que, em meio a tantas mudanças, se transformou em um projeto de
+            amor.
+          </p>
+
+          <p>
+            Com a criação do Super Fefê, nosso pequeno herói ganhou um lugar
+            especial na identidade da marca. O carinho das pessoas nos ajudou
+            a começar, mas foi o sabor, a qualidade e o cuidado de cada doce
+            que fizeram a Doce Fefê conquistar seus clientes.
+          </p>
+
+          <p>
+            Hoje, sonhamos com uma loja, um site e uma marca que cresça cada
+            vez mais. Mas nosso maior sonho vai além de uma confeitaria.
+          </p>
+
+          <p class="destaque">
+            Nosso grande sonho é que a Doce Fefê cresça junto com o Fefê e se
+            torne a garantia de um futuro para ele.
+          </p>
+
+          <p>
+            Que, quando adulto e pronto, ele possa assumir esse negócio e
+            cuidar dele com o mesmo amor e carinho com que cuidamos dele hoje.
+          </p>
+
+          <p>
+            Queremos construir uma oportunidade de autonomia, trabalho e
+            inclusão, para que Fernando e outros jovens possam realizar seus
+            próprios sonhos.
+          </p>
+        </article>
+      </div>
+    </section>
+
+    <!-- =====================================================================
+         LINHA DO TEMPO
+         Marcos extraídos EXCLUSIVAMENTE do texto da família.
+         Nenhuma data ou fato foi acrescentado.
+         ================================================================== -->
+    <section class="secao">
+      <div class="container">
+        <div class="secao__cabecalho secao__cabecalho--centro">
+          <span class="sobretitulo">Caminhada</span>
+          <h2>Uma história de superação</h2>
+          <span class="filete-dourado filete-dourado--centro"></span>
+        </div>
+
+        <div class="linha-tempo">
+          <article class="marco" data-revelar>
+            <span class="marco__periodo">15 de janeiro de 2023</span>
+            <h3 class="marco__titulo">O Fefê chega ao mundo</h3>
+            <p class="marco__texto">
+              Fernando nasce prematuro, com Síndrome de Down e cardiopatia
+              congênita.
+            </p>
+          </article>
+
+          <article class="marco" data-revelar>
+            <span class="marco__periodo">Aos três meses</span>
+            <h3 class="marco__titulo">A cirurgia no coração</h3>
+            <p class="marco__texto">
+              Enfrenta uma cirurgia no coração e, mesmo tendo ficado em estado
+              grave, supera essa batalha.
+            </p>
+          </article>
+
+          <article class="marco" data-revelar>
+            <span class="marco__periodo">Mais uma vitória</span>
+            <h3 class="marco__titulo">A catarata congênita vencida</h3>
+            <p class="marco__texto">
+              Mais um desafio superado na sua caminhada.
+            </p>
+          </article>
+
+          <article class="marco" data-revelar>
+            <span class="marco__periodo">Julho</span>
+            <h3 class="marco__titulo">Nasce a Doce Fefê</h3>
+            <p class="marco__texto">
+              Dois dias antes da descoberta da leucemia, nasce a ideia: uma
+              pequena produção de pães de mel que se transformou em um projeto
+              de amor.
+            </p>
+          </article>
+
+          <article class="marco" data-revelar>
+            <span class="marco__periodo">Julho</span>
+            <h3 class="marco__titulo">O diagnóstico de leucemia</h3>
+            <p class="marco__texto">
+              Um novo desafio. Graças a Deus, alcançou a remissão e segue seu
+              tratamento com muita coragem e esperança.
+            </p>
+          </article>
+
+          <article class="marco" data-revelar>
+            <span class="marco__periodo">Hoje</span>
+            <h3 class="marco__titulo">Uma marca que cresce</h3>
+            <p class="marco__texto">
+              Com o Super Fefê na identidade da marca, o sabor, a qualidade e
+              o cuidado de cada doce conquistaram os clientes. Sonhamos com
+              uma loja, um site e uma marca que cresça cada vez mais.
+            </p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- =====================================================================
+         O SUPER FEFÊ
+         ================================================================== -->
+    <section class="secao secao--bege">
+      <div class="container historia-abertura">
+        <div class="historia-abertura__texto" data-revelar>
+          <span class="sobretitulo">Nosso pequeno herói</span>
+          <h2>O Super Fefê</h2>
+          <span class="filete-dourado"></span>
+
+          <p class="mt-6">
+            Com a criação do Super Fefê, nosso pequeno herói ganhou um lugar
+            especial na identidade da marca.
+          </p>
+        </div>
+
+        <!-- Arte do Super Fefê, fornecida pela família. Exibida na íntegra. -->
+        <div data-revelar data-revelar-atraso="1">
+          <div class="historia-foto historia-foto--larga">
+            <img
+              src="./assets/images/SuperFefe.jpg"
+              alt="Super Fefê: Fernando vestido de super-herói, com capa vermelha e o peito estampado com o nome Super Fefê"
+              width="659" height="871"
+              loading="lazy" decoding="async">
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- =====================================================================
+         NOSSO SONHO
+         ================================================================== -->
+    <section class="secao">
+      <div class="container">
+        <div class="secao__cabecalho secao__cabecalho--centro">
+          <span class="sobretitulo">Para onde vamos</span>
+          <h2>Nosso maior sonho</h2>
+          <span class="filete-dourado filete-dourado--centro"></span>
+        </div>
+
+        <div class="citacao" data-revelar>
+          <p class="citacao__texto">
+            Nosso grande sonho é que a Doce Fefê cresça junto com o Fefê e se
+            torne a garantia de um futuro para ele. Que, quando adulto e
+            pronto, ele possa assumir esse negócio e cuidar dele com o mesmo
+            amor e carinho com que cuidamos dele hoje.
+          </p>
+        </div>
+
+        <div class="texto-reservado mt-8" data-revelar>
+          <span class="texto-reservado__rotulo">
+            <span aria-hidden="true">🌱</span> Nosso propósito
+          </span>
+          <p class="proposito-texto">
+            Queremos construir uma oportunidade de autonomia, trabalho e
+            inclusão, para que Fernando e outros jovens possam realizar seus
+            próprios sonhos.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- =====================================================================
+         VALORES
+         ================================================================== -->
+    <section class="secao secao--creme">
+      <div class="container">
+        <div class="secao__cabecalho secao__cabecalho--centro">
+          <span class="sobretitulo">O que nos move</span>
+          <h2>Nossos valores</h2>
+          <span class="filete-dourado filete-dourado--centro"></span>
+        </div>
+
+        <div class="valores">
+          <article class="valor" data-revelar>
+            <div class="valor__icone" aria-hidden="true">❤️</div>
+            <h3 class="valor__titulo">Amor</h3>
+            <p class="valor__texto">
+              Um projeto que nasceu do amor e é feito com ele, todos os dias.
+            </p>
+          </article>
+
+          <article class="valor" data-revelar data-revelar-atraso="1">
+            <div class="valor__icone" aria-hidden="true">👨‍👩‍👦</div>
+            <h3 class="valor__titulo">Família</h3>
+            <p class="valor__texto">
+              Uma marca construída em família, que leva o nome do nosso filho.
+            </p>
+          </article>
+
+          <article class="valor" data-revelar data-revelar-atraso="2">
+            <div class="valor__icone" aria-hidden="true">💪</div>
+            <h3 class="valor__titulo">Superação</h3>
+            <p class="valor__texto">
+              Cada desafio vencido pelo Fefê nos ensina a não desistir.
+            </p>
+          </article>
+
+          <article class="valor" data-revelar>
+            <div class="valor__icone" aria-hidden="true">🌅</div>
+            <h3 class="valor__titulo">Esperança</h3>
+            <p class="valor__texto">
+              Seguimos com coragem e esperança, um dia de cada vez.
+            </p>
+          </article>
+
+          <article class="valor" data-revelar data-revelar-atraso="1">
+            <div class="valor__icone" aria-hidden="true">🤲</div>
+            <h3 class="valor__titulo">Carinho</h3>
+            <p class="valor__texto">
+              O mesmo cuidado que temos com ele vai em cada doce que sai daqui.
+            </p>
+          </article>
+
+          <article class="valor" data-revelar data-revelar-atraso="2">
+            <div class="valor__icone" aria-hidden="true">🌱</div>
+            <h3 class="valor__titulo">Inclusão</h3>
+            <p class="valor__texto">
+              Construir autonomia, trabalho e oportunidade para o Fernando e
+              outros jovens.
+            </p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- =====================================================================
+         GALERIA
+         ================================================================== -->
+    <section class="secao">
+      <div class="container">
+        <div class="secao__cabecalho secao__cabecalho--centro">
+          <span class="sobretitulo">Momentos</span>
+          <h2>Nossa galeria</h2>
+          <span class="filete-dourado filete-dourado--centro"></span>
+          <p class="subtitulo mt-4">
+            Um espaço para as fotos que contam essa caminhada.
+          </p>
+        </div>
+
+        <div class="galeria">
+          <!-- Enquanto não houver fotos da família, mantemos os marcadores.
+               Eles serão substituídos um a um, sem mexer no layout. -->
+          <div class="galeria__item">
+            <img
+              src="./assets/images/logo-circular.jpeg"
+              alt="Selo circular da Doce Fefê.21 com o telefone de contato"
+              width="400" height="400" loading="lazy" decoding="async">
+          </div>
+          <div class="galeria__item">
+            <img
+              src="./assets/images/selo-pao-de-mel.jpeg"
+              alt="Selo da linha de Pão de Mel da Doce Fefê.21"
+              width="400" height="400" loading="lazy" decoding="async">
+          </div>
+          <!-- Espaços para mais fotos da caminhada, quando a família enviar. -->
+          <div class="galeria__item">
+            <div class="espaco-foto">
+              <span class="espaco-foto__icone" aria-hidden="true">📷</span>
+              <p class="espaco-foto__rotulo">Espaço para nova foto</p>
+            </div>
+          </div>
+          <div class="galeria__item">
+            <div class="espaco-foto">
+              <span class="espaco-foto__icone" aria-hidden="true">📷</span>
+              <p class="espaco-foto__rotulo">Espaço para nova foto</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- =====================================================================
+         ENCERRAMENTO
+         ================================================================== -->
+    <section class="secao secao--escura">
+      <div class="container">
+        <div class="historia-encerramento" data-revelar>
+          <p class="historia-encerramento__frase">
+            Doce Fefê.21 — um sonho que nasceu do amor e cresce com esperança.
+            <span class="historia-encerramento__coracao" aria-hidden="true">❤️</span>
+          </p>
+
+          <div class="flex quebrar justificar-centro gap-4 mt-8">
+            <a href="./produtos.html" class="btn btn--dourado btn--grande">
+              Conhecer nossos doces
+            </a>
+            <a href="#" data-whatsapp="encomenda" class="btn btn--contorno-claro btn--grande">
+              Fazer uma encomenda
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+
   </main>
 
   <div id="rodape"></div>
