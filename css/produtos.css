@@ -1,8 +1,717 @@
 /* =============================================================================
    DOCE FEFÊ.21 — produtos.css
-   Catálogo, cards de produto, filtros, busca e página de detalhes.
+   Catálogo, cards de produto, filtros, busca, paginação e página de detalhes.
 
-   Esta folha será preenchida na FASE 3.
-   O arquivo já existe e é carregado pelas páginas correspondentes, para que
-   nenhum <link> aponte para um endereço inexistente.
+   Carregada por: produtos.html, produto.html, index.html (pelos cards)
    ========================================================================== */
+
+/* =============================================================================
+   PARTE 1 — CARD DE PRODUTO
+   Gerado por js/components/product-card.js
+   ========================================================================== */
+
+.produto-card {
+  display: flex;
+  flex-direction: column;
+  background-color: var(--cor-branco);
+  border: 1px solid var(--cor-borda);
+  border-radius: var(--raio-lg);
+  overflow: hidden;
+  box-shadow: var(--sombra-sm);
+  color: inherit;
+  height: 100%;
+  transition: transform var(--transicao), box-shadow var(--transicao),
+    border-color var(--transicao);
+}
+
+.produto-card:hover {
+  transform: translateY(-5px);
+  box-shadow: var(--sombra-lg);
+  border-color: var(--cor-dourado-400);
+  color: inherit;
+}
+
+/* -----------------------------------------------------------------------------
+   1.1 Imagem
+   -------------------------------------------------------------------------- */
+.produto-card__midia {
+  position: relative;
+  aspect-ratio: 1;
+  /* Fundo creme suave: aparece nas bordas quando a imagem não é quadrada. */
+  background: linear-gradient(160deg, var(--cor-creme) 0%, var(--cor-creme-200) 100%);
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+/*
+  `contain`, e NÃO `cover`.
+
+  As artes dos kits são largas e trazem informação essencial impressa —
+  nome do kit, conteúdo e preço. Com `cover`, o recorte quadrado cortava
+  justamente a lateral onde fica o preço.
+
+  Perder enquadramento é um problema estético; perder o preço é um problema
+  de informação. Então a imagem aparece inteira, e o fundo creme preenche o
+  que sobra.
+*/
+.produto-card__midia img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  padding: var(--esp-2);
+  transition: transform 600ms ease;
+}
+
+.produto-card:hover .produto-card__midia img {
+  transform: scale(1.06);
+}
+
+/* Marcador exibido enquanto não há fotografia cadastrada.
+   Preferimos isto a uma imagem genérica de banco de imagens, que destoaria
+   da identidade artesanal da marca. */
+.produto-card__sem-foto {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--esp-2);
+  background: linear-gradient(145deg, var(--cor-bege-300), var(--cor-creme-200));
+}
+
+.produto-card__sem-foto-icone {
+  font-size: 2.8rem;
+  line-height: 1;
+  opacity: 0.55;
+}
+
+.produto-card__sem-foto-texto {
+  font-size: var(--txt-xs);
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--cor-texto-claro);
+}
+
+/* -----------------------------------------------------------------------------
+   1.2 Selos
+   -------------------------------------------------------------------------- */
+.produto-card__selos {
+  position: absolute;
+  top: var(--esp-3);
+  left: var(--esp-3);
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--esp-2);
+  /* Decorativos: não devem bloquear o clique no card. */
+  pointer-events: none;
+}
+
+/* -----------------------------------------------------------------------------
+   1.3 Esgotado
+   -------------------------------------------------------------------------- */
+.produto-card__esgotado {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  background-color: rgba(46, 24, 16, 0.55);
+  pointer-events: none;
+}
+
+.produto-card__esgotado span {
+  padding: 0.45rem 1.2rem;
+  border-radius: var(--raio-pill);
+  background-color: var(--cor-creme);
+  color: var(--cor-chocolate-800);
+  font-size: var(--txt-sm);
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.produto-card--esgotado .produto-card__midia img {
+  filter: grayscale(0.55);
+}
+
+/* -----------------------------------------------------------------------------
+   1.4 Corpo
+   -------------------------------------------------------------------------- */
+.produto-card__corpo {
+  display: flex;
+  flex-direction: column;
+  gap: var(--esp-2);
+  padding: var(--esp-5);
+  /* Ocupa o espaço restante para que os rodapés fiquem alinhados entre
+     cards de alturas diferentes. */
+  flex: 1;
+}
+
+.produto-card__categoria {
+  font-size: var(--txt-xs);
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--cor-dourado-700);
+}
+
+.produto-card__nome {
+  font-size: var(--txt-lg);
+  line-height: 1.25;
+  color: var(--cor-chocolate-800);
+  margin: 0;
+}
+
+.produto-card__descricao {
+  font-size: var(--txt-sm);
+  line-height: 1.5;
+  color: var(--cor-texto-suave);
+  max-width: none;
+}
+
+.produto-card__rodape {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: var(--esp-3);
+  margin-top: auto;
+  padding-top: var(--esp-4);
+}
+
+.produto-card__preco {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.2;
+}
+
+.produto-card__preco .preco {
+  font-size: var(--txt-xl);
+}
+
+.produto-card__peso {
+  font-size: var(--txt-xs);
+  font-weight: 700;
+  color: var(--cor-texto-claro);
+  padding: 0.2rem 0.6rem;
+  background-color: var(--cor-bege-300);
+  border-radius: var(--raio-pill);
+  white-space: nowrap;
+}
+
+/* =============================================================================
+   PARTE 2 — FILTROS E BUSCA
+   ========================================================================== */
+
+.catalogo-barra {
+  position: sticky;
+  /* Gruda logo abaixo do cabeçalho fixo. */
+  top: var(--altura-header);
+  z-index: var(--z-sticky);
+  background-color: var(--cor-creme);
+  border-bottom: 1px solid var(--cor-borda);
+  padding-block: var(--esp-5);
+  margin-bottom: var(--esp-8);
+}
+
+/* -----------------------------------------------------------------------------
+   2.1 Campo de busca
+   -------------------------------------------------------------------------- */
+.busca {
+  position: relative;
+  max-width: 460px;
+  width: 100%;
+}
+
+.busca input {
+  width: 100%;
+  padding: 0.7rem 1.2rem 0.7rem 2.8rem;
+  background-color: var(--cor-branco);
+  border: 1.5px solid var(--cor-borda);
+  border-radius: var(--raio-pill);
+  /* 16px mínimo impede o iOS de dar zoom ao focar o campo. */
+  font-size: max(16px, var(--txt-base));
+  transition: border-color var(--transicao-rapida), box-shadow var(--transicao-rapida);
+}
+
+.busca input:focus {
+  outline: none;
+  border-color: var(--cor-dourado-600);
+  box-shadow: 0 0 0 3px rgba(201, 146, 43, 0.18);
+}
+
+.busca__icone {
+  position: absolute;
+  left: var(--esp-4);
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--cor-texto-claro);
+  pointer-events: none;
+  display: flex;
+}
+
+.busca__icone svg {
+  width: 19px;
+  height: 19px;
+}
+
+/* -----------------------------------------------------------------------------
+   2.2 Chips de categoria
+   -------------------------------------------------------------------------- */
+.filtros-categorias {
+  display: flex;
+  gap: var(--esp-2);
+  overflow-x: auto;
+  padding-bottom: var(--esp-2);
+  scrollbar-width: thin;
+  -webkit-overflow-scrolling: touch;
+}
+
+.filtro-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--esp-2);
+  padding: 0.5rem 1rem;
+  border-radius: var(--raio-pill);
+  border: 1.5px solid var(--cor-borda);
+  background-color: var(--cor-branco);
+  color: var(--cor-chocolate-700);
+  font-size: var(--txt-sm);
+  font-weight: 700;
+  white-space: nowrap;
+  flex-shrink: 0;
+  min-height: 40px;
+  transition: background-color var(--transicao-rapida),
+    border-color var(--transicao-rapida), color var(--transicao-rapida);
+}
+
+.filtro-chip:hover {
+  border-color: var(--cor-dourado-400);
+  background-color: var(--cor-creme-200);
+}
+
+.filtro-chip--ativo {
+  background-color: var(--cor-chocolate-700);
+  border-color: var(--cor-chocolate-700);
+  color: var(--cor-creme);
+}
+
+.filtro-chip__contagem {
+  font-size: var(--txt-xs);
+  font-weight: 800;
+  padding: 0.1rem 0.42rem;
+  border-radius: var(--raio-pill);
+  background-color: var(--cor-bege-300);
+  color: var(--cor-chocolate-700);
+}
+
+.filtro-chip--ativo .filtro-chip__contagem {
+  background-color: rgba(255, 249, 241, 0.22);
+  color: var(--cor-creme);
+}
+
+/* Categoria ainda sem produtos: aparece, mas não filtra. */
+.filtro-chip--em-breve {
+  border-style: dashed;
+  opacity: 0.7;
+  cursor: default;
+}
+
+.filtro-chip--em-breve:hover {
+  border-color: var(--cor-borda);
+  background-color: var(--cor-branco);
+}
+
+.filtro-chip__em-breve {
+  font-size: var(--txt-xs);
+  font-weight: 800;
+  padding: 0.1rem 0.45rem;
+  border-radius: var(--raio-pill);
+  background-color: var(--cor-bege-400);
+  color: var(--cor-chocolate-600);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+/* -----------------------------------------------------------------------------
+   2.3 Linha de ordenação e resumo
+   -------------------------------------------------------------------------- */
+.catalogo-controles {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--esp-4);
+  margin-top: var(--esp-4);
+}
+
+.catalogo-resumo {
+  font-size: var(--txt-sm);
+  font-weight: 700;
+  color: var(--cor-texto-suave);
+  max-width: none;
+}
+
+.ordenacao {
+  display: flex;
+  align-items: center;
+  gap: var(--esp-2);
+  font-size: var(--txt-sm);
+}
+
+.ordenacao label {
+  font-weight: 700;
+  color: var(--cor-texto-suave);
+  white-space: nowrap;
+}
+
+.ordenacao select {
+  padding: 0.5rem 0.9rem;
+  border: 1.5px solid var(--cor-borda);
+  border-radius: var(--raio-md);
+  background-color: var(--cor-branco);
+  font-size: max(16px, var(--txt-sm));
+  font-weight: 600;
+  color: var(--cor-chocolate-700);
+  cursor: pointer;
+}
+
+.ordenacao select:focus {
+  outline: none;
+  border-color: var(--cor-dourado-600);
+  box-shadow: 0 0 0 3px rgba(201, 146, 43, 0.18);
+}
+
+/* =============================================================================
+   PARTE 3 — PAGINAÇÃO
+   ========================================================================== */
+
+.paginacao {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: var(--esp-2);
+  margin-top: var(--esp-12);
+}
+
+.paginacao__botao {
+  min-width: 42px;
+  height: 42px;
+  padding: 0 var(--esp-3);
+  border-radius: var(--raio-md);
+  border: 1.5px solid var(--cor-borda);
+  background-color: var(--cor-branco);
+  color: var(--cor-chocolate-700);
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  transition: background-color var(--transicao-rapida),
+    border-color var(--transicao-rapida), color var(--transicao-rapida);
+}
+
+.paginacao__botao:hover:not(:disabled):not(.paginacao__botao--atual) {
+  border-color: var(--cor-dourado-400);
+  background-color: var(--cor-creme-200);
+}
+
+.paginacao__botao--atual {
+  background-color: var(--cor-chocolate-700);
+  border-color: var(--cor-chocolate-700);
+  color: var(--cor-creme);
+  cursor: default;
+}
+
+.paginacao__botao:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+/* =============================================================================
+   PARTE 4 — AVISOS DO CATÁLOGO
+   ========================================================================== */
+
+/* Faixa exibida a revendedores aprovados. */
+.aviso-atacado {
+  display: flex;
+  align-items: center;
+  gap: var(--esp-3);
+  padding: var(--esp-4) var(--esp-5);
+  margin-bottom: var(--esp-6);
+  border-radius: var(--raio-md);
+  background-color: var(--cor-sucesso-fundo);
+  border-left: 4px solid var(--cor-sucesso);
+  color: #1E5A38;
+  font-size: var(--txt-sm);
+  font-weight: 600;
+}
+
+/* Aviso de catálogo em demonstração.
+   REMOVER quando os produtos reais forem cadastrados. */
+.aviso-demonstracao {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--esp-3);
+  padding: var(--esp-4) var(--esp-5);
+  margin-bottom: var(--esp-6);
+  border-radius: var(--raio-md);
+  background-color: var(--cor-aviso-fundo);
+  border-left: 4px solid var(--cor-aviso);
+  color: #7A4E08;
+  font-size: var(--txt-sm);
+}
+
+.aviso-demonstracao p {
+  max-width: none;
+}
+
+/* =============================================================================
+   PARTE 5 — PÁGINA DE DETALHES DO PRODUTO
+   ========================================================================== */
+
+.produto-detalhe {
+  display: grid;
+  gap: var(--esp-8);
+  grid-template-columns: 1fr;
+  align-items: start;
+}
+
+@media (min-width: 900px) {
+  .produto-detalhe {
+    grid-template-columns: 1fr 1fr;
+    gap: var(--esp-12);
+  }
+}
+
+/* -----------------------------------------------------------------------------
+   5.1 Galeria
+   -------------------------------------------------------------------------- */
+.produto-galeria__principal {
+  position: relative;
+  aspect-ratio: 1;
+  border-radius: var(--raio-xl);
+  overflow: hidden;
+  background: linear-gradient(160deg, var(--cor-creme) 0%, var(--cor-creme-200) 100%);
+  box-shadow: var(--sombra-md);
+}
+
+/* `contain` pelo mesmo motivo do card: nada da arte pode ser cortado. */
+.produto-galeria__principal img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  padding: var(--esp-4);
+}
+
+.produto-galeria__miniaturas {
+  display: flex;
+  gap: var(--esp-3);
+  margin-top: var(--esp-4);
+  overflow-x: auto;
+}
+
+.produto-galeria__miniatura {
+  width: 76px;
+  height: 76px;
+  flex-shrink: 0;
+  border-radius: var(--raio-md);
+  overflow: hidden;
+  border: 2px solid transparent;
+  background-color: var(--cor-bege-300);
+  cursor: pointer;
+  transition: border-color var(--transicao-rapida);
+}
+
+.produto-galeria__miniatura img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  padding: 2px;
+}
+
+.produto-galeria__miniatura--ativa {
+  border-color: var(--cor-dourado-600);
+}
+
+/* -----------------------------------------------------------------------------
+   5.2 Informações
+   -------------------------------------------------------------------------- */
+.produto-info__categoria {
+  font-size: var(--txt-sm);
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--cor-dourado-700);
+}
+
+.produto-info__nome {
+  font-size: var(--txt-3xl);
+  margin-block: var(--esp-3) var(--esp-4);
+}
+
+.produto-info__selos {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--esp-2);
+  margin-bottom: var(--esp-5);
+}
+
+.produto-info__preco {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: var(--esp-3);
+  padding-block: var(--esp-5);
+  border-block: 1px solid var(--cor-borda);
+  margin-bottom: var(--esp-6);
+}
+
+.produto-info__preco .preco {
+  font-size: var(--txt-3xl);
+}
+
+.produto-info__economia {
+  font-size: var(--txt-sm);
+  font-weight: 700;
+  color: var(--cor-sucesso);
+  padding: 0.25rem 0.7rem;
+  border-radius: var(--raio-pill);
+  background-color: var(--cor-sucesso-fundo);
+}
+
+.produto-info__descricao {
+  font-size: var(--txt-base);
+  line-height: 1.75;
+  color: var(--cor-texto-suave);
+  margin-bottom: var(--esp-6);
+}
+
+/* -----------------------------------------------------------------------------
+   5.3 Ficha técnica
+   -------------------------------------------------------------------------- */
+.ficha {
+  margin-bottom: var(--esp-8);
+}
+
+.ficha__linha {
+  display: flex;
+  gap: var(--esp-4);
+  padding-block: var(--esp-3);
+  border-bottom: 1px solid var(--cor-borda);
+  font-size: var(--txt-sm);
+}
+
+.ficha__rotulo {
+  flex-shrink: 0;
+  width: 120px;
+  font-weight: 700;
+  color: var(--cor-chocolate-700);
+}
+
+.ficha__valor {
+  color: var(--cor-texto-suave);
+  max-width: none;
+}
+
+/* -----------------------------------------------------------------------------
+   5.4 Compra
+   -------------------------------------------------------------------------- */
+.produto-compra {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--esp-4);
+  padding: var(--esp-6);
+  background-color: var(--cor-creme-200);
+  border-radius: var(--raio-lg);
+  margin-bottom: var(--esp-5);
+}
+
+.seletor-quantidade {
+  display: flex;
+  align-items: center;
+  border: 1.5px solid var(--cor-borda);
+  border-radius: var(--raio-pill);
+  background-color: var(--cor-branco);
+  overflow: hidden;
+}
+
+.seletor-quantidade__botao {
+  width: 42px;
+  height: 46px;
+  display: grid;
+  place-items: center;
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--cor-chocolate-700);
+  transition: background-color var(--transicao-rapida);
+}
+
+.seletor-quantidade__botao:hover:not(:disabled) {
+  background-color: var(--cor-bege-300);
+}
+
+.seletor-quantidade__botao:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
+.seletor-quantidade__valor {
+  width: 52px;
+  height: 46px;
+  border: none;
+  text-align: center;
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+  font-size: max(16px, var(--txt-base));
+  background: transparent;
+  color: var(--cor-chocolate-800);
+}
+
+.seletor-quantidade__valor:focus {
+  outline: none;
+}
+
+/* Esconde as setinhas nativas do input numérico. */
+.seletor-quantidade__valor::-webkit-outer-spin-button,
+.seletor-quantidade__valor::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.seletor-quantidade__valor[type='number'] {
+  -moz-appearance: textfield;
+  appearance: textfield;
+}
+
+.produto-compra .btn {
+  flex: 1;
+  min-width: 190px;
+}
+
+/* -----------------------------------------------------------------------------
+   5.5 Disponibilidade
+   -------------------------------------------------------------------------- */
+.disponibilidade {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--esp-2);
+  font-size: var(--txt-sm);
+  font-weight: 700;
+}
+
+.disponibilidade::before {
+  content: '';
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.disponibilidade--disponivel { color: var(--cor-sucesso); }
+.disponibilidade--disponivel::before { background-color: var(--cor-sucesso); }
+
+.disponibilidade--encomenda { color: var(--cor-info); }
+.disponibilidade--encomenda::before { background-color: var(--cor-info); }
+
+.disponibilidade--esgotado { color: var(--cor-erro); }
+.disponibilidade--esgotado::before { background-color: var(--cor-erro); }

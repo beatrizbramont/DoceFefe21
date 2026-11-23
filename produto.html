@@ -5,19 +5,17 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="theme-color" content="#4A2C18">
 
-  <!-- ===== SEO ===== -->
+  <!--
+    SEO: título e descrição são ajustados por js/produto.js assim que o
+    produto carrega. Estes valores são o ponto de partida.
+  -->
   <title>Detalhes do Produto | Doce Fefê.21</title>
   <meta name="description" content="Ingredientes, peso, fotos e informações completas do doce artesanal escolhido.">
-  <link rel="canonical" href="https://docefefe21.com.br/produto.html">
 
-  <!-- ===== Open Graph ===== -->
-  <meta property="og:type" content="website">
+  <meta property="og:type" content="product">
   <meta property="og:site_name" content="Doce Fefê.21">
   <meta property="og:locale" content="pt_BR">
-  <meta property="og:title" content="Detalhes do Produto | Doce Fefê.21">
-  <meta property="og:description" content="Ingredientes, peso, fotos e informações completas do doce artesanal escolhido.">
   <meta property="og:image" content="./assets/images/logo.jpeg">
-  <meta property="og:url" content="https://docefefe21.com.br/produto.html">
   <meta name="twitter:card" content="summary_large_image">
 
   <link rel="icon" type="image/jpeg" href="./assets/images/logo.jpeg">
@@ -37,43 +35,115 @@
   <div id="cabecalho"></div>
 
   <main id="conteudo">
-    <section class="capa-pagina">
-      <div class="container">
-        <h1>Detalhes do Produto</h1>
-        <p class="subtitulo">Fotos, ingredientes, peso e tudo o que você precisa saber.</p>
-      </div>
-    </section>
 
     <div class="container">
       <nav aria-label="Você está aqui">
         <ol class="migalhas">
           <li><a href="./index.html">Início</a></li>
-          <li><span aria-current="page">Detalhes do Produto</span></li>
+          <li><a href="./produtos.html">Nossos Doces</a></li>
+          <li><a href="./produtos.html" data-migalha-categoria></a></li>
+          <li><span aria-current="page" data-migalha-produto>Carregando…</span></li>
         </ol>
       </nav>
     </div>
 
-    <!--
-      ATENÇÃO: bloco temporário da Fase 1.
-      O conteúdo real desta página será implementado na FASE 3.
-      Este aviso deve ser REMOVIDO quando aquela fase for concluída.
-    -->
-    <div class="container">
-      <div class="em-construcao">
-        <div class="em-construcao__icone" aria-hidden="true">🧁</div>
-        <h2>Esta página chega na Fase 3</h2>
-        <p>A página de detalhes com galeria de fotos, ingredientes, peso, preço e botão de adicionar ao carrinho.</p>
-        <p class="texto-pequeno">
-          A estrutura, o cabeçalho, o rodapé e a identidade visual já estão
-          funcionando — é a fundação sobre a qual esta página será construída.
-        </p>
-        <a href="./index.html" class="btn btn--primario">Voltar para o início</a>
+    <!-- ===== Carregando ===== -->
+    <div class="container" data-carregando-produto>
+      <div class="produto-detalhe" style="padding-block: var(--esp-6)">
+        <div class="esqueleto" style="aspect-ratio:1; border-radius:var(--raio-xl)"></div>
+        <div class="flex flex-coluna gap-4">
+          <div class="esqueleto esqueleto-linha esqueleto-linha--curta"></div>
+          <div class="esqueleto esqueleto-linha esqueleto-linha--titulo" style="height:34px"></div>
+          <div class="esqueleto esqueleto-linha"></div>
+          <div class="esqueleto esqueleto-linha"></div>
+          <div class="esqueleto esqueleto-linha esqueleto-linha--curta"></div>
+        </div>
       </div>
     </div>
+
+    <!-- ===== Erro / produto não encontrado ===== -->
+    <div class="container" data-erro-produto hidden></div>
+
+    <!-- ===== Produto ===== -->
+    <article class="container" data-conteudo-produto hidden>
+      <div class="produto-detalhe" style="padding-block: var(--esp-6)">
+
+        <!-- ----- Galeria ----- -->
+        <div data-galeria></div>
+
+        <!-- ----- Informações ----- -->
+        <div class="produto-info">
+
+          <!-- Aviso de produto de demonstração. Some automaticamente quando
+               os produtos reais forem cadastrados. -->
+          <div class="aviso-demonstracao" data-aviso-demonstracao hidden>
+            <span aria-hidden="true">⚠️</span>
+            <p class="sem-margem">
+              <strong>Produto de demonstração.</strong>
+              Nome, preço e peso são exemplos para visualizar o site.
+            </p>
+          </div>
+
+          <span class="produto-info__categoria" data-produto-categoria></span>
+          <h1 class="produto-info__nome" data-produto-nome></h1>
+
+          <div class="produto-info__selos" data-produto-selos></div>
+
+          <div class="produto-info__preco" data-produto-preco></div>
+
+          <p class="disponibilidade mb-6" data-produto-disponibilidade></p>
+
+          <p class="produto-info__descricao" data-produto-descricao></p>
+
+          <!-- ----- Compra ----- -->
+          <div class="produto-compra" data-area-compra>
+            <div data-seletor-quantidade></div>
+
+            <!-- Fica oculto até o produto carregar, para não aparecer um
+                 botão sem produto associado. -->
+            <button type="button" class="btn btn--primario btn--grande"
+                    data-adicionar-carrinho hidden>
+              Adicionar ao carrinho
+            </button>
+
+            <!-- O WhatsApp continua como caminho direto: é assim que a
+                 marca já atende hoje. -->
+            <a href="#" class="btn btn--whatsapp btn--grande"
+               data-pedir-whatsapp target="_blank" rel="noopener noreferrer">
+              Pedir pelo WhatsApp
+            </a>
+          </div>
+
+          <p class="texto-pequeno texto-suave mb-8" style="max-width:none">
+            Total:
+            <strong class="texto-dourado" data-total-pedido>—</strong>
+            · <a href="./carrinho.html">Ver carrinho</a></p>
+
+          <!-- ----- Ficha técnica ----- -->
+          <div class="ficha" data-ficha></div>
+
+        </div>
+      </div>
+    </article>
+
+    <!-- ===== Produtos relacionados ===== -->
+    <section class="secao secao--creme" data-secao-relacionados hidden>
+      <div class="container">
+        <div class="secao__cabecalho secao__cabecalho--centro">
+          <span class="sobretitulo">Você também pode gostar</span>
+          <h2>Da mesma linha</h2>
+          <span class="filete-dourado filete-dourado--centro"></span>
+        </div>
+
+        <div class="grade grade--4" data-relacionados></div>
+      </div>
+    </section>
+
   </main>
 
   <div id="rodape"></div>
 
   <script type="module" src="./js/main.js"></script>
+  <script type="module" src="./js/produto.js"></script>
 </body>
 </html>
