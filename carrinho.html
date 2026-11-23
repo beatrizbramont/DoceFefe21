@@ -5,20 +5,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="theme-color" content="#4A2C18">
 
-  <!-- ===== SEO ===== -->
   <title>Carrinho de Compras | Doce Fefê.21</title>
   <meta name="description" content="Revise os itens do seu pedido na Doce Fefê.21 antes de finalizar a compra.">
-  <link rel="canonical" href="https://docefefe21.com.br/carrinho.html">
 
-  <!-- ===== Open Graph ===== -->
-  <meta property="og:type" content="website">
-  <meta property="og:site_name" content="Doce Fefê.21">
-  <meta property="og:locale" content="pt_BR">
-  <meta property="og:title" content="Carrinho de Compras | Doce Fefê.21">
-  <meta property="og:description" content="Revise os itens do seu pedido na Doce Fefê.21 antes de finalizar a compra.">
-  <meta property="og:image" content="./assets/images/logo.jpeg">
-  <meta property="og:url" content="https://docefefe21.com.br/carrinho.html">
-  <meta name="twitter:card" content="summary_large_image">
+  <!-- Página de compra: não deve aparecer nos resultados de busca. -->
+  <meta name="robots" content="noindex, nofollow">
 
   <link rel="icon" type="image/jpeg" href="./assets/images/logo.jpeg">
   <link rel="apple-touch-icon" href="./assets/images/logo.jpeg">
@@ -30,6 +21,8 @@
   <link rel="stylesheet" href="./css/global.css">
   <link rel="stylesheet" href="./css/header.css">
   <link rel="stylesheet" href="./css/footer.css">
+  <!-- O carrinho reaproveita .seletor-quantidade e .preco do catálogo. -->
+  <link rel="stylesheet" href="./css/produtos.css">
   <link rel="stylesheet" href="./css/carrinho.css">
 </head>
 
@@ -37,6 +30,7 @@
   <div id="cabecalho"></div>
 
   <main id="conteudo">
+
     <section class="capa-pagina">
       <div class="container">
         <h1>Seu Carrinho</h1>
@@ -48,32 +42,99 @@
       <nav aria-label="Você está aqui">
         <ol class="migalhas">
           <li><a href="./index.html">Início</a></li>
-          <li><span aria-current="page">Seu Carrinho</span></li>
+          <li><span aria-current="page">Carrinho</span></li>
         </ol>
       </nav>
     </div>
 
-    <!--
-      ATENÇÃO: bloco temporário da Fase 1.
-      O conteúdo real desta página será implementado na FASE 4.
-      Este aviso deve ser REMOVIDO quando aquela fase for concluída.
-    -->
-    <div class="container">
-      <div class="em-construcao">
-        <div class="em-construcao__icone" aria-hidden="true">🧁</div>
-        <h2>Esta página chega na Fase 4</h2>
-        <p>A lista de itens com alteração de quantidade, remoção, aplicação de cupom e cálculo automático de subtotal, descontos e total.</p>
-        <p class="texto-pequeno">
-          A estrutura, o cabeçalho, o rodapé e a identidade visual já estão
-          funcionando — é a fundação sobre a qual esta página será construída.
-        </p>
-        <a href="./index.html" class="btn btn--primario">Voltar para o início</a>
+    <section class="secao" style="padding-top:0">
+      <div class="container">
+
+        <!-- Avisos vindos do servidor: item esgotado, quantidade ajustada,
+             preço alterado. Preenchidos por js/cart-page.js. -->
+        <div data-avisos></div>
+
+        <!-- Exibido só a revendedores aprovados — decidido no servidor. -->
+        <div class="aviso-atacado" data-aviso-atacado hidden>
+          <span aria-hidden="true">🤝</span>
+          <p class="sem-margem">
+            Você está vendo os <strong>preços de atacado</strong> da sua
+            condição de revendedor aprovado.
+          </p>
+        </div>
+
+        <!-- TEMPORÁRIO: some sozinho quando não houver produto de demonstração. -->
+        <div class="aviso-demonstracao" data-aviso-demonstracao hidden>
+          <span aria-hidden="true">⚠️</span>
+          <p class="sem-margem">
+            <strong>Há produtos de demonstração no carrinho.</strong>
+            Os preços são exemplos para visualizar o site — não representam a
+            tabela real da marca.
+          </p>
+        </div>
+
+        <!-- ===== Carrinho vazio ===== -->
+        <div data-carrinho-vazio hidden></div>
+
+        <!-- ===== Carrinho com itens ===== -->
+        <div class="carrinho-layout" data-painel-carrinho hidden>
+
+          <!-- ----- Lista de itens ----- -->
+          <div>
+            <div class="carrinho-cabecalho">
+              <h2>Itens do pedido</h2>
+              <button type="button" class="carrinho-item__remover" data-esvaziar>
+                Esvaziar carrinho
+              </button>
+            </div>
+
+            <div data-lista-itens></div>
+
+            <a href="./produtos.html" class="btn btn--secundario mt-6">
+              ← Continuar comprando
+            </a>
+          </div>
+
+          <!-- ----- Resumo ----- -->
+          <aside class="carrinho-resumo" aria-label="Resumo do pedido">
+            <div data-resumo></div>
+
+            <div class="carrinho-acoes">
+              <!--
+                O checkout completo chega na FASE 7. Até lá, o botão principal
+                é o pedido pelo WhatsApp — que é como a marca já atende hoje,
+                e funciona de verdade.
+              -->
+              <a href="#" class="btn btn--whatsapp btn--grande btn--bloco"
+                 data-pedido-whatsapp target="_blank" rel="noopener noreferrer">
+                Fechar pedido pelo WhatsApp
+              </a>
+
+              <a href="./checkout.html" class="btn btn--secundario btn--bloco"
+                 data-finalizar>
+                Finalizar no site
+              </a>
+            </div>
+
+            <!-- ----- Garantia ----- -->
+            <div class="carrinho-garantia">
+              <span aria-hidden="true">🔒</span>
+              <p>
+                Os valores são conferidos no servidor a cada atualização.
+                Preço e estoque são revalidados antes de confirmar o pedido.
+              </p>
+            </div>
+          </aside>
+
+        </div>
       </div>
-    </div>
+    </section>
+
   </main>
 
   <div id="rodape"></div>
 
   <script type="module" src="./js/main.js"></script>
+  <script type="module" src="./js/cart-page.js"></script>
 </body>
 </html>

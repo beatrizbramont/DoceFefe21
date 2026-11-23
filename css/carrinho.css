@@ -2,7 +2,384 @@
    DOCE FEFÊ.21 — carrinho.css
    Lista de itens, quantidades, cupom e resumo de valores.
 
-   Esta folha será preenchida na FASE 4.
-   O arquivo já existe e é carregado pelas páginas correspondentes, para que
-   nenhum <link> aponte para um endereço inexistente.
+   Carregada por: carrinho.html
+   Depende de produtos.css para .seletor-quantidade e .preco
    ========================================================================== */
+
+/* =============================================================================
+   1. LAYOUT GERAL
+   ========================================================================== */
+
+.carrinho-layout {
+  display: grid;
+  gap: var(--esp-8);
+  grid-template-columns: 1fr;
+  align-items: start;
+}
+
+@media (min-width: 960px) {
+  .carrinho-layout {
+    /* A lista ocupa o dobro do resumo. */
+    grid-template-columns: 1.7fr 1fr;
+    gap: var(--esp-10);
+  }
+}
+
+/* Enquanto o servidor revalida, o painel fica levemente apagado —
+   sinaliza "estou conferindo" sem esconder o conteúdo. */
+.carrinho-layout[aria-busy='true'] {
+  opacity: 0.65;
+  pointer-events: none;
+  transition: opacity var(--transicao);
+}
+
+.carrinho-cabecalho {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--esp-4);
+  padding-bottom: var(--esp-5);
+  margin-bottom: var(--esp-5);
+  border-bottom: 1px solid var(--cor-borda);
+}
+
+.carrinho-cabecalho h2 {
+  font-size: var(--txt-xl);
+  margin: 0;
+}
+
+/* =============================================================================
+   2. ITEM DO CARRINHO
+   ========================================================================== */
+
+.carrinho-item {
+  display: grid;
+  gap: var(--esp-4);
+  padding: var(--esp-5) 0;
+  border-bottom: 1px solid var(--cor-borda);
+  /* Celular: foto ao lado das informações, ações embaixo. */
+  grid-template-columns: 86px 1fr;
+  grid-template-areas:
+    'midia info'
+    'acoes acoes';
+}
+
+.carrinho-item:last-child {
+  border-bottom: none;
+}
+
+@media (min-width: 620px) {
+  .carrinho-item {
+    grid-template-columns: 100px 1fr auto;
+    grid-template-areas: 'midia info acoes';
+    align-items: center;
+    gap: var(--esp-5);
+  }
+}
+
+/* -----------------------------------------------------------------------------
+   2.1 Imagem
+   -------------------------------------------------------------------------- */
+.carrinho-item__midia {
+  grid-area: midia;
+  display: block;
+  aspect-ratio: 1;
+  border-radius: var(--raio-md);
+  overflow: hidden;
+  background: linear-gradient(160deg, var(--cor-creme) 0%, var(--cor-creme-200) 100%);
+}
+
+/* `contain` também aqui: as artes dos kits não podem ser cortadas. */
+.carrinho-item__midia img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  padding: 3px;
+}
+
+.carrinho-item__sem-foto {
+  width: 100%;
+  height: 100%;
+  display: grid;
+  place-items: center;
+  font-size: 1.9rem;
+  background: linear-gradient(145deg, var(--cor-bege-300), var(--cor-creme-200));
+  opacity: 0.7;
+}
+
+/* -----------------------------------------------------------------------------
+   2.2 Informações
+   -------------------------------------------------------------------------- */
+.carrinho-item__info {
+  grid-area: info;
+  display: flex;
+  flex-direction: column;
+  gap: var(--esp-1);
+  min-width: 0;
+}
+
+.carrinho-item__categoria {
+  font-size: var(--txt-xs);
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--cor-dourado-700);
+}
+
+.carrinho-item__nome {
+  font-family: var(--fonte-titulo);
+  font-size: var(--txt-lg);
+  font-weight: 700;
+  line-height: 1.25;
+  color: var(--cor-chocolate-800);
+}
+
+.carrinho-item__nome:hover {
+  color: var(--cor-dourado-700);
+}
+
+.carrinho-item__meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--esp-2);
+  font-size: var(--txt-xs);
+  color: var(--cor-texto-claro);
+  margin-top: var(--esp-1);
+}
+
+.carrinho-item__precos {
+  display: flex;
+  align-items: baseline;
+  gap: var(--esp-2);
+  margin-top: var(--esp-2);
+}
+
+.carrinho-item__unitario {
+  font-size: var(--txt-sm);
+  color: var(--cor-texto-suave);
+  font-variant-numeric: tabular-nums;
+}
+
+/* -----------------------------------------------------------------------------
+   2.3 Ações
+   -------------------------------------------------------------------------- */
+.carrinho-item__acoes {
+  grid-area: acoes;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--esp-4);
+}
+
+@media (min-width: 620px) {
+  .carrinho-item__acoes {
+    flex-direction: column;
+    align-items: flex-end;
+    justify-content: center;
+    gap: var(--esp-3);
+  }
+}
+
+.carrinho-item__subtotal {
+  font-size: var(--txt-lg);
+  white-space: nowrap;
+}
+
+.carrinho-item__remover {
+  font-size: var(--txt-xs);
+  font-weight: 700;
+  color: var(--cor-texto-claro);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  padding: var(--esp-1);
+  transition: color var(--transicao-rapida);
+}
+
+.carrinho-item__remover:hover {
+  color: var(--cor-erro);
+}
+
+/* =============================================================================
+   3. RESUMO
+   ========================================================================== */
+
+.carrinho-resumo {
+  /* Acompanha a rolagem no desktop, para o total ficar sempre visível. */
+  position: sticky;
+  top: calc(var(--altura-header) + var(--esp-5));
+  padding: var(--esp-6);
+  background-color: var(--cor-branco);
+  border: 1px solid var(--cor-borda);
+  border-radius: var(--raio-lg);
+  box-shadow: var(--sombra-sm);
+}
+
+@media (max-width: 959px) {
+  .carrinho-resumo {
+    position: static;
+  }
+}
+
+.resumo__titulo {
+  font-size: var(--txt-lg);
+  padding-bottom: var(--esp-4);
+  margin-bottom: var(--esp-4);
+  border-bottom: 1px solid var(--cor-borda);
+}
+
+.resumo__linha {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--esp-4);
+  padding-block: var(--esp-2);
+  font-size: var(--txt-sm);
+  color: var(--cor-texto-suave);
+  font-variant-numeric: tabular-nums;
+}
+
+.resumo__linha--desconto {
+  color: var(--cor-sucesso);
+  font-weight: 700;
+}
+
+.resumo__linha--info {
+  font-size: var(--txt-xs);
+  color: var(--cor-texto-claro);
+}
+
+.resumo__total {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--esp-4);
+  padding-top: var(--esp-4);
+  margin-top: var(--esp-3);
+  border-top: 2px solid var(--cor-bege-400);
+  font-size: var(--txt-base);
+  font-weight: 800;
+  color: var(--cor-chocolate-800);
+}
+
+.carrinho-acoes {
+  display: flex;
+  flex-direction: column;
+  gap: var(--esp-3);
+  margin-top: var(--esp-6);
+}
+
+/* Botão desabilitado por regra de negócio (ex.: pedido mínimo de atacado).
+   Usamos aria-disabled em vez de `disabled` porque o elemento é um link —
+   assim o leitor de tela anuncia o estado e o `title` explica o porquê. */
+.btn--desabilitado,
+.btn[aria-disabled='true'] {
+  opacity: 0.5;
+  pointer-events: none;
+  cursor: not-allowed;
+}
+
+/* =============================================================================
+   4. CUPOM
+   ========================================================================== */
+
+.carrinho-cupom {
+  padding-top: var(--esp-5);
+  margin-top: var(--esp-5);
+  border-top: 1px solid var(--cor-borda);
+}
+
+.cupom__linha {
+  display: flex;
+  gap: var(--esp-2);
+}
+
+.cupom__campo {
+  flex: 1;
+  min-width: 0;
+  padding: 0.6rem 0.9rem;
+  border: 1.5px solid var(--cor-borda);
+  border-radius: var(--raio-md);
+  background-color: var(--cor-creme-200);
+  font-size: max(16px, var(--txt-sm));
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--cor-chocolate-700);
+}
+
+.cupom__campo:focus {
+  outline: none;
+  border-color: var(--cor-dourado-600);
+  background-color: var(--cor-branco);
+  box-shadow: 0 0 0 3px rgba(201, 146, 43, 0.18);
+}
+
+.cupom__campo::placeholder {
+  letter-spacing: normal;
+  text-transform: none;
+  font-weight: 400;
+  color: var(--cor-texto-claro);
+}
+
+.cupom__mensagem {
+  font-size: var(--txt-xs);
+  margin-top: var(--esp-2);
+  min-height: 1.1em;
+}
+
+.cupom__mensagem--erro {
+  color: var(--cor-erro);
+  font-weight: 600;
+}
+
+.cupom-aplicado {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--esp-4);
+  padding: var(--esp-4);
+  border-radius: var(--raio-md);
+  background-color: var(--cor-sucesso-fundo);
+  border: 1px solid rgba(47, 125, 79, 0.28);
+  color: #1E5A38;
+}
+
+.cupom-aplicado strong {
+  display: block;
+  font-size: var(--txt-sm);
+  letter-spacing: 0.06em;
+  color: inherit;
+}
+
+.cupom-aplicado p {
+  color: inherit;
+  opacity: 0.85;
+  max-width: none;
+}
+
+/* =============================================================================
+   5. SELO DE SEGURANÇA
+   ========================================================================== */
+
+.carrinho-garantia {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--esp-3);
+  margin-top: var(--esp-5);
+  padding-top: var(--esp-5);
+  border-top: 1px solid var(--cor-borda);
+  font-size: var(--txt-xs);
+  color: var(--cor-texto-claro);
+}
+
+.carrinho-garantia span[aria-hidden] {
+  font-size: 1.1rem;
+  line-height: 1.2;
+  flex-shrink: 0;
+}
+
+.carrinho-garantia p {
+  max-width: none;
+}
