@@ -1,0 +1,20 @@
+/* =============================================================================
+   DOCE FEFÊ.21 — admin.css
+   Estilos do painel administrativo.
+
+   O layout completo (barra lateral, tabelas, formulários e gráficos) será
+   implementado na FASE 9. Por ora, apenas o essencial para as telas-base.
+   ========================================================================== */
+
+body.admin {
+  background-color: var(--cor-creme-200);
+  min-height: 100vh;
+}
+
+body.admin main {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  padding-block: var(--esp-10);
+}

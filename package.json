@@ -1,0 +1,26 @@
+{
+  "name": "doce-fefe-21",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Loja virtual da Doce Fefê.21 — doces artesanais. Frontend em HTML/CSS/JS puro com Vite, backend em Node + Express, banco PostgreSQL via Supabase.",
+  "type": "module",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "serve": "node --use-system-ca dev-server.mjs",
+    "test": "node --use-system-ca tests/executar.mjs",
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "db:check": "node --use-system-ca tests/conexao-banco.mjs",
+    "server": "node --use-system-ca backend/server.js",
+    "server:dev": "node --use-system-ca --watch backend/server.js",
+    "start": "concurrently -n \"VITE,API\" -c \"magenta,cyan\" \"npm:dev\" \"npm:server:dev\""
+  },
+  "devDependencies": {
+    "concurrently": "^9.1.2",
+    "vite": "^6.0.7"
+  },
+  "dependencies": {}
+}

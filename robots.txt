@@ -1,0 +1,13 @@
+# Doce Fefê.21 — robots.txt
+# Define o que os buscadores podem rastrear.
+
+User-agent: *
+Allow: /
+
+# O painel administrativo e as páginas de compra não devem ser indexados.
+Disallow: /admin/
+Disallow: /checkout.html
+Disallow: /carrinho.html
+Disallow: /minha-conta.html
+
+Sitemap: https://docefefe21.com.br/sitemap.xml

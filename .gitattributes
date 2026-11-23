@@ -1,0 +1,18 @@
+# Normaliza as quebras de linha.
+# No repositório tudo fica em LF; na máquina Windows o Git converte na hora
+# do checkout. Isso evita que o mesmo arquivo apareça como "modificado" só
+# porque foi aberto em outro sistema operacional.
+* text=auto eol=lf
+
+# Arquivos binários: o Git não deve tentar converter nada.
+*.jpg  binary
+*.jpeg binary
+*.png  binary
+*.gif  binary
+*.webp binary
+*.ico  binary
+*.pdf  binary
+*.woff  binary
+*.woff2 binary
+*.ttf   binary
+*.otf   binary

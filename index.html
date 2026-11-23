@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#4A2C18">
+
+  <!-- ===== SEO ===== -->
+  <title>Doce Fefê.21 — Doces Artesanais | Brownies, Pães de Mel e Alfajores</title>
+  <meta name="description" content="Doces artesanais feitos à mão com ingredientes selecionados. Brownies, pães de mel, alfajores e a linha fit da Doce Fefê.21. Encomendas pelo WhatsApp.">
+  <meta name="author" content="Doce Fefê.21">
+  <link rel="canonical" href="https://docefefe21.com.br/">
+
+  <!-- ===== Open Graph (compartilhamento em redes sociais) ===== -->
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Doce Fefê.21">
+  <meta property="og:locale" content="pt_BR">
+  <meta property="og:title" content="Doce Fefê.21 — Doces Artesanais">
+  <meta property="og:description" content="Muito mais que doces, uma história de amor em cada pedaço. Brownies, pães de mel e alfajores artesanais.">
+  <meta property="og:image" content="./assets/images/logo.jpeg">
+  <meta property="og:url" content="https://docefefe21.com.br/">
+  <meta name="twitter:card" content="summary_large_image">
+
+  <!-- ===== Ícone da aba ===== -->
+  <link rel="icon" type="image/jpeg" href="./assets/images/logo.jpeg">
+  <link rel="apple-touch-icon" href="./assets/images/logo.jpeg">
+
+  <!--
+    ===== Fontes =====
+    preconnect abre a conexão com o Google Fonts antes do CSS ser lido,
+    reduzindo o tempo até o texto aparecer com a fonte correta.
+    `display=swap` mostra o texto de imediato com a fonte de reserva.
+  -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,700;0,800;1,500;1,700&family=Nunito+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- ===== Estilos ===== -->
+  <link rel="stylesheet" href="./css/global.css">
+  <link rel="stylesheet" href="./css/header.css">
+  <link rel="stylesheet" href="./css/footer.css">
+  <link rel="stylesheet" href="./css/home.css">
+  <!-- Os cards das vitrines usam os estilos do catálogo. -->
+  <link rel="stylesheet" href="./css/produtos.css">
+
+  <!--
+    ===== Dados estruturados =====
+    Ajudam o Google a entender que este é um negócio de confeitaria.
+    Endereço e horários serão acrescentados quando confirmados pela cliente.
+  -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Bakery",
+    "name": "Doce Fefê.21",
+    "description": "Doces artesanais: brownies, pães de mel, alfajores e linha fit.",
+    "image": "https://docefefe21.com.br/assets/images/logo.jpeg",
+    "logo": "https://docefefe21.com.br/assets/images/logo.jpeg",
+    "url": "https://docefefe21.com.br/",
+    "telephone": "+5511979788231",
+    "sameAs": ["https://instagram.com/docefefe.21"],
+    "servesCuisine": "Doces artesanais",
+    "priceRange": "$$"
+  }
+  </script>
+</head>
+
+<body>
+  <!-- Cabeçalho, menu e rodapé são gerados por js/components/ -->
+  <div id="cabecalho"></div>
+
+  <main id="conteudo">
+
+    <!-- =====================================================================
+         BANNER PRINCIPAL
+         ================================================================== -->
+    <section class="hero">
+      <div class="container hero__interno">
+        <div class="hero__conteudo">
+          <!--
+            Chamada do especial de Natal. Fica ANTES do título, no primeiro
+            bloco que a pessoa lê, e rola até a seção dos kits.
+            Remover quando a campanha acabar.
+          -->
+          <a href="#natal" class="selo-natal">
+            <span class="selo-natal__icone" aria-hidden="true">🎄</span>
+            <span class="selo-natal__texto">
+              <strong>Especial de Natal</strong>
+            </span>
+            <span class="selo-natal__seta" aria-hidden="true">→</span>
+          </a>
+
+          <span class="hero__selo">
+            <span aria-hidden="true">✦</span> Feito com amor
+          </span>
+
+          <h1 class="hero__titulo">
+            Muito mais que doces,<br>
+            uma <em>história de amor</em><br>
+            em cada pedaço
+          </h1>
+
+          <p class="hero__texto">
+            Brownies, pães de mel e alfajores artesanais, preparados com
+            ingredientes selecionados e o carinho de quem faz de cada receita
+            um afeto.
+          </p>
+
+          <div class="hero__acoes">
+            <a href="./produtos.html" class="btn btn--dourado btn--grande">
+              Ver nossos doces
+            </a>
+            <a href="#" data-whatsapp="encomenda" class="btn btn--contorno-claro btn--grande">
+              Fazer uma encomenda
+            </a>
+          </div>
+
+          <!-- Dados verificáveis da própria operação. Nada inventado aqui:
+               são as linhas de produto e o canal de atendimento reais. -->
+          <div class="hero__provas">
+            <div>
+              <div class="hero__prova-valor">100%</div>
+              <div class="hero__prova-rotulo">Artesanal</div>
+            </div>
+            <div>
+              <div class="hero__prova-valor">4</div>
+              <div class="hero__prova-rotulo">Linhas de doces</div>
+            </div>
+            <div>
+              <div class="hero__prova-valor">WhatsApp</div>
+              <div class="hero__prova-rotulo">Atendimento direto</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- A logomarca original, apenas centralizada e redimensionada.
+             Os efeitos decorativos ficam na moldura, nunca sobre a imagem. -->
+        <div class="hero__visual">
+          <div class="hero__logo-moldura">
+            <img
+              src="./assets/images/logo.jpeg"
+              alt="Logomarca da Doce Fefê.21 — Doces Artesanais"
+              width="380" height="380"
+              loading="eager" fetchpriority="high" decoding="async">
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- =====================================================================
+         DIFERENCIAIS
+         ================================================================== -->
+    <section class="diferenciais">
+      <div class="container">
+        <div class="diferenciais__grade">
+          <div class="diferencial">
+            <div class="diferencial__icone" aria-hidden="true">👐</div>
+            <div>
+              <h2 class="diferencial__titulo">Produção artesanal</h2>
+              <p class="diferencial__texto">Cada doce é feito à mão, em pequenas quantidades.</p>
+            </div>
+          </div>
+          <div class="diferencial">
+            <div class="diferencial__icone" aria-hidden="true">🌾</div>
+            <div>
+              <h2 class="diferencial__titulo">Ingredientes selecionados</h2>
+              <p class="diferencial__texto">Sem atalhos: a qualidade começa na escolha da matéria-prima.</p>
+            </div>
+          </div>
+          <div class="diferencial">
+            <div class="diferencial__icone" aria-hidden="true">🎀</div>
+            <div>
+              <h2 class="diferencial__titulo">Pronto para presentear</h2>
+              <p class="diferencial__texto">Embalagens caprichadas que já chegam com carinho.</p>
+            </div>
+          </div>
+          <div class="diferencial">
+            <div class="diferencial__icone" aria-hidden="true">💬</div>
+            <div>
+              <h2 class="diferencial__titulo">Atendimento próximo</h2>
+              <p class="diferencial__texto">Fale direto conosco pelo WhatsApp, sem intermediários.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- =====================================================================
+         APRESENTAÇÃO DA MARCA
+         ================================================================== -->
+    <section class="secao">
+      <div class="container apresentacao">
+        <div class="apresentacao__midia" data-revelar>
+          <img
+            src="./assets/images/logo-selo.jpeg"
+            alt="Selo da marca Doce Fefê.21 — Doces Artesanais"
+            width="600" height="450" loading="lazy" decoding="async">
+        </div>
+
+        <!--
+          Resumo da história, usando apenas trechos do texto escrito pela
+          família. A narrativa completa está em nossa-historia.html.
+        -->
+        <div data-revelar>
+          <span class="sobretitulo">Nossa marca</span>
+          <h2>Doces que carregam uma história</h2>
+          <span class="filete-dourado"></span>
+
+          <p class="mt-6">
+            Fernando, nosso Fefê, nasceu em 15 de janeiro de 2023. Foi no meio
+            de uma caminhada de grandes desafios que nasceu a ideia da Doce
+            Fefê: uma pequena produção de pães de mel que, em meio a tantas
+            mudanças, se transformou em um projeto de amor.
+          </p>
+          <p class="mt-4">
+            Nosso maior sonho vai além de uma confeitaria — é construir
+            autonomia, trabalho e inclusão para que o Fernando e outros jovens
+            possam realizar seus próprios sonhos.
+          </p>
+
+          <a href="./nossa-historia.html" class="btn btn--secundario mt-8">
+            Conheça nossa história
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- =====================================================================
+         CATEGORIAS
+         ================================================================== -->
+    <section class="secao secao--creme">
+      <div class="container">
+        <div class="secao__cabecalho secao__cabecalho--centro">
+          <span class="sobretitulo">O que fazemos</span>
+          <h2>Nossas linhas de doces</h2>
+          <span class="filete-dourado filete-dourado--centro"></span>
+        </div>
+
+        <!--
+          As categorias vêm do banco (js/products.js). Assim o selo "Em breve"
+          da linha Fit tem uma fonte única de verdade — marcar aqui no HTML
+          exigiria lembrar de atualizar também o catálogo.
+        -->
+        <div class="categorias" data-categorias-home></div>
+      </div>
+    </section>
+
+    <!-- =====================================================================
+         PRODUTOS EM DESTAQUE
+         Os cards serão preenchidos a partir do banco de dados na Fase 3.
+         Até lá, exibimos esqueletos de carregamento (não dados falsos).
+         ================================================================== -->
+    <section class="secao" id="destaques">
+      <div class="container">
+        <div class="vitrine__cabecalho">
+          <div class="secao__cabecalho">
+            <span class="sobretitulo">Seleção da casa</span>
+            <h2>Produtos em destaque</h2>
+            <span class="filete-dourado"></span>
+          </div>
+          <a href="./produtos.html" class="btn btn--secundario btn--pequeno">Ver todos</a>
+        </div>
+
+        <div class="grade grade--4" data-vitrine="destaques" aria-busy="true">
+          <!-- js/products.js (Fase 3) preenche este contêiner -->
+        </div>
+      </div>
+    </section>
+
+    <!-- =====================================================================
+         PROMOÇÕES
+         A validade é controlada pelo banco (coluna promocao_ate). Quando a
+         data passa, esta vitrine fica vazia sozinha — sem ninguém mexer.
+         ================================================================== -->
+    <section class="secao" id="promocoes">
+      <div class="container">
+        <div class="secao__cabecalho secao__cabecalho--centro">
+          <span class="sobretitulo">Oferta especial</span>
+          <h2>Promoções</h2>
+          <span class="filete-dourado filete-dourado--centro"></span>
+          <p class="selo-prazo mt-4" data-prazo-promocao hidden></p>
+        </div>
+
+        <div class="grade grade--4" data-vitrine-promocao aria-busy="true"></div>
+      </div>
+    </section>
+
+    <!-- =====================================================================
+         ESPECIAL DE NATAL
+         Os Kits de Natal estão marcados como novidade no banco, então a
+         vitrine "novidades" os traz automaticamente.
+         ================================================================== -->
+    <section class="secao secao--natal" id="natal">
+      <div class="container">
+        <div class="secao__cabecalho secao__cabecalho--centro">
+          <span class="sobretitulo sobretitulo--natal">Presentes especiais</span>
+          <h2>Kits de Natal</h2>
+          <span class="filete-dourado filete-dourado--centro"></span>
+          <p class="subtitulo mt-4" style="margin-inline:auto">
+            Escolha seu kit e surpreenda neste Natal! Pães de mel ou alfajores
+            em embalagens caprichadas.
+          </p>
+          <p class="aviso-limitado mt-4">
+            <span aria-hidden="true">🎁</span>
+            Quantidade limitada de embalagem — faça seu pedido com antecedência.
+          </p>
+        </div>
+
+        <div class="grade grade--4" data-vitrine="novidades" aria-busy="true"></div>
+
+        <div class="texto-centro mt-8">
+          <a href="./produtos.html?categoria=sazonais" class="btn btn--primario btn--grande">
+            Ver todos os kits
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- =====================================================================
+         CHAMADAS: ENCOMENDAS E REVENDEDORES
+         ================================================================== -->
+    <section class="secao">
+      <div class="container">
+        <div class="chamadas">
+          <article class="chamada" data-revelar>
+            <div class="chamada__icone" aria-hidden="true">🎂</div>
+            <h3>Encomendas personalizadas</h3>
+            <p>
+              Festa, formatura, lembrancinha ou aquele mimo sem motivo nenhum?
+              Fale com a gente e montamos sua encomenda do jeito que você
+              imaginou.
+            </p>
+            <a href="#" data-whatsapp="encomenda" class="btn btn--whatsapp">
+              Encomendar pelo WhatsApp
+            </a>
+          </article>
+
+          <article class="chamada chamada--destaque" data-revelar data-revelar-atraso="1">
+            <div class="chamada__icone" aria-hidden="true">🤝</div>
+            <h3>Seja um revendedor</h3>
+            <p>
+              Tem uma cafeteria, loja ou quer empreender com doces artesanais?
+              Trabalhamos com condições especiais de atacado para parceiros
+              aprovados.
+            </p>
+            <a href="./seja-revendedor.html" class="btn btn--dourado">
+              Quero ser parceiro
+            </a>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- =====================================================================
+         INSTAGRAM
+         ================================================================== -->
+    <section class="secao secao--bege">
+      <div class="container instagram-chamada">
+        <span class="sobretitulo">Acompanhe o dia a dia</span>
+        <h2>Nosso Instagram</h2>
+        <span class="filete-dourado filete-dourado--centro"></span>
+
+        <p class="subtitulo mt-6 mb-6" style="margin-inline:auto">
+          Bastidores da produção, novidades e as fotos que dão água na boca.
+        </p>
+
+        <a
+          href="https://instagram.com/docefefe.21"
+          target="_blank" rel="noopener noreferrer"
+          class="btn btn--primario btn--grande">
+          Seguir @docefefe.21
+        </a>
+      </div>
+    </section>
+
+  </main>
+
+  <div id="rodape"></div>
+
+  <!-- Scripts como módulos ES: o Vite resolve as importações e otimiza o build -->
+  <script type="module" src="./js/main.js"></script>
+  <!-- Preenche as vitrines (destaques, mais vendidos, novidades) do banco -->
+  <script type="module" src="./js/products.js"></script>
+</body>
+</html>

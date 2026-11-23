@@ -1,0 +1,344 @@
+/* =============================================================================
+   DOCE FEFÊ.21 — header.css
+   Cabeçalho fixo, menu de navegação e menu lateral (drawer) do celular.
+   O HTML correspondente é gerado por js/components/site-header.js
+   ========================================================================== */
+
+/* -----------------------------------------------------------------------------
+   Cabeçalho
+   -------------------------------------------------------------------------- */
+.cabecalho {
+  position: sticky;
+  top: 0;
+  z-index: var(--z-header);
+  background-color: rgba(255, 249, 241, 0.92);
+  /* O desfoque dá profundidade sem esconder o conteúdo que passa por baixo. */
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--cor-borda);
+  transition: box-shadow var(--transicao), background-color var(--transicao);
+}
+
+/* Classe aplicada por js/navigation.js quando a página é rolada. */
+.cabecalho--rolado {
+  box-shadow: var(--sombra-md);
+  background-color: rgba(255, 249, 241, 0.98);
+}
+
+.cabecalho__interno {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--esp-4);
+  min-height: var(--altura-header);
+}
+
+/* --- Logomarca ---
+   IMPORTANTE: a imagem é o arquivo original da marca. Nunca aplicar filtros,
+   recortes ou deformações sobre ela — apenas redimensionamento proporcional. */
+.cabecalho__logo {
+  display: flex;
+  align-items: center;
+  gap: var(--esp-3);
+  flex-shrink: 0;
+}
+
+.cabecalho__logo img {
+  height: 56px;
+  width: 56px;
+  object-fit: contain;
+  border-radius: 50%;
+}
+
+.cabecalho__logo-texto {
+  display: none;
+  flex-direction: column;
+  line-height: 1.1;
+}
+
+.cabecalho__logo-nome {
+  font-family: var(--fonte-titulo);
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: var(--cor-chocolate-700);
+}
+
+.cabecalho__logo-slogan {
+  font-size: 0.64rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--cor-dourado-700);
+  font-weight: 700;
+}
+
+@media (min-width: 420px) {
+  .cabecalho__logo-texto {
+    display: flex;
+  }
+}
+
+/* --- Navegação principal (desktop) --- */
+.nav-principal {
+  display: none;
+}
+
+.nav-principal__lista {
+  display: flex;
+  align-items: center;
+  gap: var(--esp-1);
+}
+
+.nav-principal__link {
+  display: block;
+  padding: var(--esp-2) var(--esp-4);
+  border-radius: var(--raio-pill);
+  font-size: var(--txt-sm);
+  font-weight: 700;
+  color: var(--cor-chocolate-700);
+  white-space: nowrap;
+  transition: background-color var(--transicao-rapida), color var(--transicao-rapida);
+}
+
+.nav-principal__link:hover {
+  background-color: var(--cor-bege-300);
+  color: var(--cor-chocolate-800);
+}
+
+/* Página atual — marcada por js/navigation.js com aria-current="page". */
+.nav-principal__link[aria-current='page'] {
+  background-color: var(--cor-chocolate-700);
+  color: var(--cor-creme);
+}
+
+@media (min-width: 1024px) {
+  .nav-principal {
+    display: block;
+  }
+}
+
+/* --- Ações à direita (busca, conta, carrinho) --- */
+.cabecalho__acoes {
+  display: flex;
+  align-items: center;
+  gap: var(--esp-1);
+  flex-shrink: 0;
+}
+
+.botao-icone {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  color: var(--cor-chocolate-700);
+  transition: background-color var(--transicao-rapida), color var(--transicao-rapida);
+}
+
+.botao-icone:hover {
+  background-color: var(--cor-bege-300);
+  color: var(--cor-chocolate-800);
+}
+
+.botao-icone svg {
+  width: 22px;
+  height: 22px;
+}
+
+/* Contador de itens do carrinho. Atualizado por js/cart.js. */
+.botao-icone__contador {
+  position: absolute;
+  top: 2px;
+  right: 2px;
+  min-width: 19px;
+  height: 19px;
+  padding: 0 5px;
+  border-radius: var(--raio-pill);
+  background-color: var(--cor-dourado-600);
+  color: #fff;
+  font-size: 0.68rem;
+  font-weight: 800;
+  line-height: 19px;
+  text-align: center;
+  border: 2px solid var(--cor-creme);
+  /* Começa escondido; o JS remove o atributo hidden quando há itens.
+     A regra global [hidden] em global.css cuida de escondê-lo. */
+}
+
+/* Botão "hambúrguer" — some no desktop. */
+.botao-menu {
+  display: inline-flex;
+}
+
+@media (min-width: 1024px) {
+  .botao-menu {
+    display: none;
+  }
+}
+
+/* -----------------------------------------------------------------------------
+   Menu lateral do celular (drawer)
+   -------------------------------------------------------------------------- */
+.menu-overlay {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(46, 24, 16, 0.5);
+  z-index: var(--z-overlay);
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity var(--transicao), visibility var(--transicao);
+}
+
+.menu-overlay--aberto {
+  opacity: 1;
+  visibility: visible;
+}
+
+.menu-mobile {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: min(330px, 86vw);
+  background-color: var(--cor-creme);
+  z-index: var(--z-menu-mobile);
+  /* Fora da tela por padrão; desliza para dentro quando aberto. */
+  transform: translateX(100%);
+  transition: transform var(--transicao);
+  display: flex;
+  flex-direction: column;
+  box-shadow: var(--sombra-xl);
+  overflow-y: auto;
+  /* `visibility` impede que o menu fechado receba foco pelo Tab. */
+  visibility: hidden;
+}
+
+.menu-mobile--aberto {
+  transform: translateX(0);
+  visibility: visible;
+}
+
+.menu-mobile__topo {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--esp-4) var(--esp-5);
+  border-bottom: 1px solid var(--cor-borda);
+  min-height: var(--altura-header);
+}
+
+.menu-mobile__titulo {
+  font-family: var(--fonte-titulo);
+  font-size: var(--txt-lg);
+  color: var(--cor-chocolate-700);
+}
+
+.menu-mobile__lista {
+  padding: var(--esp-4) var(--esp-3);
+  flex: 1;
+}
+
+.menu-mobile__link {
+  display: flex;
+  align-items: center;
+  gap: var(--esp-3);
+  padding: var(--esp-4) var(--esp-4);
+  border-radius: var(--raio-md);
+  font-weight: 700;
+  color: var(--cor-chocolate-700);
+  transition: background-color var(--transicao-rapida);
+}
+
+.menu-mobile__link:hover {
+  background-color: var(--cor-bege-300);
+}
+
+.menu-mobile__link[aria-current='page'] {
+  background-color: var(--cor-chocolate-700);
+  color: var(--cor-creme);
+}
+
+.menu-mobile__separador {
+  height: 1px;
+  background-color: var(--cor-borda);
+  margin: var(--esp-3) var(--esp-4);
+}
+
+.menu-mobile__rodape {
+  padding: var(--esp-5);
+  border-top: 1px solid var(--cor-borda);
+  display: flex;
+  flex-direction: column;
+  gap: var(--esp-3);
+  background-color: var(--cor-creme-200);
+}
+
+/* -----------------------------------------------------------------------------
+   Botão flutuante do WhatsApp
+   Gerado por js/whatsapp.js — presente em todas as páginas públicas.
+   -------------------------------------------------------------------------- */
+.whatsapp-flutuante {
+  position: fixed;
+  right: var(--esp-5);
+  bottom: var(--esp-5);
+  z-index: var(--z-whatsapp);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 58px;
+  height: 58px;
+  border-radius: 50%;
+  background-color: var(--cor-whatsapp);
+  color: #fff;
+  box-shadow: var(--sombra-lg);
+  transition: transform var(--transicao), box-shadow var(--transicao);
+}
+
+.whatsapp-flutuante:hover {
+  color: #fff;
+  transform: scale(1.08);
+  box-shadow: var(--sombra-xl);
+}
+
+.whatsapp-flutuante svg {
+  width: 31px;
+  height: 31px;
+}
+
+/* Pulso suave para chamar atenção sem ser agressivo. */
+.whatsapp-flutuante::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background-color: var(--cor-whatsapp);
+  animation: pulso-whatsapp 2.4s ease-out infinite;
+  z-index: -1;
+}
+
+@keyframes pulso-whatsapp {
+  0%   { transform: scale(1);    opacity: 0.55; }
+  70%  { transform: scale(1.65); opacity: 0; }
+  100% { transform: scale(1.65); opacity: 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .whatsapp-flutuante::before {
+    animation: none;
+  }
+}
+
+/* Em telas muito pequenas, encolhe um pouco para não cobrir conteúdo. */
+@media (max-width: 420px) {
+  .whatsapp-flutuante {
+    width: 52px;
+    height: 52px;
+    right: var(--esp-4);
+    bottom: var(--esp-4);
+  }
+  .whatsapp-flutuante svg {
+    width: 27px;
+    height: 27px;
+  }
+}
