@@ -119,6 +119,9 @@ const modulos = [
 
   // --- Revendedores (Fase 10) ---
   'js/admin/revendedores.js',
+
+  // --- Separação do dia (Fase 11) ---
+  'js/admin/separacao.js',
 ];
 
 const carregados = {};

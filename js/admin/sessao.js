@@ -48,13 +48,13 @@ import {
 /* =============================================================================
  * MENU
  *
- * Só entram as telas que existem. Cupons e relatórios (Fase 11) ficam de fora
- * até serem construídos: menu que leva a uma página "em construção" é
- * promessa quebrada a cada clique.
+ * Só entram as telas que existem. Menu que leva a uma página "em construção"
+ * é promessa quebrada a cada clique.
  * ========================================================================== */
 
 const TELAS = [
   { arquivo: 'dashboard.html', rotulo: 'Visão geral', icone: '📊' },
+  { arquivo: 'separacao.html', rotulo: 'Separação', icone: '📋' },
   { arquivo: 'pedidos.html', rotulo: 'Pedidos', icone: '🧾' },
   { arquivo: 'produtos.html', rotulo: 'Produtos', icone: '🍫' },
   { arquivo: 'estoque.html', rotulo: 'Estoque', icone: '📦' },

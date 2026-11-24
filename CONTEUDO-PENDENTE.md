@@ -70,11 +70,10 @@ Nenhuma credencial foi inventada. Estas são necessárias nas fases indicadas:
 | Serviço | O que pegar | Fase |
 |---|---|---|
 | **Supabase** | Project URL, anon key, service_role key | 5 ✅ |
-| **Google Analytics** | ID de medição (G-XXXXXXXXXX) | 11 (opcional) |
 | **Domínio** | Registro de `docefefe21.com.br` ou similar | 12 |
 
-> Nenhuma credencial de intermediador de pagamento é necessária: a loja
-> recebe por Pix e confere o comprovante no painel.
+> Só falta o domínio. Não há intermediador de pagamento (o Pix é conferido
+> no painel) nem rastreamento de visitantes.
 
 Instruções detalhadas de onde obter cada uma estão no `README.md`.
 

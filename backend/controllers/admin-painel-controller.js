@@ -11,7 +11,13 @@
  */
 
 import { exigirAdmin } from '../../services/auth-service.js';
-import { obterResumo, listarClientes, PERIODOS } from '../../services/admin-service.js';
+import {
+  obterResumo,
+  listarClientes,
+  obterSeparacao,
+  PERIODOS,
+  ErroAdmin,
+} from '../../services/admin-service.js';
 
 const negar = (auth) => ({
   status: auth.status,
@@ -86,4 +92,39 @@ export async function getClientesAdmin({ req, query = {} } = {}) {
   }
 }
 
-export default { getResumoAdmin, getClientesAdmin };
+/**
+ * GET /api/admin/separacao?data=2026-11-25&filtro=a-produzir
+ *
+ * O que precisa sair da cozinha num dia. Sem `data`, devolve os pedidos que
+ * ainda não têm dia combinado — que é uma pergunta legítima, não um filtro
+ * esquecido.
+ */
+export async function getSeparacao({ req, query = {} } = {}) {
+  const auth = await exigirAdmin(req);
+  if (!auth.ok) return negar(auth);
+
+  try {
+    const separacao = await obterSeparacao({
+      data: query.data,
+      filtro: query.filtro,
+    });
+
+    return { status: 200, corpo: separacao };
+  } catch (erro) {
+    if (erro instanceof ErroAdmin) {
+      const resposta = { erro: true, mensagem: erro.message };
+      if (erro.campo) resposta.erros = { [erro.campo]: erro.message };
+
+      return { status: erro.status, corpo: resposta };
+    }
+
+    console.error('[admin] Falha ao montar a separação:', erro);
+
+    return {
+      status: 503,
+      corpo: { erro: true, mensagem: 'Não conseguimos carregar os pedidos do dia.' },
+    };
+  }
+}
+
+export default { getResumoAdmin, getClientesAdmin, getSeparacao };

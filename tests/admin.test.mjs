@@ -23,6 +23,7 @@ import {
 import {
   getResumoAdmin,
   getClientesAdmin,
+  getSeparacao,
 } from '../backend/controllers/admin-painel-controller.js';
 import {
   getProdutosAdmin,
@@ -342,6 +343,9 @@ const ROTAS_ADMIN = [
   // qualquer coisa, inclusive da validação do corpo.
   ['GET /api/admin/resumo', (req) => getResumoAdmin({ req, query: {} })],
   ['GET /api/admin/clientes', (req) => getClientesAdmin({ req, query: {} })],
+  // A separação expõe nome, WhatsApp e endereço de entrega de todo mundo
+  // que comprou para aquele dia.
+  ['GET /api/admin/separacao', (req) => getSeparacao({ req, query: {} })],
   ['GET /api/admin/produtos', (req) => getProdutosAdmin({ req, query: {} })],
   [
     'POST produto',

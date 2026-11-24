@@ -83,7 +83,16 @@ const ERROS_PEDIDO = {
   PRODUTO_INDISPONIVEL: { status: 409, campo: 'itens' },
   ESTOQUE_INSUFICIENTE: { status: 409, campo: 'itens' },
   SEM_ESTOQUE_CADASTRADO: { status: 409, campo: 'itens' },
+
+  // Mínimo de UNIDADES de um produto, para valer o preço de atacado.
   MINIMO_ATACADO: { status: 422, campo: 'itens' },
+
+  // Mínimo de VALOR do pedido inteiro, definido por parceiro (Fase 10).
+  // Sem esta linha o erro cai no caso genérico e o parceiro lê "tente
+  // novamente em instantes" — conselho errado, porque repetir o mesmo
+  // pedido nunca vai funcionar. Ele precisa ler quanto falta.
+  MINIMO_PEDIDO_ATACADO: { status: 422, campo: 'itens' },
+
   PRECO_INVALIDO: { status: 500, campo: null },
 };
 

@@ -756,10 +756,205 @@ body.admin {
 }
 
 /* =============================================================================
-   10. TELAS AINDA NÃO CONSTRUÍDAS
+   10. SEPARAÇÃO DO DIA
+   ========================================================================== */
 
-   Revendedores (Fase 10), cupons e relatórios (Fase 11) seguem com o aviso
-   de "em construção" — e por isso ficam fora do menu.
+/* Caixa vazia para riscar à caneta. No papel é o que marca o que já saiu do
+   forno; na tela, dá a mesma leitura de lista de tarefas. */
+.marcador {
+  flex-shrink: 0;
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  border: 2px solid var(--cor-chocolate-700);
+  border-radius: 3px;
+}
+
+.lista-separacao {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.lista-separacao li {
+  display: flex;
+  align-items: center;
+  gap: var(--esp-3);
+  padding-block: var(--esp-3);
+  border-top: 1px solid var(--cor-borda);
+}
+
+.lista-separacao li:first-child {
+  border-top: 0;
+}
+
+.lista-separacao__qtd {
+  min-width: 48px;
+  font-family: var(--fonte-titulo);
+  font-size: var(--txt-xl);
+  font-weight: 700;
+  color: var(--cor-dourado-700);
+  font-variant-numeric: tabular-nums;
+}
+
+.lista-separacao__nome {
+  font-size: var(--txt-base);
+  font-weight: 600;
+}
+
+/* -----------------------------------------------------------------------------
+   10.1 Pedido na folha
+   -------------------------------------------------------------------------- */
+.pedido-separacao {
+  padding: var(--esp-4);
+  margin-top: var(--esp-3);
+  background-color: var(--cor-branco);
+  border: 1px solid var(--cor-borda);
+  border-radius: var(--raio-md);
+}
+
+.pedido-separacao__topo {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--esp-3);
+  padding-bottom: var(--esp-2);
+  border-bottom: 1px solid var(--cor-borda);
+}
+
+.pedido-separacao__cliente {
+  font-weight: 600;
+}
+
+.pedido-separacao__endereco {
+  margin: var(--esp-2) 0 0;
+  font-size: var(--txt-sm);
+  line-height: 1.5;
+}
+
+/* "Sem nozes", "escrever Parabéns na caixa" — é o que mais gera erro quando
+   passa despercebido. Na folha, não pode parecer nota de rodapé. */
+.pedido-separacao__observacao {
+  margin: var(--esp-3) 0 0;
+  padding: var(--esp-3);
+  background-color: var(--cor-aviso-fundo);
+  border-left: 3px solid var(--cor-aviso);
+  border-radius: var(--raio-sm);
+  font-size: var(--txt-sm);
+}
+
+/* O cabeçalho da folha só existe no papel — na tela, a página já se
+   identifica pelo menu. */
+.folha__cabecalho {
+  display: none;
+}
+
+.folha__titulo {
+  display: block;
+  font-family: var(--fonte-titulo);
+  font-size: var(--txt-xl);
+}
+
+/* =============================================================================
+   11. IMPRESSÃO
+
+   A folha é a entrega desta tela: ela vai para a bancada e volta riscada.
+   Por isso o papel recebe um tratamento próprio, e não a página encolhida.
+
+   O QUE SAI DA PÁGINA AO IMPRIMIR
+     menu, filtros, botões, selos de status e o fundo creme — nada disso
+     ajuda quem está separando, e tinta de fundo gasta cartucho à toa.
+   ========================================================================== */
+
+@media print {
+  /* Fundo branco e texto preto: economiza tinta e sobrevive a impressora
+     monocromática, que é a que a maioria tem. */
+  body.admin {
+    background-color: #fff;
+    color: #000;
+  }
+
+  .admin-topo,
+  .admin-nav,
+  .admin-barra,
+  .filtros-categorias,
+  [data-aviso-sem-data],
+  .sem-impressao,
+  .toasts {
+    display: none !important;
+  }
+
+  .admin-conteudo {
+    padding: 0;
+    max-width: none;
+  }
+
+  .folha__cabecalho {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: var(--esp-4);
+    padding-bottom: var(--esp-3);
+    margin-bottom: var(--esp-5);
+    border-bottom: 2px solid #000;
+  }
+
+  /* Sem sombra, sem canto arredondado, sem fundo colorido: no papel esses
+     efeitos viram borrão cinza. */
+  .admin-cartao,
+  .pedido-separacao,
+  .admin-metrica {
+    box-shadow: none;
+    border-radius: 0;
+    background-color: transparent;
+    border-color: #999;
+  }
+
+  .admin-metricas {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .admin-metrica__valor {
+    color: #000;
+  }
+
+  .lista-separacao__qtd,
+  .admin-pedido__qtd {
+    color: #000;
+  }
+
+  /* Um pedido não pode começar no fim de uma folha e terminar na seguinte:
+     quem separa perderia metade da informação de vista. */
+  .pedido-separacao,
+  .lista-separacao li {
+    break-inside: avoid;
+  }
+
+  .admin-secao__titulo {
+    break-after: avoid;
+  }
+
+  .pedido-separacao__observacao {
+    background-color: transparent;
+    border-left-color: #000;
+    font-weight: 700;
+  }
+
+  .marcador {
+    border-color: #000;
+  }
+
+  /* Endereço e WhatsApp precisam ser legíveis de longe, com a mão ocupada. */
+  .pedido-separacao__endereco {
+    font-size: 11pt;
+  }
+}
+
+/* =============================================================================
+   12. TELAS AINDA NÃO CONSTRUÍDAS
+
+   Cupons segue com o aviso de "em construção" — e por isso fica fora do
+   menu. A loja decidiu não trabalhar com cupons por enquanto.
    ========================================================================== */
 
 body.admin .em-construcao {

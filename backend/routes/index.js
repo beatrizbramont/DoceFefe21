@@ -37,6 +37,7 @@ import {
 import {
   getResumoAdmin,
   getClientesAdmin,
+  getSeparacao,
 } from '../controllers/admin-painel-controller.js';
 import {
   postCandidatura,
@@ -271,6 +272,12 @@ export const ROTAS = [
     metodo: 'GET',
     padrao: '/api/admin/clientes',
     manipulador: getClientesAdmin,
+    limitador: limitadorLeitura,
+  },
+  {
+    metodo: 'GET',
+    padrao: '/api/admin/separacao',
+    manipulador: getSeparacao,
     limitador: limitadorLeitura,
   },
 

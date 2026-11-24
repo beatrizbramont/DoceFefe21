@@ -203,5 +203,15 @@ export const SUPABASE = {
   anonKey: variavel('VITE_SUPABASE_ANON_KEY'),
 };
 
-/** ID de medição do Google Analytics (opcional, Fase 11). */
-export const ANALYTICS_ID = variavel('VITE_GA_MEASUREMENT_ID');
+/*
+ * Não há rastreamento de visitantes neste site.
+ *
+ * Existia aqui um `ANALYTICS_ID` reservado para o Google Analytics, que
+ * nunca foi usado por nenhuma página. A loja decidiu não medir visitas, e a
+ * constante foi removida: configuração parada, esperando uma fase que não
+ * vem, é a mesma armadilha do desconto que não descontava — alguém a
+ * preenche um dia e supõe que ligou alguma coisa.
+ *
+ * Se um dia houver análise de audiência, ela vem junto com o aviso de
+ * cookies que a LGPD exige. São duas construções, não uma.
+ */

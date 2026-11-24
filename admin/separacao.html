@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#4A2C18">
+
+  <title>Separação do dia | Admin Doce Fefê.21</title>
+  <meta name="description" content="O que precisa sair da cozinha hoje.">
+
+  <!-- O painel administrativo NUNCA deve ser indexado por buscadores. -->
+  <meta name="robots" content="noindex, nofollow">
+
+  <link rel="icon" type="image/jpeg" href="../assets/images/logo.jpeg">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,700;0,800;1,500;1,700&family=Nunito+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="../css/global.css">
+  <!-- produtos.css traz os chips de filtro, reaproveitados aqui. -->
+  <link rel="stylesheet" href="../css/produtos.css">
+  <link rel="stylesheet" href="../css/admin.css">
+</head>
+
+<body class="admin">
+  <main id="conteudo">
+
+    <!--
+      ⚠️ O acesso é decidido no servidor: /api/admin/separacao passa por
+      `exigirAdmin`. Esta página é apenas a interface.
+    -->
+    <div data-admin-login hidden></div>
+
+    <div class="admin-painel" data-admin-painel hidden>
+      <div data-admin-topo></div>
+
+      <div class="admin-conteudo">
+
+        <!--
+          A DATA QUE MANDA É A DESEJADA PELO CLIENTE
+
+          Um pedido feito hoje para sexta não entra na produção de hoje. O
+          filtro é `data_desejada`, não a data em que a venda entrou.
+        -->
+        <div class="admin-barra">
+          <div class="campo sem-margem">
+            <label class="campo__rotulo" for="data-separacao">
+              Dia da entrega ou retirada
+            </label>
+            <input type="date" id="data-separacao" class="campo__controle" data-data>
+          </div>
+
+          <div class="flex gap-2 quebrar itens-centro" data-atalhos-data></div>
+
+          <button type="button" class="btn btn--primario" data-imprimir>
+            🖨 Imprimir folha
+          </button>
+        </div>
+
+        <div class="filtros-categorias mt-4" data-filtros-separacao
+             role="group" aria-label="Filtrar por situação do pedido"></div>
+
+        <!-- Pedidos sem dia combinado: somem da lista, não podem sumir da tela. -->
+        <div class="mt-4" data-aviso-sem-data></div>
+
+        <!--
+          A FOLHA
+
+          Tudo que precisa sair impresso fica dentro deste bloco. O CSS de
+          impressão em admin.css esconde o resto da página — menu, filtros e
+          botões não servem no papel.
+        -->
+        <div class="folha" data-folha>
+
+          <!-- Cabeçalho que só aparece no papel. -->
+          <div class="folha__cabecalho" data-cabecalho-folha></div>
+
+          <div class="admin-metricas" data-totais></div>
+
+          <section class="admin-cartao mt-6" aria-labelledby="titulo-producao">
+            <h2 id="titulo-producao" class="admin-secao__titulo">Produzir</h2>
+            <div data-producao></div>
+          </section>
+
+          <section class="mt-6" aria-labelledby="titulo-entregas">
+            <h2 id="titulo-entregas" class="admin-secao__titulo">Entregas</h2>
+            <div data-entregas></div>
+          </section>
+
+          <section class="mt-6" aria-labelledby="titulo-retiradas">
+            <h2 id="titulo-retiradas" class="admin-secao__titulo">Retiradas</h2>
+            <div data-retiradas></div>
+          </section>
+
+        </div>
+
+      </div>
+    </div>
+
+  </main>
+
+  <script type="module" src="../js/admin/separacao.js"></script>
+</body>
+</html>

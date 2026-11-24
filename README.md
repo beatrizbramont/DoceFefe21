@@ -219,11 +219,10 @@ para o cliente — não depende de disciplina do desenvolvedor.
 | Serviço | Onde obter | Quando |
 |---|---|---|
 | **Supabase** | [supabase.com](https://supabase.com) → Project Settings → API | Fase 5 |
-| **Google Analytics** *(opcional)* | [analytics.google.com](https://analytics.google.com) | Fase 11 |
 
-> A Fase 8 foi entregue com **Pix por comprovante**, conferido pela loja no
-> painel — sem intermediador de pagamento. Nenhuma credencial de gateway é
-> necessária hoje.
+> **É só isso.** A Fase 8 foi entregue com **Pix por comprovante**, conferido
+> pela loja no painel — sem intermediador de pagamento. E não há rastreamento
+> de visitantes. Nenhuma outra credencial é necessária.
 
 Do Supabase são necessárias três informações:
 
@@ -294,6 +293,7 @@ Fica em `/admin/`. Cinco telas, um login só.
 | Tela | Para quê |
 |---|---|
 | **Visão geral** | Faturamento do período, fila de trabalho, produtos acabando |
+| **Separação** | O que produzir e separar num dia, com folha para imprimir |
 | **Pedidos** | Abrir o comprovante, conferir no extrato, aprovar e avançar o pedido |
 | **Produtos** | Cadastrar, editar preço, enviar foto, publicar e arquivar |
 | **Estoque** | Entrada, saída, perda, contagem — tudo com histórico |
@@ -317,6 +317,31 @@ promove precisa ter a senha do banco.
 - **Não edita cliente.** Alterar dado pessoal exigiria registrar quem alterou
   o quê e quando. Enquanto esse registro não existir, a tela é só leitura.
 - **Não promove ninguém.** Ver acima.
+- **Não tem cupons.** A tabela `coupons` e a lógica de desconto seguem no
+  banco, usadas por `criar_pedido`, mas não há como criar nem aplicar cupom:
+  a loja decidiu não trabalhar com eles.
+- **Não mede visitas.** Não há Google Analytics nem rastreador nenhum. Se um
+  dia houver, vem junto com o aviso de cookies que a LGPD exige.
+
+### A folha de separação
+
+A tela **Separação** responde uma pergunta só: *o que precisa sair da cozinha
+neste dia?* Por isso ela abre com o somatório por produto — **18 brownies** —
+e não com a lista de pedidos. Na hora de assar não interessa que o brownie
+está em seis pedidos; interessa na hora de embalar, e aí vêm as duas listas
+de baixo, entregas e retiradas.
+
+⚠️ **O dia que filtra é o que o cliente pediu**, não a data da venda. Um
+pedido feito hoje para sexta não entra na produção de hoje.
+
+Por padrão entram só pedidos com **pagamento já conferido**: produzir antes de
+receber é decisão da dona, não comportamento automático do sistema. Pedidos
+sem dia combinado não somem — viram um aviso, porque são trabalho pendente.
+
+O botão de imprimir não gera arquivo: chama a janela de impressão do
+navegador, que também salva em PDF. Os estilos `@media print` tiram menu,
+filtros e botões, e deixam uma caixa vazia na frente de cada linha para
+riscar conforme separa.
 
 ### Revenda e atacado
 
@@ -401,7 +426,7 @@ pública e autenticada.
 | 8 | Pagamentos | ✅ Concluída |
 | 9 | Painel administrativo | ✅ Concluída |
 | 10 | Revendedores e atacado | ✅ Concluída |
-| 11 | Marketing e relatórios | ⬜ |
+| 11 | Separação do dia | ✅ Concluída |
 | 12 | Testes, segurança e publicação | ⬜ |
 
 ---
