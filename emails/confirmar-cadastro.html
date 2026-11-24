@@ -8,8 +8,26 @@
     No campo "Subject", use:  Confirme seu cadastro na Doce Fefê.21
 
   A VARIÁVEL
-    {{ .ConfirmationURL }} é trocada pelo Supabase pelo link real. Ela
-    precisa aparecer exatamente assim, com os espaços dentro das chaves.
+    {{ .Token }} é trocada pelo Supabase pelo código de 6 números. Precisa
+    aparecer exatamente assim, com os espaços dentro das chaves.
+
+  -----------------------------------------------------------------------------
+  POR QUE CÓDIGO E NÃO LINK
+
+    O link de confirmação carrega dentro dele o endereço do site, e isso
+    cria dois problemas que o código não tem:
+
+      1. O e-mail chega no celular, mas o link aponta para onde o site
+         estava quando o e-mail foi gerado. Enquanto o projeto roda em
+         `localhost`, "localhost" no celular é o PRÓPRIO celular — e a
+         página não existe lá. Foi exatamente o que aconteceu nos testes.
+
+      2. O link é de uso único, e a pré-visualização de alguns aplicativos
+         "toca" nele antes da pessoa. Ele queima sem ninguém ter clicado.
+
+    O código não aponta para lugar nenhum. A pessoa lê no celular e digita
+    onde estiver — e continua funcionando depois que o site for publicado,
+    sem reconfigurar nada.
 
   -----------------------------------------------------------------------------
   POR QUE ESTE HTML É "ANTIQUADO"
@@ -70,33 +88,29 @@
               sua conta e acompanhar seus pedidos.
             </p>
 
-            <p style="margin:0 0 32px;font-family:Arial,Helvetica,sans-serif;font-size:16px;line-height:1.6;color:#35211A;">
-              É só tocar no botão abaixo:
+            <p style="margin:0 0 24px;font-family:Arial,Helvetica,sans-serif;font-size:16px;line-height:1.6;color:#35211A;">
+              Digite este código no site:
             </p>
 
-            <!-- Botão -->
-            <table role="presentation" cellpadding="0" cellspacing="0" border="0" align="center">
+            <!--
+              O código vai numa caixa, com letra grande e espaçada. Quem
+              está com o celular na mão precisa ler de relance e digitar em
+              outro lugar — às vezes no computador. `letter-spacing` separa
+              os números para não confundir 0 com O na pressa.
+            -->
+            <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%">
               <tr>
-                <td align="center" style="background-color:#4A2C18;border-radius:999px;">
-                  <a href="{{ .ConfirmationURL }}"
-                     style="display:inline-block;padding:16px 40px;font-family:Arial,Helvetica,sans-serif;font-size:16px;font-weight:bold;color:#FFF9F1;text-decoration:none;border-radius:999px;">
-                    Confirmar meu e-mail
-                  </a>
+                <td align="center" style="background-color:#FDF2E3;border:2px dashed #C9922B;border-radius:12px;padding:24px 16px;">
+                  <p style="margin:0;font-family:'Courier New',Courier,monospace;font-size:38px;font-weight:bold;letter-spacing:10px;color:#4A2C18;line-height:1.1;">
+                    {{ .Token }}
+                  </p>
                 </td>
               </tr>
             </table>
 
-            <!--
-              O link em texto existe porque alguns clientes de e-mail
-              desmontam o botão, e porque tem gente que prefere copiar e
-              colar. Nunca deixe só o botão.
-            -->
-            <p style="margin:32px 0 0;font-family:Arial,Helvetica,sans-serif;font-size:13px;line-height:1.6;color:#6B5349;">
-              Se o botão não funcionar, copie e cole este endereço no seu
-              navegador:
-            </p>
-            <p style="margin:8px 0 0;font-family:Arial,Helvetica,sans-serif;font-size:13px;line-height:1.6;color:#A8761C;word-break:break-all;">
-              {{ .ConfirmationURL }}
+            <p style="margin:24px 0 0;font-family:Arial,Helvetica,sans-serif;font-size:13px;line-height:1.6;color:#6B5349;">
+              O código vale por 1 hora. Se vencer, é só pedir outro na
+              própria tela de cadastro.
             </p>
           </td>
         </tr>
@@ -110,8 +124,9 @@
                 <td style="padding:16px 20px;">
                   <p style="margin:0;font-family:Arial,Helvetica,sans-serif;font-size:13px;line-height:1.6;color:#6B5349;">
                     <strong style="color:#3D2117;">Não foi você?</strong>
-                    Pode ignorar este e-mail — nenhuma conta será criada sem
-                    essa confirmação.
+                    Pode ignorar este e-mail — nenhuma conta será ativada sem
+                    esse código. E nunca compartilhe esses números com
+                    ninguém, nem com a gente.
                   </p>
                 </td>
               </tr>

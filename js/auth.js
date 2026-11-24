@@ -285,6 +285,69 @@ export async function cadastrar({ nome, email, senha, telefone = '' }) {
 }
 
 /* =============================================================================
+ * CONFIRMAÇÃO POR CÓDIGO
+ *
+ * POR QUE CÓDIGO E NÃO LINK
+ *
+ *   O link de confirmação carrega dentro dele o endereço do site. Isso cria
+ *   dois problemas que o código não tem:
+ *
+ *     1. O e-mail chega no celular, mas o link aponta para onde o site
+ *        estava quando o e-mail foi gerado. Enquanto o projeto roda em
+ *        `localhost`, "localhost" no celular é o próprio celular — e a
+ *        página não existe lá.
+ *
+ *     2. O link é de uso único. A pré-visualização de alguns aplicativos
+ *        "toca" nele antes da pessoa, e ele queima sem ninguém ter clicado.
+ *
+ *   O código não aponta para lugar nenhum: a pessoa lê no celular e digita
+ *   onde estiver. Funciona hoje em localhost e continuará funcionando
+ *   depois que o site for publicado, sem reconfigurar nada.
+ * ========================================================================== */
+
+/**
+ * Confirma o cadastro com o código de 6 dígitos recebido por e-mail.
+ *
+ * Diferente do fluxo por link, aqui o Supabase devolve a sessão direto —
+ * quem digitou o código provou que tem acesso à caixa de e-mail, então já
+ * entra logada, sem precisar digitar a senha de novo.
+ *
+ * @param {{email: string, codigo: string}} dados
+ * @returns {Promise<object>} a sessão criada
+ */
+export async function confirmarCodigo({ email, codigo }) {
+  const limpo = String(codigo || '').replace(/\D/g, '');
+
+  if (limpo.length !== 6) {
+    throw new ErroAuth('O código tem 6 números.', 'codigo_invalido', 400);
+  }
+
+  const resposta = await requisitar('/verify', {
+    corpo: {
+      type: 'signup',
+      email: email.trim().toLowerCase(),
+      token: limpo,
+    },
+  });
+
+  return gravarSessao(resposta);
+}
+
+/**
+ * Pede um código novo.
+ *
+ * Usado quando o primeiro não chega, cai no spam, ou vence — o código do
+ * Supabase dura uma hora.
+ */
+export async function reenviarCodigo(email) {
+  await requisitar('/resend', {
+    corpo: { type: 'signup', email: email.trim().toLowerCase() },
+  });
+
+  return true;
+}
+
+/* =============================================================================
  * LOGIN
  * ========================================================================== */
 

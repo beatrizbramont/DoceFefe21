@@ -14,6 +14,8 @@
 
 import {
   cadastrar,
+  confirmarCodigo,
+  reenviarCodigo,
   entrar,
   sair,
   recuperarSenha,
@@ -229,9 +231,8 @@ async function processarCadastro(formulario, botao) {
     });
 
     if (precisaConfirmarEmail) {
-      mostrarAvisoConfirmacao(formulario, email.value);
-      toastSucesso('Conta criada! Confirme seu e-mail para entrar.');
-      formulario.reset();
+      mostrarFormularioCodigo(formulario, email.value.trim().toLowerCase());
+      toastSucesso('Conta criada! Agora digite o código que enviamos.');
       return;
     }
 
@@ -248,31 +249,120 @@ async function processarCadastro(formulario, botao) {
   }
 }
 
-/** Aviso de "confirme seu e-mail", com instrução clara. */
-function mostrarAvisoConfirmacao(formulario, email) {
-  let caixa = $('[data-aviso-confirmacao]', formulario.parentElement);
+/**
+ * Tela de confirmação por código.
+ *
+ * POR QUE CÓDIGO E NÃO LINK
+ *   O link carrega dentro dele o endereço do site. O e-mail chega no
+ *   celular, mas o link aponta para onde o site estava — e enquanto o
+ *   projeto roda em `localhost`, "localhost" no celular é o próprio
+ *   celular, onde não há nada. O código não aponta para lugar nenhum: a
+ *   pessoa lê no celular e digita onde estiver.
+ *
+ *   De quebra, quem digitou o código provou que tem acesso à caixa de
+ *   e-mail — então já entra logada, sem precisar repetir a senha.
+ */
+function mostrarFormularioCodigo(formularioCadastro, email) {
+  const codigo = criar('input', {
+    class: 'campo__controle',
+    type: 'text',
+    id: 'codigo-confirmacao',
+    name: 'codigo',
+    // `inputmode` abre o teclado numérico no celular, que é onde a pessoa
+    // está lendo o e-mail. `autocomplete` deixa o próprio sistema oferecer
+    // o código assim que ele chega.
+    inputmode: 'numeric',
+    autocomplete: 'one-time-code',
+    maxlength: '6',
+    placeholder: '000000',
+    'aria-label': 'Código de 6 números recebido por e-mail',
+  });
 
-  if (!caixa) {
-    caixa = criar('div', {
-      class: 'alerta alerta--info mt-4',
-      'data-aviso-confirmacao': '',
-    });
-    formulario.after(caixa);
-  }
+  const confirmar = criar('button', {
+    class: 'btn btn--primario btn--grande btn--bloco',
+    type: 'submit',
+    texto: 'Confirmar meu e-mail',
+  });
 
-  caixa.replaceChildren(
-    icone('email'),
-    criar('div', {}, [
-      criar('p', {
-        class: 'sem-margem',
-        texto: `Enviamos um link de confirmação para ${email}.`,
+  const formulario = criar('form', { novalidate: true }, [
+    criar('div', { class: 'campo' }, [
+      criar('label', {
+        class: 'campo__rotulo',
+        for: 'codigo-confirmacao',
+        texto: 'Código de 6 números',
       }),
-      criar('p', {
-        class: 'texto-mini sem-margem mt-2',
-        texto: 'Confira também a caixa de spam. Depois de confirmar, volte aqui e entre.',
-      }),
-    ])
-  );
+      codigo,
+      criar('span', { class: 'campo__erro' }),
+    ]),
+    confirmar,
+  ]);
+
+  // Só números, e confirma sozinho ao completar os 6 — quem digitou o
+  // último número já disse tudo que tinha para dizer.
+  codigo.addEventListener('input', () => {
+    codigo.value = codigo.value.replace(/\D/g, '').slice(0, 6);
+    if (codigo.value.length === 6) formulario.requestSubmit();
+  });
+
+  formulario.addEventListener('submit', async (evento) => {
+    evento.preventDefault();
+    limparErrosFormulario(formulario);
+    botaoCarregando(confirmar, true);
+
+    try {
+      await confirmarCodigo({ email, codigo: codigo.value });
+
+      toastSucesso('E-mail confirmado! Bem-vinda.');
+      await mostrarPainelCliente();
+    } catch (erro) {
+      marcarErroCampo(codigo, 'Código inválido ou vencido.');
+      codigo.select();
+      toastErro(erro.message || 'Não conseguimos confirmar esse código.');
+    } finally {
+      botaoCarregando(confirmar, false);
+    }
+  });
+
+  const reenviar = criar('button', {
+    class: 'btn btn--secundario btn--pequeno',
+    type: 'button',
+    texto: 'Enviar outro código',
+    on: {
+      click: async (evento) => {
+        botaoCarregando(evento.currentTarget, true);
+
+        try {
+          await reenviarCodigo(email);
+          toastSucesso('Código novo enviado.');
+        } catch (erro) {
+          toastErro(erro.message || 'Não conseguimos reenviar agora.');
+        } finally {
+          botaoCarregando(evento.currentTarget, false);
+        }
+      },
+    },
+  });
+
+  const caixa = criar('div', { class: 'confirmacao-codigo', 'data-confirmacao-codigo': '' }, [
+    icone('email', 'confirmacao-codigo__icone'),
+    criar('h2', { class: 'confirmacao-codigo__titulo', texto: 'Confira seu e-mail' }),
+    criar('p', {
+      texto: `Enviamos um código de 6 números para ${email}. Digite ele aqui embaixo.`,
+    }),
+    formulario,
+    criar('p', {
+      class: 'texto-mini texto-suave mt-6',
+      texto: 'Não chegou? Veja a caixa de spam — ou peça outro:',
+    }),
+    reenviar,
+  ]);
+
+  // O formulário de cadastro sai de cena: deixar os dois à mostra sugeriria
+  // que ainda falta preencher alguma coisa ali.
+  formularioCadastro.hidden = true;
+  formularioCadastro.after(caixa);
+
+  codigo.focus();
 }
 
 /* -----------------------------------------------------------------------------
