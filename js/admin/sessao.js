@@ -25,7 +25,14 @@
  *   adianta nada.
  */
 
-import { entrar, sair, estaLogado, autenticacaoDisponivel, ErroAuth } from '../auth.js';
+import {
+  entrar,
+  sair,
+  estaLogado,
+  iniciarAutenticacao,
+  autenticacaoDisponivel,
+  ErroAuth,
+} from '../auth.js';
 import { api, ErroApi } from '../lib/api.js';
 import {
   $,
@@ -266,19 +273,39 @@ export async function iniciarPainel({ titulo, aoEntrar }) {
     toastSucesso('Você saiu do painel.');
   };
 
-  areaLogin.replaceChildren(montarLogin((formulario, botao) => processarLogin(formulario, botao, abrir)));
+  areaLogin.replaceChildren(
+    montarLogin((formulario, botao) => processarLogin(formulario, botao, abrir))
+  );
   areaTopo?.replaceChildren(montarTopo(titulo, encerrar));
 
-  // Já logada? Confirma que é administradora ANTES de abrir o painel. Ter
-  // sessão válida não é o mesmo que ter permissão.
+  /*
+    RESTAURAR A SESSÃO É A PRIMEIRA COISA
+
+    O painel não carrega js/main.js — que é quem faz isso nas páginas
+    públicas. Sem esta chamada, o token guardado nunca chegava ao cliente
+    HTTP: a primeira requisição saía sem `Authorization`, levava 401, e só
+    funcionava depois de uma renovação automática. Duas idas à rede antes de
+    qualquer coisa aparecer na tela.
+  */
+  await iniciarAutenticacao();
+
+  /*
+    E O PAINEL ABRE DIRETO, SEM PERGUNTAR ANTES
+
+    A versão anterior confirmava o perfil em /admin/sessao antes de abrir. A
+    conta estava certa, a resposta também — mas a tela de login ficava à
+    mostra durante a viagem até o servidor. Trocar de aba piscava o login
+    toda vez.
+
+    Agora quem confirma a permissão é a própria requisição de dados da tela:
+    se a conta não for administradora, ela volta 403 e `tratarErroDeSessao`
+    fecha o painel. O caminho feliz não paga mais o pedágio pelo caminho
+    infeliz — e nenhum dado aparece antes do servidor autorizar, porque
+    nenhum dado chega.
+  */
   if (estaLogado()) {
-    try {
-      await api.get('/admin/sessao');
-      abrir();
-      return;
-    } catch {
-      // Sessão expirada, ou conta sem perfil de administrador.
-    }
+    abrir();
+    return;
   }
 
   mostrarLogin();

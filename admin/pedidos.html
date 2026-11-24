@@ -30,10 +30,14 @@
       cabeçalho do site público. Com cinco telas administrativas, manter esse
       HTML copiado em cada arquivo garantiria que uma delas ficasse para trás.
 
+      As DUAS áreas começam escondidas. Quem já está logada troca de aba sem
+      ver o login piscar; quem não está vê o formulário no instante seguinte.
+      Mostrar o login por padrão custava um susto a cada navegação.
+
       ⚠️ Esconder o painel é conveniência, não segurança. A barreira real está
       no servidor: toda rota /api/admin/* confere o perfil no banco.
     -->
-    <div data-admin-login></div>
+    <div data-admin-login hidden></div>
 
     <div class="admin-painel" data-admin-painel hidden>
       <div data-admin-topo></div>
