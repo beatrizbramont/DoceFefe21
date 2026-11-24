@@ -29,7 +29,7 @@ import {
 import { moeda, dataHora } from './lib/format.js';
 import { icone } from './components/icons.js';
 import { montarLinkWhatsApp } from './whatsapp.js';
-import { ROTAS, rota, urlMidia } from './config.js';
+import { ROTAS, rota, urlMidia, SUPABASE } from './config.js';
 
 /* =============================================================================
  * ESTADO
@@ -205,10 +205,20 @@ function mostrarPix() {
         criar('strong', { class: 'preco preco--grande', texto: moeda(pedido.total) }),
       ]),
 
-      // O QR Code é a arte oficial da marca, com o código do Pix.
+      /*
+        O QR Code vem do Storage do Supabase, não da pasta do projeto.
+
+        A arte traz o nome completo da titular e o banco. Servida à cliente
+        que vai pagar, isso é o uso pretendido; versionada num repositório
+        de código público, vira dado pessoal exposto, indexável e preso ao
+        histórico para sempre. Foi o que aconteceu — ver a seção de
+        segurança no README.
+
+        No Storage ela cumpre o papel sem entrar no Git.
+      */
       criar('div', { class: 'pix-qrcode' }, [
         criar('img', {
-          src: urlMidia('assets/images/pix-qrcode.jpeg'),
+          src: `${SUPABASE.url}/storage/v1/object/public/produtos/marca/pix-qrcode.jpeg`,
           alt:
             'QR Code do Pix da Doce Fefê.21. Leia com o aplicativo do seu banco ' +
             'para pagar.',
