@@ -130,7 +130,18 @@ verificar(
   Boolean(validar({ categoriaId: 'brownies' }).erros.categoriaId)
 );
 
-verificar('peso negativo é recusado', Boolean(validar({ pesoGramas: -10 }).erros.pesoGramas));
+verificar(
+  'medida de um caractere é recusada',
+  Boolean(validar({ medida: 'x' }).erros.medida)
+);
+
+verificar('medida em branco é aceita (kits não têm)', !validar({ medida: '' }).erros.medida);
+
+verificar(
+  'medida válida passa',
+  !validar({ medida: '5x5 cm' }).erros.medida &&
+    validar({ medida: '5x5 cm' }).colunas.medida === '5x5 cm'
+);
 
 verificar(
   'mínimo de atacado zero é recusado',

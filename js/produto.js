@@ -15,7 +15,7 @@
 import { api, ErroApi } from './lib/api.js';
 import { $, criar, toastErro, toastSucesso, renderizarEstadoVazio } from './lib/ui.js';
 import { adicionar, atualizarContador } from './cart.js';
-import { moeda, peso } from './lib/format.js';
+import { moeda } from './lib/format.js';
 import { icone, iconeDaCategoria } from './components/icons.js';
 import { renderizarProdutos } from './components/product-card.js';
 import { montarLinkWhatsApp } from './whatsapp.js';
@@ -253,7 +253,7 @@ function renderizarFicha(produto) {
   };
 
   adicionar('Categoria', produto.categoria?.nome);
-  if (produto.pesoGramas) adicionar('Peso', peso(produto.pesoGramas));
+  adicionar('Medida', produto.medida);
   adicionar('Ingredientes', produto.ingredientes);
   adicionar('Alérgenos', produto.alergenicos);
 
@@ -415,9 +415,9 @@ function injetarDadosEstruturados(produto) {
     },
   };
 
-  if (produto.pesoGramas) {
-    dados.weight = { '@type': 'QuantitativeValue', value: produto.pesoGramas, unitCode: 'GRM' };
-  }
+  // `size` em vez de `weight`: o catálogo passou a informar a dimensão do
+  // doce, e o schema.org tem campo próprio para isso.
+  if (produto.medida) dados.size = produto.medida;
 
   if (produto.imagem?.url) dados.image = produto.imagem.url;
 

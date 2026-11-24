@@ -102,7 +102,7 @@ export async function validarCarrinho(itensEnviados, { usuarioId = null } = {}) 
   const produtos = await selecionar('catalogo_publico', {
     colunas:
       'id,slug,nome,preco_varejo,preco_promocional,preco_efetivo,em_promocao,' +
-      'peso_gramas,disponivel,sob_encomenda,categoria_nome,imagens',
+      'medida,disponivel,sob_encomenda,categoria_nome,imagens',
     // `in.(...)` é o operador de lista do PostgREST.
     filtros: { slug: `in.(${slugs.join(',')})` },
   });
@@ -225,7 +225,7 @@ export async function validarCarrinho(itensEnviados, { usuarioId = null } = {}) 
         precoUnitario < produto.preco_varejo ? produto.preco_varejo : null,
       tipoPreco,
       subtotal: precoUnitario * quantidade,
-      pesoGramas: produto.peso_gramas,
+      medida: produto.medida,
       disponivel,
       sobEncomenda,
       imagem: principal ? { url: principal.url, alt: principal.alt } : null,

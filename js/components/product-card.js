@@ -12,7 +12,7 @@
 
 import { criar } from '../lib/ui.js';
 import { icone, iconeDaCategoria } from './icons.js';
-import { moeda, peso, resumir } from '../lib/format.js';
+import { moeda, resumir } from '../lib/format.js';
 import { ROTAS, rota, urlMidia } from '../config.js';
 
 /* -----------------------------------------------------------------------------
@@ -158,10 +158,10 @@ export function criarCardProduto(produto, opcoes = {}) {
 
   const rodape = [criarPreco(produto)];
 
-  if (produto.pesoGramas) {
-    rodape.push(
-      criar('span', { class: 'produto-card__peso', texto: peso(produto.pesoGramas) })
-    );
+  // Medida, e não peso: "5x5 cm" deixa a pessoa imaginar o doce na mão.
+  // "90g" não diz nada a quem não tem balança na cabeça.
+  if (produto.medida) {
+    rodape.push(criar('span', { class: 'produto-card__medida', texto: produto.medida }));
   }
 
   corpo.push(criar('div', { class: 'produto-card__rodape' }, rodape));

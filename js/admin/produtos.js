@@ -376,11 +376,12 @@ function montarFormulario(produto) {
         min: '1',
       }),
       campo({
-        nome: 'pesoGramas',
-        rotulo: 'Peso (gramas)',
-        tipo: 'number',
-        valor: produto?.pesoGramas ?? '',
-        min: '1',
+        nome: 'medida',
+        rotulo: 'Medida',
+        valor: produto?.medida ?? '',
+        maxlength: '40',
+        placeholder: '5x5 cm',
+        apoio: 'Aparece no catálogo. Deixe vazio em kits e cestas.',
       }),
     ]),
 
@@ -459,7 +460,7 @@ function lerFormulario(formulario, novo) {
     promocaoAte: valor('promocaoAte') ? `${valor('promocaoAte')}T23:59:59` : null,
 
     minimoAtacado: Number(valor('minimoAtacado')) || 1,
-    pesoGramas: valor('pesoGramas') ? Number(valor('pesoGramas')) : null,
+    medida: valor('medida'),
 
     publicado: marcado('publicado'),
     destaque: marcado('destaque'),

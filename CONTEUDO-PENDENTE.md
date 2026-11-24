@@ -15,7 +15,6 @@ Atualizado em: 24/11/2026
 | **Logomarca** | Cabeçalho, banner, rodapé | — | ✅ Recebida (`logo.jpeg`) |
 | **Foto do Fefê** | Nossa História — abertura | Retrato 3:4, mín. 800×1067 | ⬜ Pendente |
 | **Arte do Super Fefê** | Nossa História — seção própria | Quadrada ou retrato | ⬜ Pendente |
-| **Fotos da caminhada** (3) | Nossa História — galeria | Quadradas, mín. 800×800 | ⬜ Pendente |
 | **Fotos dos produtos** | Catálogo, página inicial | Quadradas, mín. 1000×1000 | ⬜ Pendente — envie pelo painel |
 | **Foto da produção** | Página inicial, Nossa História | Paisagem 4:3 | ⬜ Opcional |
 
@@ -38,7 +37,6 @@ no lugar certo.
 | **História da marca** | ✅ Recebida e publicada na íntegra |
 | **Descrição dos produtos** | ⬜ Pendente — edite pelo painel |
 | **Ingredientes de cada produto** | ⬜ Pendente — edite pelo painel |
-| **Política de trocas e devoluções** | ⬜ Pendente (Fase 12) |
 
 ---
 

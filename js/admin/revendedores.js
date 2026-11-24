@@ -233,8 +233,10 @@ function criarAprovacao(parceiro) {
     criar('p', {
       class: 'campo__ajuda',
       texto:
-        'O desconto incide sobre o preço de atacado de cada produto. ' +
-        'Pedido mínimo vazio significa sem mínimo.',
+        'Estes campos só mudam preço se o produto tiver um "preço de atacado" ' +
+        'cadastrado em Produtos — e hoje nenhum tem. Enquanto for assim, o ' +
+        'parceiro aprovado vê os mesmos preços do site, e os valores são ' +
+        'combinados por WhatsApp.',
     }),
   ]);
 }

@@ -34,7 +34,7 @@ import {
   renderizarEstadoVazio,
   debounce,
 } from './lib/ui.js';
-import { moeda, peso, plural } from './lib/format.js';
+import { moeda, plural } from './lib/format.js';
 import { icone } from './components/icons.js';
 import { montarLinkWhatsApp } from './whatsapp.js';
 import { ROTAS, rota, REGRAS, urlMidia } from './config.js';
@@ -134,8 +134,8 @@ function criarLinhaItem(item) {
   ];
 
   const meta = [];
-  if (item.pesoGramas) {
-    meta.push(criar('span', { texto: peso(item.pesoGramas) }));
+  if (item.medida) {
+    meta.push(criar('span', { texto: item.medida }));
   }
   if (item.tipoPreco === 'atacado') {
     meta.push(criar('span', { class: 'selo selo--sucesso', texto: 'Atacado' }));

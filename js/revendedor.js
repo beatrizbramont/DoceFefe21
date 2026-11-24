@@ -10,9 +10,14 @@
  *   (ver services/reseller-service.js).
  *
  * POR QUE EXIGE CONTA
- *   O preço de atacado é resolvido pelo `usuario_id`: o banco pergunta "esta
- *   pessoa é revendedora aprovada?" a cada item de cada pedido. Uma
- *   candidatura sem conta vinculada não teria a quem dar o desconto.
+ *   A candidatura fica vinculada ao `usuario_id`, e é por ele que a pessoa
+ *   consulta depois em que pé está o cadastro. Sem conta, a candidatura
+ *   seria um formulário que a própria candidata não consegue acompanhar.
+ *
+ * SOBRE PREÇO
+ *   Esta página não promete preço nenhum. A loja não trabalha com tabela de
+ *   atacado automática: valores e quantidades são combinados por WhatsApp,
+ *   caso a caso, depois da aprovação.
  */
 
 import { api } from './lib/api.js';
@@ -26,8 +31,9 @@ import {
   aplicarErrosServidor,
   limparErrosFormulario,
 } from './lib/ui.js';
-import { moeda, data, somenteDigitos } from './lib/format.js';
+import { data, somenteDigitos } from './lib/format.js';
 import { icone } from './components/icons.js';
+import { montarLinkWhatsApp } from './whatsapp.js';
 
 /* =============================================================================
  * ESTADOS DA CANDIDATURA
@@ -47,8 +53,8 @@ const SITUACOES = {
     icone: 'parceria',
     titulo: 'Você é nosso parceiro!',
     texto:
-      'Seu cadastro está aprovado. Os preços de atacado já aparecem para ' +
-      'você no catálogo, sem precisar de cupom.',
+      'Seu cadastro está aprovado. Fale com a gente pelo WhatsApp para fazer ' +
+      'seus pedidos e combinar as condições.',
   },
   recusado: {
     classe: 'situacao-revenda--recusado',
@@ -70,29 +76,17 @@ const SITUACOES = {
  * BLOCO DE SITUAÇÃO
  * ========================================================================== */
 
-function montarCondicoes(candidatura) {
-  const itens = [
-    {
-      valor: `${candidatura.desconto}%`,
-      rotulo: 'Desconto sobre o atacado',
-    },
-    {
-      valor: candidatura.pedidoMinimo > 0 ? moeda(candidatura.pedidoMinimo) : 'Sem mínimo',
-      rotulo: 'Pedido mínimo',
-    },
-  ];
+/*
+  NÃO HÁ BLOCO DE CONDIÇÕES COMERCIAIS AQUI
 
-  return criar(
-    'div',
-    { class: 'condicoes-revenda' },
-    itens.map((item) =>
-      criar('div', {}, [
-        criar('span', { class: 'condicoes-revenda__valor', texto: item.valor }),
-        criar('span', { class: 'condicoes-revenda__rotulo', texto: item.rotulo }),
-      ])
-    )
-  );
-}
+  Existia um quadro mostrando "X% de desconto" e "pedido mínimo de R$ Y" para
+  quem fosse aprovado. Saiu junto com a decisão da loja de não trabalhar com
+  tabela de atacado automática: valores, quantidades e prazos são combinados
+  por WhatsApp, caso a caso.
+
+  Mostrar "0% de desconto · sem mínimo" seria pior que não mostrar nada —
+  pareceria uma condição ruim em vez da ausência de uma regra fixa.
+*/
 
 function renderizarSituacao(candidatura) {
   const container = $('[data-situacao-revenda]');
@@ -128,11 +122,15 @@ function renderizarSituacao(candidatura) {
 
   if (candidatura.status === 'aprovado') {
     filhos.push(
-      montarCondicoes(candidatura),
       criar('a', {
-        class: 'btn btn--primario mt-5',
-        href: './produtos.html',
-        texto: 'Ver o catálogo com meus preços',
+        class: 'btn btn--whatsapp mt-5',
+        href: montarLinkWhatsApp(
+          `Olá! Sou parceiro da Doce Fefê.21 (${candidatura.nomeEstabelecimento}) ` +
+            'e gostaria de fazer um pedido.'
+        ),
+        target: '_blank',
+        rel: 'noopener noreferrer',
+        texto: 'Fazer pedido pelo WhatsApp',
       })
     );
   }
@@ -158,9 +156,9 @@ function pedirLogin() {
       }),
       criar('p', {
         texto:
-          'O preço de atacado fica vinculado à sua conta: é ela que passa a ' +
-          'ver os valores de parceiro no catálogo. Por isso a candidatura ' +
-          'precisa de um cadastro — leva um minuto.',
+          'A candidatura fica vinculada à sua conta — é por ela que a gente ' +
+          'acompanha sua parceria e você consulta a situação do cadastro. ' +
+          'Criar leva um minuto.',
       }),
       criar('div', { class: 'flex gap-3 quebrar mt-5' }, [
         criar('a', {

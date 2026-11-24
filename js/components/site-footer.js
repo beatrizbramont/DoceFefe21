@@ -173,17 +173,14 @@ export function montarRodape() {
           class: 'rodape__copyright',
           texto: `© ${ANO_ATUAL} ${MARCA.nome} · Todos os direitos reservados.`,
         }),
+        // Não há link de "Trocas e Devoluções": a loja não trabalha com
+        // troca nem devolução, e um link para uma política que não existe é
+        // promessa que ninguém fez.
         criar('ul', { class: 'rodape__legais' }, [
           criar('li', {}, [
             criar('a', {
               href: rota(ROTAS.politicaPrivacidade),
               texto: 'Política de Privacidade',
-            }),
-          ]),
-          criar('li', {}, [
-            criar('a', {
-              href: `${rota(ROTAS.politicaPrivacidade)}#trocas`,
-              texto: 'Trocas e Devoluções',
             }),
           ]),
         ]),

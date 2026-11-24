@@ -69,7 +69,7 @@ const RELACIONADOS =
 
 const COLUNAS_LISTA =
   'id,slug,nome,descricao_curta,preco_varejo,preco_atacado,preco_promocional,' +
-  'promocao_ate,peso_gramas,minimo_atacado,destaque,mais_vendido,novidade,' +
+  'promocao_ate,medida,minimo_atacado,destaque,mais_vendido,novidade,' +
   `sazonal,publicado,arquivado_em,vendas_total,criado_em,categoria_id,${RELACIONADOS}`;
 
 const COLUNAS_DETALHE = `${COLUNAS_LISTA},descricao,ingredientes,alergenicos`;
@@ -120,7 +120,7 @@ function formatarProduto(linha) {
     promocaoAte: linha.promocao_ate,
     emPromocao,
 
-    pesoGramas: linha.peso_gramas,
+    medida: linha.medida,
     minimoAtacado: linha.minimo_atacado,
 
     destaque: linha.destaque,
@@ -298,14 +298,14 @@ export function validarProduto(dados = {}, { parcial = false } = {}) {
   }
 
   /* --- Peso e mínimo de atacado --- */
-  if (veio('pesoGramas')) {
-    const peso = inteiroOuNulo(dados.pesoGramas);
-    if (peso === null) {
-      colunas.peso_gramas = null;
-    } else if (!Number.isFinite(peso) || peso <= 0) {
-      erros.pesoGramas = 'O peso precisa ser maior que zero.';
+  /* --- Medida (texto livre: "5x5 cm", "300 ml") --- */
+  if (veio('medida')) {
+    const medida = texto(dados.medida, 40);
+
+    if (medida && medida.length < 2) {
+      erros.medida = 'A medida ficou curta demais — escreva algo como "5x5 cm".';
     } else {
-      colunas.peso_gramas = peso;
+      colunas.medida = medida;
     }
   }
 
@@ -752,7 +752,7 @@ const POR_RESTRICAO = {
   products_preco_varejo_positivo: ['precoVarejo', 'O preço precisa ser maior que zero.'],
   products_atacado_menor: ['precoAtacado', 'O preço de atacado precisa ser menor que o de varejo.'],
   products_promocional_menor: ['precoPromocional', 'A promoção precisa ser menor que o preço normal.'],
-  products_peso_positivo: ['pesoGramas', 'O peso precisa ser maior que zero.'],
+  products_medida_tamanho: ['medida', 'A medida precisa ter entre 2 e 40 caracteres.'],
   products_minimo_atacado_positivo: ['minimoAtacado', 'O mínimo de atacado é 1.'],
   product_images_alt_preenchido: ['alt', 'Descreva a foto em poucas palavras.'],
 };

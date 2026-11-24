@@ -26,7 +26,7 @@ import { selecionar, selecionarUm } from './database.js';
 /** Colunas devolvidas na listagem — não traz textos longos, que pesam. */
 const COLUNAS_LISTA =
   'id,slug,nome,descricao_curta,preco_varejo,preco_promocional,preco_efetivo,' +
-  'em_promocao,promocao_ate,peso_gramas,destaque,mais_vendido,novidade,sazonal,' +
+  'em_promocao,promocao_ate,medida,destaque,mais_vendido,novidade,sazonal,' +
   'vendas_total,criado_em,categoria_slug,categoria_nome,categoria_icone,' +
   'categoria_em_breve,disponivel,sob_encomenda,imagens';
 
@@ -162,7 +162,7 @@ function formatarProduto(produto, condicoes, precoAtacado = null) {
     tipoPreco: preco.tipo,
     economia: preco.economia,
 
-    pesoGramas: produto.peso_gramas,
+    medida: produto.medida,
 
     categoria: {
       slug: produto.categoria_slug,

@@ -190,7 +190,7 @@
   font-size: var(--txt-xl);
 }
 
-.produto-card__peso {
+.produto-card__medida {
   font-size: var(--txt-xs);
   font-weight: 700;
   color: var(--cor-texto-claro);
