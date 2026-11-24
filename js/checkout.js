@@ -486,11 +486,6 @@ async function iniciar() {
 
   formulario.setAttribute('novalidate', '');
 
-  if (!estaLogado()) {
-    pedirLoginParaFinalizar(formulario);
-    return;
-  }
-
   // --- Limites da data desejada ---
   const campoData = formulario.elements.dataDesejada;
   if (campoData) {
@@ -565,6 +560,20 @@ async function iniciar() {
   }
 
   await carregarCarrinho();
+
+  /*
+    O pedido de login vem DEPOIS de carregar o carrinho, não antes.
+
+    A primeira versão abortava a inicialização logo no começo — e com isso
+    o carrinho nunca era carregado. Como a página só aparece depois disso,
+    o resultado foi uma tela em branco: o aviso existia, dentro de um bloco
+    ainda escondido.
+
+    Carregando primeiro, a pessoa vê o que está comprando e o quanto vai
+    pagar, e só então descobre que falta entrar. É também a ordem que
+    convence: ninguém cria conta por um resumo que não viu.
+  */
+  if (!estaLogado()) pedirLoginParaFinalizar(formulario);
 }
 
 if (document.readyState === 'loading') {
