@@ -15,7 +15,12 @@
 
 import { exigirAdmin } from '../../services/auth-service.js';
 import { selecionar, selecionarUm, atualizar } from '../../services/database.js';
-import { atualizarStatus, ROTULOS_STATUS, ErroPedido } from '../../services/order-service.js';
+import {
+  atualizarStatus,
+  transicaoPermitida,
+  ROTULOS_STATUS,
+  ErroPedido,
+} from '../../services/order-service.js';
 import { lerVariaveisDeAmbiente } from '../../services/env.js';
 
 const env = lerVariaveisDeAmbiente();
@@ -313,33 +318,102 @@ export async function postConferirPagamento({ req, params = {}, corpo = {} } = {
     return { status: 404, corpo: { erro: true, mensagem: 'Pedido não encontrado.' } };
   }
 
+  const pagamento = await selecionarUm('payments', {
+    colunas: 'id,metodo,comprovante_caminho',
+    filtros: { pedido_id: `eq.${pedido.id}` },
+    ordenar: 'criado_em.desc',
+  });
+
+  /* ---------------------------------------------------------------------
+   * Aprovar sem comprovante exige dizer COMO foi confirmado
+   *
+   * O cliente pode ter pago o Pix e avisado por WhatsApp sem subir o print.
+   * Aprovar nesse caso é legítimo — mas precisa deixar rastro, porque é a
+   * palavra da loja sustentando a decisão. A restrição
+   * `payments_conferencia_exige_comprovante` (arquivo 16) cobra o mesmo no
+   * banco; a checagem aqui existe para a pessoa ler um pedido claro em vez
+   * de um erro de constraint.
+   * ------------------------------------------------------------------ */
+  const semComprovante = pagamento && !pagamento.comprovante_caminho;
+  const exigeJustificativa = semComprovante && pagamento.metodo !== 'dinheiro';
+
+  if (corpo.aprovado && exigeJustificativa && observacao.length < 3) {
+    return {
+      status: 422,
+      corpo: {
+        erro: true,
+        mensagem:
+          'Este pedido não tem comprovante enviado. Escreva como você ' +
+          'confirmou o pagamento — por exemplo, "confirmado no extrato".',
+        erros: { observacao: 'Diga como confirmou o pagamento.' },
+      },
+    };
+  }
+
+  const novoStatus = corpo.aprovado ? 'pagamento_aprovado' : 'aguardando_pagamento';
+
+  /* ---------------------------------------------------------------------
+   * A transição é conferida ANTES de escrever qualquer coisa
+   *
+   * Sem isto, um pedido já entregue receberia o carimbo de "conferido" no
+   * pagamento e só depois seria barrado na mudança de status — deixando o
+   * registro inconsistente por causa de uma operação que nunca deveria ter
+   * começado.
+   * ------------------------------------------------------------------ */
+  if (pedido.status !== novoStatus && !transicaoPermitida(pedido.status, novoStatus)) {
+    return {
+      status: 409,
+      corpo: {
+        erro: true,
+        mensagem:
+          `Este pedido está em "${ROTULOS_STATUS[pedido.status]}" e não pode ` +
+          'voltar para a conferência de pagamento.',
+      },
+    };
+  }
+
   try {
-    const novoStatus = corpo.aprovado ? 'pagamento_aprovado' : 'aguardando_pagamento';
+    /* -------------------------------------------------------------------
+     * ORDEM DAS ESCRITAS: PAGAMENTO PRIMEIRO, STATUS DEPOIS
+     *
+     * São duas escritas sem transação entre elas — e a ordem decide o que
+     * sobra quando a segunda falha.
+     *
+     * Era o contrário, e o resultado apareceu em produção: a restrição do
+     * banco barrou o UPDATE em `payments`, mas o pedido JÁ tinha virado
+     * "pagamento aprovado". Ficaram dois pedidos aprovados com pagamento
+     * pendente, e repetir a operação não consertava — o status já estava
+     * certo, então a segunda escrita falhava de novo.
+     *
+     * Invertida, a falha provável (restrição do banco) não muda nada: o
+     * pedido continua aguardando pagamento e a pessoa vê o erro. E se a
+     * segunda escrita falhar, repetir resolve — gravar os mesmos valores em
+     * `payments` é idempotente, e aí o status enfim avança.
+     * ---------------------------------------------------------------- */
+    if (pagamento) {
+      await atualizar(
+        'payments',
+        { id: `eq.${pagamento.id}` },
+        corpo.aprovado
+          ? {
+              status: 'aprovado',
+              conferido_em: new Date().toISOString(),
+              conferido_por: auth.usuario.id,
+              observacao_conferencia: observacao || null,
+              pago_em: new Date().toISOString(),
+            }
+          : {
+              status: 'pendente',
+              conferido_em: null,
+              conferido_por: auth.usuario.id,
+              observacao_conferencia: observacao,
+            }
+      );
+    }
 
     await atualizarStatus(codigo, novoStatus, {
       motivo: corpo.aprovado ? null : observacao,
     });
-
-    // Registra quem conferiu e quando. Aprovação some do "a conferir";
-    // recusa volta o comprovante para pendente, para o cliente reenviar.
-    await atualizar(
-      'payments',
-      { pedido_id: `eq.${pedido.id}` },
-      corpo.aprovado
-        ? {
-            status: 'aprovado',
-            conferido_em: new Date().toISOString(),
-            conferido_por: auth.usuario.id,
-            observacao_conferencia: observacao || null,
-            pago_em: new Date().toISOString(),
-          }
-        : {
-            status: 'pendente',
-            conferido_em: null,
-            conferido_por: auth.usuario.id,
-            observacao_conferencia: observacao,
-          }
-    );
 
     return {
       status: 200,

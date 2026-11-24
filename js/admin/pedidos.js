@@ -217,12 +217,29 @@ function criarConferencia(pedido) {
 }
 
 function criarBotoesConferencia(pedido) {
+  /*
+    QUANDO NÃO HÁ COMPROVANTE, O MOTIVO VIRA OBRIGATÓRIO PARA APROVAR
+
+    O cliente pode ter pago o Pix e avisado por fora, sem subir o print.
+    Aprovar assim é legítimo — e é a palavra da loja sustentando a decisão,
+    então precisa ficar escrito. O banco cobra o mesmo (ver o arquivo 16).
+
+    Dinheiro fica de fora: nunca houve comprovante a enviar.
+  */
+  const semComprovante =
+    pedido.pagamento && !pedido.pagamento.temComprovante;
+  const exigeJustificativa = semComprovante && pedido.pagamento.metodo !== 'dinheiro';
+
   const observacao = criar('input', {
     class: 'campo__controle',
     type: 'text',
-    placeholder: 'Motivo da recusa (obrigatório ao recusar)',
+    placeholder: exigeJustificativa
+      ? 'Como você confirmou? Ex.: "conferido no extrato" (obrigatório)'
+      : 'Motivo da recusa (obrigatório ao recusar)',
     maxlength: '500',
-    'aria-label': 'Motivo da recusa',
+    'aria-label': exigeJustificativa
+      ? 'Como o pagamento foi confirmado, ou motivo da recusa'
+      : 'Motivo da recusa',
   });
 
   const aprovar = criar(
@@ -238,6 +255,12 @@ function criarBotoesConferencia(pedido) {
   );
 
   aprovar.addEventListener('click', async () => {
+    if (exigeJustificativa && observacao.value.trim().length < 3) {
+      observacao.focus();
+      toastErro('Sem comprovante anexado, escreva como você confirmou o pagamento.');
+      return;
+    }
+
     const confirmado = await confirmar(
       `Confirmar que o pagamento de ${moeda(pedido.total)} do pedido ` +
         `${pedido.codigo} entrou na conta?`
@@ -257,14 +280,32 @@ function criarBotoesConferencia(pedido) {
     conferir(pedido.codigo, false, observacao.value, recusar);
   });
 
-  return criar('div', { class: 'admin-conferencia mt-4' }, [
-    criar('p', {
-      class: 'texto-mini negrito',
-      texto: 'Confira o valor e a data no extrato antes de aprovar.',
-    }),
-    observacao,
-    criar('div', { class: 'flex gap-2 quebrar mt-3' }, [aprovar, recusar]),
-  ]);
+  const filhos = [];
+
+  if (exigeJustificativa) {
+    filhos.push(
+      criar('div', { class: 'alerta alerta--aviso' }, [
+        icone('alerta'),
+        criar('p', {
+          class: 'sem-margem',
+          texto:
+            'O cliente não enviou comprovante. Para aprovar, escreva abaixo ' +
+            'como você confirmou que o dinheiro entrou.',
+        }),
+      ])
+    );
+  } else {
+    filhos.push(
+      criar('p', {
+        class: 'texto-mini negrito',
+        texto: 'Confira o valor e a data no extrato antes de aprovar.',
+      })
+    );
+  }
+
+  filhos.push(observacao, criar('div', { class: 'flex gap-2 quebrar mt-3' }, [aprovar, recusar]));
+
+  return criar('div', { class: 'admin-conferencia mt-4' }, filhos);
 }
 
 /** Botões para avançar o pedido depois do pagamento aprovado. */

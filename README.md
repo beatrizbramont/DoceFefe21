@@ -186,7 +186,8 @@ DoceFefe21/
 │   ├── …                        Correções e ajustes de catálogo
 │   ├── 13-criar-admin.sql       Promove uma conta a administradora
 │   ├── 14-painel-admin.sql      Fotos, estoque e resumo  (Fase 9)
-│   └── 15-revendedores.sql      Desconto e pedido mínimo (Fase 10)
+│   ├── 15-revendedores.sql      Desconto e pedido mínimo (Fase 10)
+│   └── 16-conferencia-sem-comprovante.sql   Correção
 │
 ├── robots.txt
 ├── sitemap.xml
@@ -424,6 +425,11 @@ Só o painel administrativo, atrás de `exigirAdmin`, consegue levar um pedido
 do primeiro estado ao segundo. É o mesmo princípio do webhook de um
 intermediador: a confirmação precisa vir de uma fonte que o cliente não
 controla. Aqui essa fonte é a pessoa que olha a conta bancária.
+
+**Conferir exige lastro, não necessariamente comprovante.** Quando o cliente
+paga o Pix e avisa por fora sem enviar o print, a loja aprova escrevendo como
+confirmou — "conferido no extrato". O texto fica gravado junto de quem aprovou
+e quando. O que não existe é aprovação no escuro.
 
 ### Dois buckets, duas naturezas
 
