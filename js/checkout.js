@@ -444,11 +444,52 @@ function paraIso(data) {
   ].join('-');
 }
 
+/**
+ * Pede login antes de deixar preencher o checkout.
+ *
+ * Aviso no lugar do formulário, e não um bloqueio depois de enviar: descobrir
+ * que precisa de conta DEPOIS de digitar endereço inteiro é o jeito mais
+ * certo de perder a venda.
+ *
+ * Quem barra de verdade é o servidor (`postPedido` devolve 401). Isto aqui
+ * existe para a pessoa não perder tempo.
+ */
+function pedirLoginParaFinalizar(formulario) {
+  const aviso = criar('div', { class: 'alerta alerta--info' }, [
+    icone('cadeado'),
+    criar('div', {}, [
+      criar('p', {
+        class: 'sem-margem negrito',
+        texto: 'Entre na sua conta para finalizar',
+      }),
+      criar('p', {
+        class: 'sem-margem mt-2',
+        texto:
+          'É pela conta que você recebe os dados do Pix, envia o comprovante ' +
+          'e acompanha o pedido até a entrega. Seu carrinho continua aqui.',
+      }),
+      criar('a', {
+        class: 'btn btn--primario mt-4',
+        href: `${rota(ROTAS.minhaConta)}?retorno=checkout`,
+        texto: 'Entrar ou criar conta',
+      }),
+    ]),
+  ]);
+
+  formulario.hidden = true;
+  formulario.before(aviso);
+}
+
 async function iniciar() {
   const formulario = $('[data-formulario-checkout]');
   if (!formulario) return;
 
   formulario.setAttribute('novalidate', '');
+
+  if (!estaLogado()) {
+    pedirLoginParaFinalizar(formulario);
+    return;
+  }
 
   // --- Limites da data desejada ---
   const campoData = formulario.elements.dataDesejada;

@@ -59,6 +59,35 @@ const FRETE_A_COMBINAR = true;
  * Cria um pedido.
  */
 export async function postPedido({ req, corpo = {} } = {}) {
+  /* ---------------------------------------------------------------------
+   * PEDIDO EXIGE CONTA
+   *
+   * Era permitido comprar sem cadastro, para não perder venda. A loja
+   * decidiu o contrário, e com razão: o pagamento é por Pix com
+   * comprovante, e o acompanhamento acontece na área do cliente. Sem
+   * conta, a pessoa pagaria e não teria onde ver o que aconteceu — e a
+   * loja não teria a quem responder.
+   *
+   * A checagem vem ANTES da validação do formulário de propósito: não
+   * adianta apontar erro de CEP a quem nem vai conseguir concluir.
+   *
+   * ⚠️ É ESTA linha que barra, não a tela. Esconder o botão no navegador
+   *   não impede ninguém de chamar a API direto.
+   * ------------------------------------------------------------------ */
+  const usuarioId = await identificarUsuarioId(req);
+
+  if (!usuarioId) {
+    return {
+      status: 401,
+      corpo: {
+        erro: true,
+        mensagem:
+          'Entre na sua conta para finalizar o pedido. É por ela que você ' +
+          'acompanha o pagamento e o andamento da entrega.',
+      },
+    };
+  }
+
   // --- Validação de formato ---
   const validacao = validarPedido(corpo);
 
@@ -72,12 +101,6 @@ export async function postPedido({ req, corpo = {} } = {}) {
       },
     };
   }
-
-  // --- Sessão (opcional) ---
-  // Pedido sem login é permitido: a loja não deve perder venda por causa de
-  // cadastro. Quem estiver logado tem o pedido vinculado à conta e aparecendo
-  // no histórico.
-  const usuarioId = await identificarUsuarioId(req);
 
   const freteCentavos = calcularFrete(validacao.dados);
 

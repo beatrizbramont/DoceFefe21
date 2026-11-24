@@ -187,8 +187,9 @@ export const ROTAS = [
   },
 
   // --- Pedidos ---
-  // Criar pedido NÃO exige login: a loja não deve perder venda por causa de
-  // cadastro. Quem estiver logado tem o pedido vinculado à conta.
+  // Criar pedido EXIGE login: o pagamento é por Pix com comprovante, e o
+  // acompanhamento acontece na área do cliente. Sem conta, a pessoa pagaria
+  // e não teria onde ver o que aconteceu. A checagem está no controlador.
   {
     metodo: 'POST',
     padrao: '/api/pedidos',
