@@ -318,8 +318,24 @@ export async function cadastrar({ nome, email, senha, telefone = '' }) {
 export async function confirmarCodigo({ email, codigo }) {
   const limpo = String(codigo || '').replace(/\D/g, '');
 
-  if (limpo.length !== 6) {
-    throw new ErroAuth('O código tem 6 números.', 'codigo_invalido', 400);
+  /*
+    FAIXA, E NÃO UM TAMANHO FIXO
+
+    A primeira versão exigia exatamente 6 números, porque 6 é o padrão do
+    Supabase. Só que o tamanho é CONFIGURÁVEL no painel (Authentication →
+    Providers → Email → OTP Length), e este projeto está em 8 — então a
+    tela recusava o código certo antes mesmo de perguntar ao servidor.
+
+    A faixa larga existe só para barrar engano óbvio: campo vazio, ou alguém
+    colando um texto inteiro. Quem decide se o código vale é o Supabase, que
+    é o único que sabe qual foi enviado.
+  */
+  if (limpo.length < 4 || limpo.length > 10) {
+    throw new ErroAuth(
+      'Digite o código que chegou no seu e-mail.',
+      'codigo_invalido',
+      400
+    );
   }
 
   const resposta = await requisitar('/verify', {

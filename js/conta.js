@@ -273,9 +273,11 @@ function mostrarFormularioCodigo(formularioCadastro, email) {
     // o código assim que ele chega.
     inputmode: 'numeric',
     autocomplete: 'one-time-code',
-    maxlength: '6',
-    placeholder: '000000',
-    'aria-label': 'Código de 6 números recebido por e-mail',
+    // Teto generoso em vez do tamanho exato: o comprimento do código é
+    // configurável no painel do Supabase, e já mudou uma vez. Fixar o
+    // número aqui faria a tela recusar o código certo.
+    maxlength: '10',
+    'aria-label': 'Código recebido por e-mail',
   });
 
   const confirmar = criar('button', {
@@ -289,7 +291,7 @@ function mostrarFormularioCodigo(formularioCadastro, email) {
       criar('label', {
         class: 'campo__rotulo',
         for: 'codigo-confirmacao',
-        texto: 'Código de 6 números',
+        texto: 'Código recebido por e-mail',
       }),
       codigo,
       criar('span', { class: 'campo__erro' }),
@@ -297,11 +299,14 @@ function mostrarFormularioCodigo(formularioCadastro, email) {
     confirmar,
   ]);
 
-  // Só números, e confirma sozinho ao completar os 6 — quem digitou o
-  // último número já disse tudo que tinha para dizer.
+  /*
+    Só números. Sem confirmar sozinho ao atingir um tamanho: como o
+    comprimento do código é configurável no Supabase, disparar o envio num
+    número fixo erraria sempre que a configuração mudasse — e enviar cedo
+    demais gasta uma tentativa à toa.
+  */
   codigo.addEventListener('input', () => {
-    codigo.value = codigo.value.replace(/\D/g, '').slice(0, 6);
-    if (codigo.value.length === 6) formulario.requestSubmit();
+    codigo.value = codigo.value.replace(/\D/g, '').slice(0, 10);
   });
 
   formulario.addEventListener('submit', async (evento) => {
@@ -347,7 +352,7 @@ function mostrarFormularioCodigo(formularioCadastro, email) {
     icone('email', 'confirmacao-codigo__icone'),
     criar('h2', { class: 'confirmacao-codigo__titulo', texto: 'Confira seu e-mail' }),
     criar('p', {
-      texto: `Enviamos um código de 6 números para ${email}. Digite ele aqui embaixo.`,
+      texto: `Enviamos um código para ${email}. Digite ele aqui embaixo.`,
     }),
     formulario,
     criar('p', {

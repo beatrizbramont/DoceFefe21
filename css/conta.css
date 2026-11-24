@@ -420,7 +420,7 @@
 }
 
 .confirmacao-codigo form {
-  max-width: 280px;
+  max-width: 320px;
   margin: var(--esp-6) auto 0;
 }
 
@@ -428,11 +428,14 @@
    está lendo no celular. */
 .confirmacao-codigo input {
   font-family: 'Courier New', Courier, monospace;
-  font-size: var(--txt-2xl);
+  font-size: var(--txt-xl);
   font-weight: 700;
   text-align: center;
-  letter-spacing: 0.5em;
+  /* Espaçamento contido: o código pode ter até 10 números, porque o
+     comprimento é configurável no Supabase. Com 0.5em, um código de 8 já
+     transbordava a caixa. */
+  letter-spacing: 0.3em;
   /* Compensa o espaçamento do último número, que empurraria o texto para
      a esquerda do centro. */
-  text-indent: 0.5em;
+  text-indent: 0.3em;
 }

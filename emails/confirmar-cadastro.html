@@ -8,8 +8,14 @@
     No campo "Subject", use:  Confirme seu cadastro na Doce Fefê.21
 
   A VARIÁVEL
-    {{ .Token }} é trocada pelo Supabase pelo código de 6 números. Precisa
-    aparecer exatamente assim, com os espaços dentro das chaves.
+    {{ .Token }} é trocada pelo Supabase pelo código. Precisa aparecer
+    exatamente assim, com os espaços dentro das chaves.
+
+  QUANTOS NÚMEROS TEM O CÓDIGO
+    Depende da configuração do projeto, em Authentication → Providers →
+    Email → OTP Length. Nem este modelo nem a tela do site fixam esse
+    número — ambos aceitam o que vier. Assim, mudar a configuração não
+    quebra nada.
 
   -----------------------------------------------------------------------------
   POR QUE CÓDIGO E NÃO LINK
