@@ -46,3 +46,15 @@ uploads/
 *.cert
 *.crt
 service-account*.json
+
+# === Dados bancários e pessoais ===
+#
+# A arte do Pix traz o QR Code, o NOME COMPLETO da titular e o banco. Esteve
+# versionada num repositório público entre as Fases 8 e 12 — ver a seção de
+# segurança no README.
+#
+# O arquivo continua no disco: serve para impressão e uso presencial. O que
+# não pode é ir para o Git de novo.
+assets/images/pix-qrcode.jpeg
+assets/images/*PRIVADO*
+assets/images/*pix*

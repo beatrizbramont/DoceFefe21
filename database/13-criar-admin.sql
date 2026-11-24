@@ -30,7 +30,12 @@
 do $$
 declare
   -- ⚠️ SUBSTITUA pelo e-mail da conta que você criou no site.
-  c_email constant text := 'beatriz.bramont@gmail.com';
+  --
+  -- Deixado em branco de propósito: este arquivo vai para o Git, e um
+  -- e-mail escrito aqui diz a quem ler exatamente qual conta tem o poder
+  -- de aprovar pagamento. É meio caminho andado para quem quiser tentar
+  -- invadir — e é dado pessoal exposto sem necessidade.
+  c_email constant text := '';
 
   v_usuario_id uuid;
   v_perfil     text;
@@ -39,6 +44,11 @@ begin
   select id into v_usuario_id
     from auth.users
    where lower(email) = lower(c_email);
+
+  if c_email = '' then
+    raise exception
+      'Preencha c_email na linha 36 com o e-mail da conta que voce criou no site.';
+  end if;
 
   if v_usuario_id is null then
     raise exception
