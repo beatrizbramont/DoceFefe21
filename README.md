@@ -185,7 +185,8 @@ DoceFefe21/
 │   ├── 03-seed.sql              Dados de demonstração
 │   ├── …                        Correções e ajustes de catálogo
 │   ├── 13-criar-admin.sql       Promove uma conta a administradora
-│   └── 14-painel-admin.sql      Fotos, estoque e resumo  (Fase 9)
+│   ├── 14-painel-admin.sql      Fotos, estoque e resumo  (Fase 9)
+│   └── 15-revendedores.sql      Desconto e pedido mínimo (Fase 10)
 │
 ├── robots.txt
 ├── sitemap.xml
@@ -266,6 +267,17 @@ o backend consulta `resellers.status = 'aprovado'` no banco e decide se
 devolve o preço de varejo ou o de atacado. Não há como forjar isso pelo
 console do navegador.
 
+A conta do parceiro é feita por `preco_para_usuario`, uma função do banco:
+
+```
+preço do parceiro = preço de atacado − (atacado × desconto do parceiro)
+```
+
+Ela é chamada a cada item de cada pedido, dentro da mesma transação que grava
+o pedido. Nem o preço nem a condição de atacado chegam como parâmetro — se o
+backend inteiro fosse comprometido e tentasse gravar um item pela metade do
+preço, a função recalcularia o valor correto.
+
 ### Nada de `innerHTML` com dados externos
 
 As funções de `lib/ui.js` inserem texto via `textContent`, que escapa HTML
@@ -286,6 +298,7 @@ Fica em `/admin/`. Cinco telas, um login só.
 | **Produtos** | Cadastrar, editar preço, enviar foto, publicar e arquivar |
 | **Estoque** | Entrada, saída, perda, contagem — tudo com histórico |
 | **Clientes** | Cadastros, contato e quanto cada pessoa já comprou |
+| **Parceiros** | Aprovar revendedores e definir desconto e pedido mínimo |
 
 ### Como ganhar acesso
 
@@ -305,11 +318,28 @@ promove precisa ter a senha do banco.
   o quê e quando. Enquanto esse registro não existir, a tela é só leitura.
 - **Não promove ninguém.** Ver acima.
 
+### Revenda e atacado
+
+Quem quer revender se cadastra em `seja-revendedor.html` — **com conta**, já
+que o preço de atacado fica vinculado a ela. A candidatura nasce `pendente` e
+não concede nada; na tela **Parceiros** a loja aprova e define duas condições:
+
+| Condição | O que faz |
+|---|---|
+| **Desconto** | Percentual abatido do preço de **atacado** de cada produto |
+| **Pedido mínimo** | Valor em mercadoria abaixo do qual o pedido é recusado |
+
+O mínimo é conferido no banco, dentro da transação que cria o pedido — não só
+no botão do carrinho. Frete não entra nessa conta: senão um endereço distante
+ajudaria a atingir o mínimo.
+
+Suspender um parceiro devolve a conta dele ao preço de varejo imediatamente.
+
 ### Antes de usar
 
-O painel depende de `database/14-painel-admin.sql` — ele cria o bucket das
-fotos e as funções de estoque e resumo. Execute os arquivos SQL **em ordem
-numérica**; o 14 vem por último.
+O painel depende dos arquivos `database/14-painel-admin.sql` (bucket das
+fotos, funções de estoque e resumo) e `database/15-revendedores.sql` (desconto
+do parceiro e pedido mínimo). Execute os arquivos SQL **em ordem numérica**.
 
 ---
 
@@ -370,7 +400,7 @@ pública e autenticada.
 | 7 | Checkout e pedidos | ✅ Concluída |
 | 8 | Pagamentos | ✅ Concluída |
 | 9 | Painel administrativo | ✅ Concluída |
-| 10 | Revendedores e atacado | ⬜ |
+| 10 | Revendedores e atacado | ✅ Concluída |
 | 11 | Marketing e relatórios | ⬜ |
 | 12 | Testes, segurança e publicação | ⬜ |
 

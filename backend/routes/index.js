@@ -39,6 +39,14 @@ import {
   getClientesAdmin,
 } from '../controllers/admin-painel-controller.js';
 import {
+  postCandidatura,
+  getMinhaCandidatura,
+} from '../controllers/reseller-controller.js';
+import {
+  getRevendedoresAdmin,
+  patchRevendedor,
+} from '../controllers/admin-revendedores-controller.js';
+import {
   getProdutosAdmin,
   getProdutoAdmin,
   postProduto,
@@ -160,6 +168,23 @@ export const ROTAS = [
     limitador: limitadorLeitura,
   },
 
+  // --- Revendedores (candidatura) ---
+  // Exigem sessão: o preço de atacado é resolvido pelo usuario_id, então
+  // candidatura sem conta vinculada não levaria a desconto nenhum.
+  // Nenhuma delas aprova — aprovar é /api/admin/revendedores/:id.
+  {
+    metodo: 'GET',
+    padrao: '/api/revendedores/eu',
+    manipulador: getMinhaCandidatura,
+    limitador: limitadorLeitura,
+  },
+  {
+    metodo: 'POST',
+    padrao: '/api/revendedores',
+    manipulador: postCandidatura,
+    limitador: limitadorEscrita,
+  },
+
   // --- Pedidos ---
   // Criar pedido NÃO exige login: a loja não deve perder venda por causa de
   // cadastro. Quem estiver logado tem o pedido vinculado à conta.
@@ -247,6 +272,21 @@ export const ROTAS = [
     padrao: '/api/admin/clientes',
     manipulador: getClientesAdmin,
     limitador: limitadorLeitura,
+  },
+
+  // --- Painel: revendedores ---
+  // ⚠️ O PATCH é a única rota do sistema que cria desconto permanente.
+  {
+    metodo: 'GET',
+    padrao: '/api/admin/revendedores',
+    manipulador: getRevendedoresAdmin,
+    limitador: limitadorLeitura,
+  },
+  {
+    metodo: 'PATCH',
+    padrao: '/api/admin/revendedores/:id',
+    manipulador: patchRevendedor,
+    limitador: limitadorEscrita,
   },
 
   // --- Painel: catálogo ---

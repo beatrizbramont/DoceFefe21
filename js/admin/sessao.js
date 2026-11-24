@@ -48,9 +48,9 @@ import {
 /* =============================================================================
  * MENU
  *
- * Só entram as telas que existem. Revendedores (Fase 10), cupons e relatórios
- * (Fase 11) ficam de fora até serem construídos: menu que leva a uma página
- * "em construção" é promessa quebrada a cada clique.
+ * Só entram as telas que existem. Cupons e relatórios (Fase 11) ficam de fora
+ * até serem construídos: menu que leva a uma página "em construção" é
+ * promessa quebrada a cada clique.
  * ========================================================================== */
 
 const TELAS = [
@@ -59,6 +59,7 @@ const TELAS = [
   { arquivo: 'produtos.html', rotulo: 'Produtos', icone: '🍫' },
   { arquivo: 'estoque.html', rotulo: 'Estoque', icone: '📦' },
   { arquivo: 'clientes.html', rotulo: 'Clientes', icone: '👥' },
+  { arquivo: 'revendedores.html', rotulo: 'Parceiros', icone: '🤝' },
 ];
 
 /** Nome do arquivo .html aberto agora. */

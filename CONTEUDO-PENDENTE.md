@@ -53,7 +53,8 @@ no lugar certo.
 | **Endereço para retirada** | ⬜ Pendente | Checkout (Fase 7) |
 | **Prazo de produção** | ⬜ Pendente | FAQ, checkout |
 | **Área e valor de entrega** | ⬜ Pendente | Checkout (Fase 7) |
-| **Pedido mínimo para atacado** | ⬜ Pendente | Seja Revendedor (Fase 10) |
+| **Pedido mínimo para atacado** | ✅ Definido por parceiro no painel | Tela Parceiros |
+| **Tabela de preços de atacado** | ⬜ Pendente | Cadastro de cada produto |
 | **Razão social e CNPJ** | ⬜ Pendente | Rodapé, política de privacidade |
 
 > Os campos de e-mail e cidade já estão programados em `js/config.js`. Assim

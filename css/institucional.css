@@ -1,8 +1,12 @@
 /* =============================================================================
    DOCE FEFÊ.21 — institucional.css
-   Páginas Nossa História e Contato.
+   Páginas Nossa História, Contato e Seja Revendedor.
 
-   Carregada por: nossa-historia.html, contato.html
+   Carregada por: nossa-historia.html, contato.html, seja-revendedor.html
+
+   PARTE 1 — Nossa História
+   PARTE 2 — Contato
+   PARTE 3 — Seja Revendedor
    ========================================================================== */
 
 /* =============================================================================
@@ -727,4 +731,115 @@
   .faq__resposta {
     transition: none;
   }
+}
+
+/* =============================================================================
+   PARTE 3 — SEJA REVENDEDOR
+   ========================================================================== */
+
+/* -----------------------------------------------------------------------------
+   3.1 Como funciona
+
+   Três passos numerados. O número é decorativo — a ordem já está no <ol>,
+   que é o que um leitor de tela anuncia.
+   -------------------------------------------------------------------------- */
+.passos {
+  display: grid;
+  gap: var(--esp-5);
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr));
+  list-style: none;
+  padding: 0;
+  margin-bottom: var(--esp-10);
+}
+
+.passo {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--esp-4);
+  padding: var(--esp-5);
+  background-color: var(--cor-branco);
+  border: 1px solid var(--cor-borda);
+  border-radius: var(--raio-lg);
+  box-shadow: var(--sombra-sm);
+}
+
+.passo__numero {
+  flex-shrink: 0;
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background-color: var(--cor-dourado-600);
+  color: var(--cor-branco);
+  font-family: var(--fonte-titulo);
+  font-size: var(--txt-lg);
+  font-weight: 700;
+  line-height: 1;
+}
+
+.passo h3 {
+  font-size: var(--txt-base);
+  margin-bottom: var(--esp-2);
+}
+
+.passo p {
+  font-size: var(--txt-sm);
+  margin: 0;
+  color: var(--cor-texto-suave);
+}
+
+/* -----------------------------------------------------------------------------
+   3.2 Situação da candidatura
+
+   Aparece no lugar do formulário para quem já se candidatou. A cor da borda
+   carrega o estado: dourado em análise, verde aprovado, vermelho recusado.
+   -------------------------------------------------------------------------- */
+.situacao-revenda {
+  padding: var(--esp-6);
+  margin-bottom: var(--esp-8);
+  background-color: var(--cor-branco);
+  border: 1px solid var(--cor-borda);
+  border-left: 4px solid var(--cor-dourado-600);
+  border-radius: var(--raio-lg);
+  box-shadow: var(--sombra-sm);
+}
+
+.situacao-revenda--aprovado { border-left-color: var(--cor-sucesso); }
+.situacao-revenda--recusado { border-left-color: var(--cor-erro); }
+.situacao-revenda--suspenso { border-left-color: var(--cor-aviso); }
+
+.situacao-revenda__titulo {
+  font-size: var(--txt-lg);
+  margin-bottom: var(--esp-2);
+}
+
+/* As condições comerciais de quem foi aprovado. */
+.condicoes-revenda {
+  display: grid;
+  gap: var(--esp-4);
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 180px), 1fr));
+  padding: var(--esp-5);
+  margin-top: var(--esp-5);
+  background-color: var(--cor-creme-200);
+  border-radius: var(--raio-md);
+}
+
+.condicoes-revenda__valor {
+  display: block;
+  font-family: var(--fonte-titulo);
+  font-size: var(--txt-2xl);
+  font-weight: 700;
+  line-height: 1;
+  color: var(--cor-chocolate-800);
+}
+
+.condicoes-revenda__rotulo {
+  display: block;
+  margin-top: var(--esp-2);
+  font-size: var(--txt-xs);
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--cor-texto-claro);
 }

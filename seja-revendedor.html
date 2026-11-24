@@ -30,6 +30,7 @@
   <link rel="stylesheet" href="./css/global.css">
   <link rel="stylesheet" href="./css/header.css">
   <link rel="stylesheet" href="./css/footer.css">
+  <link rel="stylesheet" href="./css/institucional.css">
 </head>
 
 <body>
@@ -52,27 +53,213 @@
       </nav>
     </div>
 
-    <!--
-      ATENÇÃO: bloco temporário da Fase 1.
-      O conteúdo real desta página será implementado na FASE 10.
-      Este aviso deve ser REMOVIDO quando aquela fase for concluída.
-    -->
-    <div class="container">
-      <div class="em-construcao">
-        <div class="em-construcao__icone" aria-hidden="true">🧁</div>
-        <h2>Esta página chega na Fase 10</h2>
-        <p>O formulário de cadastro comercial (responsável, estabelecimento, CNPJ opcional, cidade, WhatsApp, volume estimado) e o fluxo de aprovação administrativa.</p>
-        <p class="texto-pequeno">
-          A estrutura, o cabeçalho, o rodapé e a identidade visual já estão
-          funcionando — é a fundação sobre a qual esta página será construída.
-        </p>
-        <a href="./index.html" class="btn btn--primario">Voltar para o início</a>
+    <section class="secao">
+      <div class="container">
+
+        <!-- =================================================================
+             COMO FUNCIONA
+             ============================================================== -->
+        <div class="secao__cabecalho" data-revelar>
+          <span class="sobretitulo">Parceria comercial</span>
+          <h2>Como funciona</h2>
+          <span class="filete-dourado"></span>
+        </div>
+
+        <ol class="passos" data-revelar>
+          <li class="passo">
+            <span class="passo__numero" aria-hidden="true">1</span>
+            <div>
+              <h3>Você se cadastra</h3>
+              <p>Conta sobre o seu negócio no formulário abaixo. Leva dois minutos.</p>
+            </div>
+          </li>
+          <li class="passo">
+            <span class="passo__numero" aria-hidden="true">2</span>
+            <div>
+              <h3>A gente conversa</h3>
+              <p>
+                Chamamos no WhatsApp para entender seu volume e combinar as
+                condições.
+              </p>
+            </div>
+          </li>
+          <li class="passo">
+            <span class="passo__numero" aria-hidden="true">3</span>
+            <div>
+              <h3>Os preços mudam sozinhos</h3>
+              <p>
+                Aprovado o cadastro, o site passa a mostrar o preço de atacado
+                para você — na mesma conta, sem código nem cupom.
+              </p>
+            </div>
+          </li>
+        </ol>
+
+        <!-- =================================================================
+             SITUAÇÃO DA CANDIDATURA
+
+             Preenchido por js/revendedor.js para quem já se candidatou.
+             Quem nunca se candidatou não vê nada aqui.
+             ============================================================== -->
+        <div data-situacao-revenda></div>
+
+        <!-- =================================================================
+             FORMULÁRIO
+             ============================================================== -->
+        <div data-area-formulario>
+          <div class="secao__cabecalho mt-8" data-revelar>
+            <span class="sobretitulo">Cadastro</span>
+            <h2>Seja nosso parceiro</h2>
+            <span class="filete-dourado"></span>
+          </div>
+
+          <div class="formulario-caixa">
+            <!--
+              ⚠️ Este formulário NÃO concede desconto nenhum. Ele cria uma
+              candidatura `pendente`. Quem aprova é a loja, pelo painel —
+              a mesma separação do comprovante de pagamento.
+            -->
+            <form data-formulario-revenda method="post" novalidate>
+
+              <div class="campo-linha">
+                <div class="campo">
+                  <label class="campo__rotulo" for="nomeResponsavel">
+                    Seu nome <span class="campo__obrigatorio" aria-hidden="true">*</span>
+                  </label>
+                  <input type="text" id="nomeResponsavel" name="nomeResponsavel"
+                         autocomplete="name" placeholder="Quem responde pelo negócio"
+                         required>
+                  <span class="campo__erro"></span>
+                </div>
+
+                <div class="campo">
+                  <label class="campo__rotulo" for="whatsapp">
+                    WhatsApp <span class="campo__obrigatorio" aria-hidden="true">*</span>
+                  </label>
+                  <input type="tel" id="whatsapp" name="whatsapp"
+                         autocomplete="tel" placeholder="(11) 99999-9999"
+                         data-mascara="telefone" inputmode="numeric" required>
+                  <span class="campo__erro"></span>
+                </div>
+              </div>
+
+              <div class="campo-linha">
+                <div class="campo">
+                  <label class="campo__rotulo" for="nomeEstabelecimento">
+                    Nome do negócio <span class="campo__obrigatorio" aria-hidden="true">*</span>
+                  </label>
+                  <input type="text" id="nomeEstabelecimento" name="nomeEstabelecimento"
+                         placeholder="Como seu negócio é conhecido" required>
+                  <span class="campo__erro"></span>
+                </div>
+
+                <div class="campo">
+                  <label class="campo__rotulo" for="tipoEstabelecimento">Tipo de negócio</label>
+                  <select id="tipoEstabelecimento" name="tipoEstabelecimento">
+                    <option value="">Escolha uma opção</option>
+                    <option value="cafeteria">Cafeteria</option>
+                    <option value="padaria">Padaria</option>
+                    <option value="mercado">Mercado ou mercearia</option>
+                    <option value="restaurante">Restaurante</option>
+                    <option value="loja">Loja</option>
+                    <option value="eventos">Eventos e festas</option>
+                    <option value="revenda-pessoal">Revenda pessoal</option>
+                    <option value="outro">Outro</option>
+                  </select>
+                  <span class="campo__erro"></span>
+                </div>
+              </div>
+
+              <div class="campo-linha">
+                <div class="campo">
+                  <label class="campo__rotulo" for="cidade">
+                    Cidade <span class="campo__obrigatorio" aria-hidden="true">*</span>
+                  </label>
+                  <input type="text" id="cidade" name="cidade"
+                         autocomplete="address-level2" required>
+                  <span class="campo__erro"></span>
+                </div>
+
+                <div class="campo">
+                  <label class="campo__rotulo" for="estado">Estado</label>
+                  <select id="estado" name="estado" data-ufs></select>
+                  <span class="campo__erro"></span>
+                </div>
+              </div>
+
+              <div class="campo-linha">
+                <div class="campo">
+                  <label class="campo__rotulo" for="cnpj">CNPJ</label>
+                  <input type="text" id="cnpj" name="cnpj"
+                         placeholder="00.000.000/0000-00" inputmode="numeric"
+                         data-mascara="cnpj" maxlength="18">
+                  <span class="campo__ajuda">
+                    Opcional. Revenda pessoal não precisa de CNPJ.
+                  </span>
+                  <span class="campo__erro"></span>
+                </div>
+
+                <div class="campo">
+                  <label class="campo__rotulo" for="quantidadeEstimada">
+                    Quanto pretende comprar por mês
+                  </label>
+                  <select id="quantidadeEstimada" name="quantidadeEstimada">
+                    <option value="">Escolha uma opção</option>
+                    <option value="ate-50">Até 50 unidades</option>
+                    <option value="50-100">De 50 a 100 unidades</option>
+                    <option value="100-300">De 100 a 300 unidades</option>
+                    <option value="mais-de-300">Mais de 300 unidades</option>
+                    <option value="nao-sei">Ainda não sei</option>
+                  </select>
+                  <span class="campo__ajuda">
+                    Só para dimensionar a produção — não é compromisso.
+                  </span>
+                  <span class="campo__erro"></span>
+                </div>
+              </div>
+
+              <div class="campo">
+                <label class="campo__rotulo" for="mensagem">
+                  Conte um pouco sobre o seu negócio
+                </label>
+                <textarea id="mensagem" name="mensagem"
+                          placeholder="Há quanto tempo existe, quem é seu público, o que mais vende…"></textarea>
+                <span class="campo__erro"></span>
+              </div>
+
+              <!-- Consentimento explícito — exigência da LGPD -->
+              <div class="campo">
+                <label class="campo-marcavel" for="consentimento">
+                  <input type="checkbox" id="consentimento" name="consentimento" required>
+                  <span>
+                    Autorizo a Doce Fefê.21 a usar meus dados para analisar esta
+                    candidatura e entrar em contato. Consulte nossa
+                    <a href="./politica-privacidade.html">Política de Privacidade</a>.
+                    <span class="campo__obrigatorio" aria-hidden="true">*</span>
+                  </span>
+                </label>
+                <span class="campo__erro"></span>
+              </div>
+
+              <button type="submit" class="btn btn--primario btn--grande btn--bloco">
+                Enviar candidatura
+              </button>
+
+              <p class="texto-mini texto-suave mt-4 texto-centro" style="max-width:none">
+                Enviar não garante aprovação. A gente analisa e responde pelo
+                WhatsApp.
+              </p>
+            </form>
+          </div>
+        </div>
+
       </div>
-    </div>
+    </section>
   </main>
 
   <div id="rodape"></div>
 
   <script type="module" src="./js/main.js"></script>
+  <script type="module" src="./js/revendedor.js"></script>
 </body>
 </html>

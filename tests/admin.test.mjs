@@ -35,7 +35,12 @@ import {
   postMovimentoEstoque,
   patchConfiguracaoEstoque,
 } from '../backend/controllers/admin-catalogo-controller.js';
+import {
+  getRevendedoresAdmin,
+  patchRevendedor,
+} from '../backend/controllers/admin-revendedores-controller.js';
 import { validarProduto, gerarSlug } from '../services/product-admin-service.js';
+import { validarCandidatura, cnpjValido } from '../services/reseller-service.js';
 import {
   bancoConfigurado,
   verificarConexao,
@@ -178,6 +183,108 @@ verificar(
   gerarSlug('  Brownie!!  ')
 );
 
+/* =============================================================================
+ * 2. VALIDAÇÃO DA CANDIDATURA A REVENDEDOR
+ *
+ * Também sem banco. O que importa provar aqui é que o formulário público NÃO
+ * é um caminho para se autoconceder condição comercial.
+ * ========================================================================== */
+
+console.log('\n── Candidatura a revendedor ──\n');
+
+const CANDIDATURA_VALIDA = {
+  nomeResponsavel: 'Maria da Silva',
+  nomeEstabelecimento: 'Café da Esquina',
+  whatsapp: '11988887777',
+  cidade: 'São Paulo',
+  estado: 'SP',
+  consentimento: true,
+};
+
+const candidatar = (mudancas) =>
+  validarCandidatura({ ...CANDIDATURA_VALIDA, ...mudancas });
+
+verificar('candidatura completa é aceita', candidatar({}).ok);
+
+verificar(
+  'sem consentimento LGPD é recusada',
+  Boolean(candidatar({ consentimento: false }).erros?.consentimento)
+);
+
+verificar(
+  'consentimento precisa ser booleano, não string',
+  Boolean(candidatar({ consentimento: 'sim' }).erros?.consentimento),
+  'aceitar qualquer valor "verdadeiro" tornaria o aceite decorativo'
+);
+
+verificar(
+  'WhatsApp sem DDD é recusado',
+  Boolean(candidatar({ whatsapp: '98887777' }).erros?.whatsapp)
+);
+
+verificar(
+  'estado inventado é recusado',
+  Boolean(candidatar({ estado: 'XX' }).erros?.estado)
+);
+
+verificar(
+  'tipo de negócio fora da lista é recusado',
+  Boolean(candidatar({ tipoEstabelecimento: 'lavanderia' }).erros?.tipoEstabelecimento)
+);
+
+// O coração da questão: nada que venha do formulário pode virar condição
+// comercial. Estes campos simplesmente não são lidos.
+const forjada = candidatar({
+  status: 'aprovado',
+  desconto_percentual: 90,
+  descontoPercentual: 90,
+  pedido_minimo_centavos: 0,
+  usuario_id: '00000000-0000-0000-0000-000000000001',
+});
+
+verificar(
+  'status enviado pelo formulário é ignorado',
+  forjada.ok && !('status' in forjada.dados),
+  JSON.stringify(Object.keys(forjada.dados || {}))
+);
+
+verificar(
+  'desconto enviado pelo formulário é ignorado',
+  forjada.ok && !('desconto_percentual' in forjada.dados)
+);
+
+verificar(
+  'usuario_id enviado pelo formulário é ignorado',
+  forjada.ok && !('usuario_id' in forjada.dados),
+  'o id vem da sessão validada, nunca do corpo'
+);
+
+/* -----------------------------------------------------------------------------
+ * CNPJ — o dígito verificador pega o erro de digitação
+ * -------------------------------------------------------------------------- */
+
+verificar('CNPJ válido é aceito', cnpjValido('11.222.333/0001-81'));
+verificar('CNPJ só com dígitos é aceito', cnpjValido('11222333000181'));
+
+verificar(
+  'CNPJ com um dígito trocado é recusado',
+  !cnpjValido('11.222.333/0001-82'),
+  'é o erro de digitação mais comum'
+);
+
+verificar('CNPJ curto é recusado', !cnpjValido('112223330001'));
+verificar('CNPJ com todos os dígitos iguais é recusado', !cnpjValido('11111111111111'));
+
+verificar(
+  'CNPJ errado no formulário vira erro de campo',
+  Boolean(candidatar({ cnpj: '11.222.333/0001-82' }).erros?.cnpj)
+);
+
+verificar(
+  'sem CNPJ continua valendo (revenda pessoal)',
+  candidatar({ cnpj: '' }).ok
+);
+
 /* -----------------------------------------------------------------------------
  * Pré-requisitos do restante da suíte
  *
@@ -295,6 +402,22 @@ const ROTAS_ADMIN = [
         req,
         params: { id: '00000000-0000-0000-0000-000000000000' },
         corpo: { alertaMinimo: 0 },
+      }),
+  ],
+
+  // --- Fase 10: revendedores ---
+  //
+  // ⚠️ O PATCH abaixo é a rota que cria desconto PERMANENTE. Se algum dia ela
+  //   aceitar uma requisição sem perfil de administrador, qualquer pessoa
+  //   passa a comprar no atacado para sempre.
+  ['GET /api/admin/revendedores', (req) => getRevendedoresAdmin({ req, query: {} })],
+  [
+    'PATCH revendedor (autoaprovação)',
+    (req) =>
+      patchRevendedor({
+        req,
+        params: { id: '00000000-0000-0000-0000-000000000000' },
+        corpo: { status: 'aprovado', desconto: 90, pedidoMinimo: 0 },
       }),
   ],
 ];
