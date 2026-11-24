@@ -465,8 +465,7 @@ function pedirLoginParaFinalizar(formulario) {
       criar('p', {
         class: 'sem-margem mt-2',
         texto:
-          'É pela conta que você recebe os dados do Pix, envia o comprovante ' +
-          'e acompanha o pedido até a entrega. Seu carrinho continua aqui.',
+          'Para finalizar a compra pelo site é necessário realizar o login '
       }),
       criar('a', {
         class: 'btn btn--primario mt-4',
