@@ -219,6 +219,12 @@ export async function enviarParaStorage(bucket, caminho, conteudo, tipo) {
  *
  * Nunca lança: a falha ao apagar um arquivo órfão não pode derrubar a operação
  * que o usuário pediu. Fica registrada no log para ser limpa depois.
+ *
+ * Nota sobre bucket público: a URL pública passa por CDN, que pode continuar
+ * servindo o arquivo por alguns instantes depois de apagado. O objeto já não
+ * existe — a consulta ao Storage comprova —, é só cache de borda. Como todo
+ * caminho que gravamos leva um carimbo de tempo no nome, nenhum arquivo novo
+ * herda o cache de um antigo.
  */
 export async function apagarDoStorage(bucket, caminho) {
   try {

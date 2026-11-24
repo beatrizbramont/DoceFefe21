@@ -12,9 +12,10 @@
  *
  * ⚠️ ESTA SUÍTE ESCREVE NO BANCO
  *   Cria uma conta temporária, promove a administradora, cadastra um produto
- *   de teste e apaga tudo no fim. O produto chega a ser publicado por alguns
- *   segundos — é o único jeito de provar que publicar funciona. O nome deixa
- *   claro que não é para vender, e a limpeza roda em `finally`.
+ *   de teste, sobe uma foto e apaga tudo no fim. O produto chega a ser
+ *   publicado por alguns segundos — é o único jeito de provar que publicar
+ *   funciona. O nome deixa claro que não é para vender, e a limpeza roda em
+ *   `finally`.
  */
 
 import {
@@ -22,6 +23,8 @@ import {
   postProduto,
   patchProduto,
   deleteProduto,
+  postFotoProduto,
+  deleteFotoProduto,
   getEstoque,
   postMovimentoEstoque,
   getMovimentosEstoque,
@@ -307,7 +310,120 @@ try {
   verificar('produto fora do ar some do catálogo público', !sumiuDoPublico);
 
   /* ===========================================================================
-   * 4. ESTOQUE
+   * 4. FOTOS
+   *
+   * ⚠️ O bucket `produtos` é PÚBLICO para leitura — qualquer visitante da loja
+   *   precisa ver a foto. O que protege é a ESCRITA: nenhuma política de
+   *   insert existe, então só a chave de serviço grava. E o que entra passa
+   *   pela assinatura binária, não pela extensão do nome.
+   * ======================================================================== */
+
+  console.log('\n── Fotos ──\n');
+
+  // JPEG mínimo válido: assinatura FF D8 FF, corpo e marcador de fim.
+  const jpeg = Buffer.concat([
+    Buffer.from([0xff, 0xd8, 0xff, 0xe0]),
+    Buffer.alloc(2000, 0x41),
+    Buffer.from([0xff, 0xd9]),
+  ]).toString('base64');
+
+  const executavelDisfarcado = await postFotoProduto({
+    req: comToken(token),
+    params: { id: produtoId },
+    corpo: {
+      // Assinatura "MZ" é de executável do Windows. O nome diz .jpg e o
+      // Content-Type diz image/jpeg — os dois mentem.
+      arquivo: Buffer.from('MZ  conteudo executavel').toString('base64'),
+      tipo: 'image/jpeg',
+      nome: 'brownie.jpg',
+    },
+  });
+
+  verificar(
+    'arquivo que mente sobre o próprio tipo é recusado',
+    executavelDisfarcado.status === 422,
+    `obtido: ${executavelDisfarcado.status}`
+  );
+
+  const pdfComoFoto = await postFotoProduto({
+    req: comToken(token),
+    params: { id: produtoId },
+    corpo: {
+      arquivo: Buffer.from('%PDF-1.4').toString('base64'),
+      tipo: 'application/pdf',
+      nome: 'catalogo.pdf',
+    },
+  });
+
+  verificar(
+    'PDF é recusado como foto de produto',
+    pdfComoFoto.status === 422,
+    `obtido: ${pdfComoFoto.status}`
+  );
+
+  const envioFoto = await postFotoProduto({
+    req: comToken(token),
+    params: { id: produtoId },
+    corpo: { arquivo: jpeg, tipo: 'image/jpeg', nome: 'brownie.jpg' },
+  });
+
+  verificar('foto é aceita', envioFoto.status === 201, `obtido: ${envioFoto.status}`);
+
+  const foto = envioFoto.corpo.produto?.fotos?.[0];
+
+  verificar(
+    'a primeira foto vira a principal sozinha',
+    foto?.principal === true,
+    'produto sem foto principal não aparece direito na vitrine'
+  );
+
+  verificar(
+    'o texto alternativo nunca fica vazio',
+    Boolean(foto?.alt),
+    'é o que um leitor de tela anuncia — e o banco exige'
+  );
+
+  if (foto) {
+    const publica = await fetch(foto.url);
+
+    verificar(
+      'a URL pública entrega a imagem',
+      publica.status === 200 && (publica.headers.get('content-type') || '').startsWith('image/'),
+      `${publica.status} · ${publica.headers.get('content-type')}`
+    );
+
+    const semFoto = await deleteFotoProduto({
+      req: comToken(token),
+      params: { id: produtoId, fotoId: foto.id },
+    });
+
+    verificar('remover a foto desvincula do produto', semFoto.corpo.produto?.fotos?.length === 0);
+
+    // Consulta o Storage com a chave de serviço, que não passa pela CDN: a
+    // URL pública pode continuar servindo cache de borda por alguns instantes.
+    const pasta = foto.url.split('/produtos/')[1]?.split('/')[0];
+
+    const listagem = await fetch(`${SUPABASE_URL}/storage/v1/object/list/produtos`, {
+      method: 'POST',
+      headers: {
+        apikey: SERVICE_KEY,
+        Authorization: `Bearer ${SERVICE_KEY}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ prefix: pasta, limit: 100 }),
+    });
+
+    const restantes = listagem.ok ? await listagem.json() : [{ name: 'falha ao listar' }];
+
+    verificar(
+      'o arquivo some do Storage, não só do banco',
+      restantes.length === 0,
+      JSON.stringify(restantes.map((f) => f.name))
+    );
+  }
+
+  /* ===========================================================================
+   * 5. ESTOQUE
    * ======================================================================== */
 
   console.log('\n── Estoque ──\n');
@@ -394,7 +510,7 @@ try {
   );
 
   /* ===========================================================================
-   * 5. LISTAGENS DO PAINEL
+   * 6. LISTAGENS DO PAINEL
    * ======================================================================== */
 
   console.log('\n── Listagens ──\n');
@@ -447,7 +563,7 @@ try {
   );
 
   /* ===========================================================================
-   * 6. ARQUIVAR E RESTAURAR
+   * 7. ARQUIVAR E RESTAURAR
    * ======================================================================== */
 
   console.log('\n── Arquivamento ──\n');
