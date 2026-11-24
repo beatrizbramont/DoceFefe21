@@ -33,12 +33,22 @@
       NUNCA é proteção suficiente.
     -->
     <div class="em-construcao">
-      <div class="em-construcao__icone" aria-hidden="true">🔒</div>
+      <!--
+        SVG escrito à mão porque esta página não carrega JavaScript nenhum —
+        é uma casca estática. As demais usam <span data-icone="cadeado">.
+      -->
+      <svg class="em-construcao__icone" xmlns="http://www.w3.org/2000/svg"
+           viewBox="0 0 24 24" fill="none" stroke="currentColor"
+           stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"
+           aria-hidden="true" focusable="false">
+        <rect x="3.8" y="10.5" width="16.4" height="10.5" rx="2"/>
+        <path d="M7.8 10.5V7.2a4.2 4.2 0 0 1 8.4 0v3.3"/>
+      </svg>
       <h2>Cupons e Promoções</h2>
       <p>Criação de cupons, configuração de descontos e promoções.</p>
       <p class="texto-pequeno">
-        Implementação prevista para a <strong>Fase 9</strong>. O acesso será
-        protegido por autenticação e autorização validadas no servidor.
+        A loja decidiu não trabalhar com cupons por enquanto. A tabela e a
+        lógica de desconto continuam no banco, prontas caso isso mude.
       </p>
       <a href="../index.html" class="btn btn--secundario">Voltar ao site</a>
     </div>

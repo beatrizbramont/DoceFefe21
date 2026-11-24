@@ -229,7 +229,7 @@ async function carregar() {
     if (await tratarErroDeSessao(erro)) return;
 
     renderizarEstadoVazio(metricas, {
-      icone: '⚠️',
+      icone: 'alerta',
       titulo: 'Não conseguimos carregar os números',
       texto: erro.message || 'Tente novamente em instantes.',
       acao: { texto: 'Tentar de novo', onClick: carregar },

@@ -23,6 +23,7 @@
 
 import { iniciarPainel, tratarErroDeSessao } from './sessao.js';
 import { api } from '../lib/api.js';
+import { icone } from '../components/icons.js';
 import { $, criar, renderizarEstadoVazio, toastErro } from '../lib/ui.js';
 import { moeda, data as formatarData, telefone as formatarTelefone } from '../lib/format.js';
 import { descreverStatus } from '../lib/status-pedido.js';
@@ -351,7 +352,7 @@ async function carregar() {
     if (await tratarErroDeSessao(erro)) return;
 
     renderizarEstadoVazio(producao, {
-      icone: '⚠️',
+      icone: 'alerta',
       titulo: 'Não conseguimos carregar os pedidos do dia',
       texto: erro.message || 'Tente novamente em instantes.',
       acao: { texto: 'Tentar de novo', onClick: carregar },
@@ -391,7 +392,12 @@ function iniciar() {
         });
       }
 
-      $('[data-imprimir]')?.addEventListener('click', imprimir);
+      const botaoImprimir = $('[data-imprimir]');
+
+      if (botaoImprimir) {
+        botaoImprimir.prepend(icone('imprimir'));
+        botaoImprimir.addEventListener('click', imprimir);
+      }
 
       carregar();
     },

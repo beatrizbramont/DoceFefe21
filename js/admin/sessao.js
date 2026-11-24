@@ -34,6 +34,7 @@ import {
   ErroAuth,
 } from '../auth.js';
 import { api, ErroApi } from '../lib/api.js';
+import { icone, ativarIcones } from '../components/icons.js';
 import {
   $,
   $$,
@@ -53,13 +54,13 @@ import {
  * ========================================================================== */
 
 const TELAS = [
-  { arquivo: 'dashboard.html', rotulo: 'Visão geral', icone: '📊' },
-  { arquivo: 'separacao.html', rotulo: 'Separação', icone: '📋' },
-  { arquivo: 'pedidos.html', rotulo: 'Pedidos', icone: '🧾' },
-  { arquivo: 'produtos.html', rotulo: 'Produtos', icone: '🍫' },
-  { arquivo: 'estoque.html', rotulo: 'Estoque', icone: '📦' },
-  { arquivo: 'clientes.html', rotulo: 'Clientes', icone: '👥' },
-  { arquivo: 'revendedores.html', rotulo: 'Parceiros', icone: '🤝' },
+  { arquivo: 'dashboard.html', rotulo: 'Visão geral', icone: 'painel' },
+  { arquivo: 'separacao.html', rotulo: 'Separação', icone: 'separacao' },
+  { arquivo: 'pedidos.html', rotulo: 'Pedidos', icone: 'pedidos' },
+  { arquivo: 'produtos.html', rotulo: 'Produtos', icone: 'produtos' },
+  { arquivo: 'estoque.html', rotulo: 'Estoque', icone: 'estoque' },
+  { arquivo: 'clientes.html', rotulo: 'Clientes', icone: 'clientes' },
+  { arquivo: 'revendedores.html', rotulo: 'Parceiros', icone: 'parceiros' },
 ];
 
 /** Nome do arquivo .html aberto agora. */
@@ -150,14 +151,23 @@ function montarTopo(titulo, aoSair) {
     TELAS.map((tela) => {
       const ehAtual = tela.arquivo === atual;
 
-      return criar('a', {
-        class: `admin-nav__item${ehAtual ? ' admin-nav__item--ativo' : ''}`,
-        href: `./${tela.arquivo}`,
-        // `aria-current` é o que um leitor de tela anuncia como "página atual".
-        // A cor do item ativo sozinha não diz nada para quem não enxerga.
-        ...(ehAtual ? { 'aria-current': 'page' } : {}),
-        texto: `${tela.icone} ${tela.rotulo}`,
-      });
+      return criar(
+        'a',
+        {
+          class: `admin-nav__item${ehAtual ? ' admin-nav__item--ativo' : ''}`,
+          href: `./${tela.arquivo}`,
+          // `aria-current` é o que um leitor de tela anuncia como "página
+          // atual". A cor do item ativo sozinha não diz nada para quem não
+          // enxerga.
+          ...(ehAtual ? { 'aria-current': 'page' } : {}),
+        },
+        [
+          // O ícone é decorativo: `aria-hidden` já vem do próprio SVG, e o
+          // rótulo ao lado é o que carrega o sentido.
+          icone(tela.icone, 'admin-nav__icone'),
+          criar('span', { texto: tela.rotulo }),
+        ]
+      );
     })
   );
 
@@ -249,7 +259,7 @@ export async function iniciarPainel({ titulo, aoEntrar }) {
       criar('div', { class: 'admin-login' }, [
         criar('div', { class: 'admin-login__caixa' }, [
           criar('div', { class: 'alerta alerta--aviso' }, [
-            criar('span', { texto: '⚙️', 'aria-hidden': 'true' }),
+            icone('engrenagem'),
             criar('p', {
               class: 'sem-margem',
               texto:
@@ -278,6 +288,10 @@ export async function iniciarPainel({ titulo, aoEntrar }) {
     montarLogin((formulario, botao) => processarLogin(formulario, botao, abrir))
   );
   areaTopo?.replaceChildren(montarTopo(titulo, encerrar));
+
+  // Preenche os <span data-icone="..."> que as páginas do painel declaram.
+  // O site público faz isso em main.js, que o painel não carrega.
+  ativarIcones();
 
   /*
     RESTAURAR A SESSÃO É A PRIMEIRA COISA

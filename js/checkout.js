@@ -39,6 +39,7 @@ import {
   renderizarEstadoVazio,
 } from './lib/ui.js';
 import { moeda, plural, somenteDigitos, cep as formatarCep } from './lib/format.js';
+import { icone } from './components/icons.js';
 import { ROTAS, rota } from './config.js';
 
 /* =============================================================================
@@ -358,7 +359,7 @@ function mostrarConflito(mensagem) {
 
   container.replaceChildren(
     criar('div', { class: 'alerta alerta--aviso', role: 'alert' }, [
-      criar('span', { texto: '⚠️', 'aria-hidden': 'true' }),
+      icone('alerta'),
       criar('div', {}, [
         criar('p', { class: 'sem-margem', texto: mensagem }),
         criar('a', {
@@ -402,7 +403,7 @@ async function carregarCarrinho() {
 
     if (vazio) {
       renderizarEstadoVazio(vazio, {
-        icone: '🛒',
+        icone: 'carrinho',
         titulo: 'Seu carrinho está vazio',
         texto: 'Escolha seus doces antes de finalizar o pedido.',
         acao: { texto: 'Ver nossos doces', href: rota(ROTAS.produtos) },

@@ -35,6 +35,7 @@ import {
   debounce,
 } from './lib/ui.js';
 import { moeda, peso, plural } from './lib/format.js';
+import { icone } from './components/icons.js';
 import { montarLinkWhatsApp } from './whatsapp.js';
 import { ROTAS, rota, REGRAS, urlMidia } from './config.js';
 
@@ -59,9 +60,7 @@ function criarImagem(item) {
     });
   }
 
-  return criar('div', { class: 'carrinho-item__sem-foto' }, [
-    criar('span', { texto: '🍫', 'aria-hidden': 'true' }),
-  ]);
+  return criar('div', { class: 'carrinho-item__sem-foto' }, [icone('doce')]);
 }
 
 function criarSeletorQuantidade(item) {
@@ -311,7 +310,7 @@ function renderizar(carrinho) {
 
     if (vazio) {
       renderizarEstadoVazio(vazio, {
-        icone: '🛒',
+        icone: 'carrinho',
         titulo: 'Seu carrinho está vazio',
         texto: 'Que tal dar uma olhada nos nossos doces artesanais?',
         acao: { texto: 'Ver nossos doces', href: rota(ROTAS.produtos) },

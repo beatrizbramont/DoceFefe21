@@ -18,7 +18,10 @@ import { montarCabecalho } from './components/site-header.js';
 import { montarRodape } from './components/site-footer.js';
 import { iniciarNavegacao } from './navigation.js';
 import { montarBotaoWhatsApp, ativarLinksWhatsApp } from './whatsapp.js';
-import { icone } from './components/icons.js';
+// `ativarIcones` preenche os <span data-icone="..."> declarados no HTML.
+// Mora em components/icons.js porque o painel administrativo, que não carrega
+// este arquivo, também precisa dela.
+import { ativarIcones } from './components/icons.js';
 // Importar o carrinho já liga o contador do cabeçalho em todas as páginas.
 import { atualizarContador } from './cart.js';
 import {
@@ -60,23 +63,6 @@ function ativarMascaras(raiz = document) {
       const novaPosicao = Math.max(0, posicao + diferenca);
       input.setSelectionRange(novaPosicao, novaPosicao);
     });
-  });
-}
-
-/* =============================================================================
- * ÍCONES DECLARADOS NO HTML
- *
- * Permite pedir um ícone direto da marcação, sem repetir SVG nas páginas:
- *   <span data-icone="whatsapp" aria-hidden="true"></span>
- * ========================================================================== */
-
-function ativarIcones(raiz = document) {
-  $$('[data-icone]', raiz).forEach((el) => {
-    // Não duplica se a função rodar mais de uma vez.
-    if (el.querySelector('svg')) return;
-
-    const svg = icone(el.dataset.icone);
-    if (svg) el.append(svg);
   });
 }
 

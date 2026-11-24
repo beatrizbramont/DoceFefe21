@@ -324,7 +324,7 @@ function renderizarLista() {
 
   if (produtos.length === 0) {
     renderizarEstadoVazio(lista, {
-      icone: '📦',
+      icone: 'caixa',
       titulo: busca ? 'Nenhum produto com esse nome' : 'Nenhum produto ativo',
       texto: busca
         ? 'Tente outro termo.'
@@ -370,7 +370,7 @@ async function carregar() {
     if (await tratarErroDeSessao(erro)) return;
 
     renderizarEstadoVazio(lista, {
-      icone: '⚠️',
+      icone: 'alerta',
       titulo: 'Não conseguimos carregar o estoque',
       texto: erro.message || 'Tente novamente em instantes.',
       acao: { texto: 'Tentar de novo', onClick: carregar },

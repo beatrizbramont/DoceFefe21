@@ -277,6 +277,32 @@ o pedido. Nem o preço nem a condição de atacado chegam como parâmetro — se
 backend inteiro fosse comprometido e tentasse gravar um item pela metade do
 preço, a função recalcularia o valor correto.
 
+### Ícones em SVG, nunca emoji
+
+Emoji parece prático e é armadilha: **cada sistema desenha o seu**. O 🤝 do
+Windows não é o do iPhone, que não é o do Android — e não há CSS que conserte,
+porque o desenho vem da fonte do sistema. Um painel montado com emoji muda de
+cara conforme quem abre.
+
+Os ícones ficam em `js/components/icons.js`, como SVG inline: desenhados uma
+vez, iguais em todo lugar, herdando a cor do texto via `currentColor` e sem
+nenhuma requisição extra. Uma biblioteca como Font Awesome traria o mesmo
+resultado visual ao custo de um pedido a um servidor de terceiros em cada
+carregamento de página — num projeto cuja regra é zero dependência externa.
+
+Há duas formas de pedir um ícone:
+
+```js
+icone('alerta')                              // no JavaScript
+```
+```html
+<span data-icone="alerta" aria-hidden="true"></span>   <!-- no HTML -->
+```
+
+`tests/icones.test.mjs` falha se um emoji voltar para a interface. Ele
+distingue emoji de **tipografia**: `←`, `→` e `−` continuam permitidos, porque
+quem os desenha é a fonte do texto, não o sistema.
+
 ### Nada de `innerHTML` com dados externos
 
 As funções de `lib/ui.js` inserem texto via `textContent`, que escapa HTML

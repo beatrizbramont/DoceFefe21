@@ -27,6 +27,7 @@ import {
   limparErrosFormulario,
 } from './lib/ui.js';
 import { moeda, data, somenteDigitos } from './lib/format.js';
+import { icone } from './components/icons.js';
 
 /* =============================================================================
  * ESTADOS DA CANDIDATURA
@@ -35,7 +36,7 @@ import { moeda, data, somenteDigitos } from './lib/format.js';
 const SITUACOES = {
   pendente: {
     classe: '',
-    icone: '⏳',
+    icone: 'relogio',
     titulo: 'Candidatura em análise',
     texto:
       'Recebemos seu cadastro. Vamos conferir os dados e chamar no seu ' +
@@ -43,7 +44,7 @@ const SITUACOES = {
   },
   aprovado: {
     classe: 'situacao-revenda--aprovado',
-    icone: '🤝',
+    icone: 'parceria',
     titulo: 'Você é nosso parceiro!',
     texto:
       'Seu cadastro está aprovado. Os preços de atacado já aparecem para ' +
@@ -51,7 +52,7 @@ const SITUACOES = {
   },
   recusado: {
     classe: 'situacao-revenda--recusado',
-    icone: '✕',
+    icone: 'recusar',
     titulo: 'Candidatura não aprovada desta vez',
     texto: 'Você pode corrigir os dados e enviar de novo.',
   },
@@ -101,7 +102,7 @@ function renderizarSituacao(candidatura) {
 
   const filhos = [
     criar('div', { class: 'flex gap-3 itens-centro' }, [
-      criar('span', { texto: situacao.icone, 'aria-hidden': 'true' }),
+      icone(situacao.icone, 'situacao-revenda__icone'),
       criar('h2', { class: 'situacao-revenda__titulo sem-margem', texto: situacao.titulo }),
     ]),
     criar('p', { class: 'mt-3', texto: situacao.texto }),
@@ -119,7 +120,7 @@ function renderizarSituacao(candidatura) {
   if (candidatura.status === 'recusado' && candidatura.motivoRecusa) {
     filhos.push(
       criar('div', { class: 'alerta alerta--aviso mt-4' }, [
-        criar('span', { texto: '!', 'aria-hidden': 'true' }),
+        icone('alerta'),
         criar('p', { class: 'sem-margem', texto: candidatura.motivoRecusa }),
       ])
     );

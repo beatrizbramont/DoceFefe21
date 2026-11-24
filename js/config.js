@@ -82,14 +82,17 @@ export const MENSAGENS_WHATSAPP = {
 /* -----------------------------------------------------------------------------
  * CATEGORIAS DO CATÁLOGO
  * Usadas como fallback de navegação. A lista verdadeira vem do banco (Fase 3).
- * Observação: a linha de kits será adicionada numa etapa futura.
+ *
+ * Sem campo de ícone: o desenho de cada categoria é resolvido pelo slug, em
+ * `iconeDaCategoria` (components/icons.js). Guardar o ícone aqui E no banco
+ * significaria dois lugares para manter em dia — e um deles ficaria para trás.
  * -------------------------------------------------------------------------- */
 export const CATEGORIAS = [
-  { slug: 'brownies', nome: 'Brownies', icone: '🍫' },
-  { slug: 'paes-de-mel', nome: 'Pães de Mel', icone: '🍯' },
-  { slug: 'alfajores', nome: 'Alfajores', icone: '🥮' },
-  { slug: 'fit', nome: 'Doce Fefê Fit', icone: '🌿' },
-  { slug: 'sazonais', nome: 'Sazonais', icone: '🎁' },
+  { slug: 'brownies', nome: 'Brownies' },
+  { slug: 'paes-de-mel', nome: 'Pães de Mel' },
+  { slug: 'alfajores', nome: 'Alfajores' },
+  { slug: 'fit', nome: 'Doce Fefê Fit' },
+  { slug: 'sazonais', nome: 'Sazonais' },
 ];
 
 /* -----------------------------------------------------------------------------

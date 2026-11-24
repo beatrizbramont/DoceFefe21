@@ -26,6 +26,7 @@ import {
   renderizarEstadoVazio,
 } from './lib/ui.js';
 import { plural, dataCurta } from './lib/format.js';
+import { icone, iconeDaCategoria } from './components/icons.js';
 import { renderizarProdutos } from './components/product-card.js';
 import { montarLinkWhatsApp } from './whatsapp.js';
 import { CATEGORIAS, ROTAS, rota } from './config.js';
@@ -106,14 +107,15 @@ async function montarFiltroCategorias(estado, aoMudar) {
     // Mantém a lista local; não vale travar o catálogo por causa disto.
   }
 
-  const criarBotao = ({ slug, nome, icone, quantidade, emBreve = false }) => {
+  const criarBotao = ({ slug, nome, quantidade, emBreve = false }) => {
     const ativo = estado.categoria === slug;
 
-    const filhos = [];
-    if (icone) {
-      filhos.push(criar('span', { texto: icone, 'aria-hidden': 'true' }));
-    }
-    filhos.push(criar('span', { texto: nome }));
+    // O desenho vem do slug, não do campo `icone` do banco — ver
+    // `iconeDaCategoria` em components/icons.js.
+    const filhos = [
+      icone(iconeDaCategoria(slug), 'filtro-chip__icone'),
+      criar('span', { texto: nome }),
+    ];
 
     if (emBreve) {
       filhos.push(criar('span', { class: 'filtro-chip__em-breve', texto: 'Em breve' }));
@@ -154,7 +156,7 @@ async function montarFiltroCategorias(estado, aoMudar) {
   const total = categorias.reduce((s, c) => s + (c.quantidade || 0), 0);
 
   container.replaceChildren(
-    criarBotao({ slug: '', nome: 'Todos', icone: '🍬', quantidade: total || null }),
+    criarBotao({ slug: '', nome: 'Todos', quantidade: total || null }),
     ...categorias.map(criarBotao)
   );
 }
@@ -185,11 +187,7 @@ async function montarCategoriasHome() {
   container.replaceChildren(
     ...categorias.map((categoria, indice) => {
       const filhos = [
-        criar('span', {
-          class: 'categoria__icone',
-          texto: categoria.icone || '🍬',
-          'aria-hidden': 'true',
-        }),
+        icone(iconeDaCategoria(categoria.slug), 'categoria__icone', '1em'),
         criar('span', { class: 'categoria__nome', texto: categoria.nome }),
       ];
 
@@ -349,7 +347,7 @@ async function carregarProdutos(estado) {
     if (resultado.produtos.length === 0) {
       grade.style.gridTemplateColumns = '1fr';
       renderizarEstadoVazio(grade, {
-        icone: '🔍',
+        icone: 'busca',
         titulo: 'Nenhum doce encontrado',
         texto: estado.busca
           ? `Não achamos nada para "${estado.busca}". Tente outra palavra ou veja todas as categorias.`
@@ -396,7 +394,7 @@ async function carregarProdutos(estado) {
 
     grade.style.gridTemplateColumns = '1fr';
     renderizarEstadoVazio(grade, {
-      icone: '⚠️',
+      icone: 'alerta',
       titulo: 'Não conseguimos carregar o catálogo',
       texto:
         erro instanceof ErroApi && erro.status === 0
@@ -491,7 +489,7 @@ async function carregarVitrines() {
       if (produtos.length === 0) {
         container.style.gridTemplateColumns = '1fr';
         renderizarEstadoVazio(container, {
-          icone: '🍫',
+          icone: 'doce',
           titulo: 'Em breve por aqui',
           texto: 'Estamos preparando esta seleção. Fale com a gente para saber o que tem hoje.',
           acao: { texto: 'Ver no WhatsApp', href: montarLinkWhatsApp('encomenda') },
@@ -508,7 +506,7 @@ async function carregarVitrines() {
     vitrines.forEach((container) => {
       container.style.gridTemplateColumns = '1fr';
       renderizarEstadoVazio(container, {
-        icone: '🍫',
+        icone: 'doce',
         titulo: 'Nossos doces chegam em breve',
         texto:
           'Não conseguimos carregar o catálogo agora. Fale com a gente pelo WhatsApp para conhecer os sabores disponíveis.',
@@ -542,7 +540,7 @@ async function carregarPromocao() {
     if (resultado.produtos.length === 0) {
       grade.style.gridTemplateColumns = '1fr';
       renderizarEstadoVazio(grade, {
-        icone: '🏷️',
+        icone: 'promocao',
         titulo: 'Nenhuma promoção no momento',
         texto:
           'Assim que tivermos uma oferta especial, ela aparece aqui. ' +
@@ -570,7 +568,7 @@ async function carregarPromocao() {
 
     grade.style.gridTemplateColumns = '1fr';
     renderizarEstadoVazio(grade, {
-      icone: '🏷️',
+      icone: 'promocao',
       titulo: 'Nenhuma promoção no momento',
       texto: 'Acompanhe nosso Instagram para ficar por dentro das ofertas.',
       acao: { texto: 'Ver todos os doces', href: rota(ROTAS.produtos) },

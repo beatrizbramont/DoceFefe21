@@ -18,6 +18,7 @@
 
 import { iniciarPainel, tratarErroDeSessao } from './sessao.js';
 import { api } from '../lib/api.js';
+import { icone } from '../components/icons.js';
 import {
   $,
   criar,
@@ -179,7 +180,7 @@ function criarAprovacao(parceiro) {
   const aprovar = criar('button', {
     class: 'btn btn--primario btn--pequeno',
     type: 'button',
-    texto: parceiro.status === 'aprovado' ? 'Salvar condições' : '✓ Aprovar parceiro',
+    texto: parceiro.status === 'aprovado' ? 'Salvar condições' : 'Aprovar parceiro',
   });
 
   aprovar.addEventListener('click', async () => {
@@ -250,7 +251,7 @@ function criarRecusa(parceiro) {
   const recusar = criar('button', {
     class: 'btn btn--secundario btn--pequeno',
     type: 'button',
-    texto: '✕ Recusar',
+    texto: 'Recusar',
     on: {
       click: () => {
         if (motivo.value.trim().length < 3) {
@@ -335,7 +336,7 @@ function criarCartao(parceiro) {
   if (parceiro.status === 'aprovado') {
     filhos.push(
       criar('div', { class: 'alerta alerta--sucesso' }, [
-        criar('span', { texto: '✓', 'aria-hidden': 'true' }),
+        icone('verificado'),
         criar('p', {
           class: 'sem-margem',
           texto:
@@ -352,7 +353,7 @@ function criarCartao(parceiro) {
   if (parceiro.status === 'recusado' && parceiro.motivoRecusa) {
     filhos.push(
       criar('div', { class: 'alerta alerta--aviso' }, [
-        criar('span', { texto: '!', 'aria-hidden': 'true' }),
+        icone('alerta'),
         criar('p', { class: 'sem-margem', texto: `Recusado: ${parceiro.motivoRecusa}` }),
       ])
     );
@@ -431,7 +432,7 @@ function renderizarLista() {
 
   if (parceiros.length === 0) {
     renderizarEstadoVazio(lista, {
-      icone: statusAtual === 'pendente' ? '✓' : '🤝',
+      icone: statusAtual === 'pendente' ? 'verificado' : 'parceiros',
       titulo:
         statusAtual === 'pendente'
           ? 'Nenhuma candidatura esperando'
@@ -471,7 +472,7 @@ async function carregar() {
     if (await tratarErroDeSessao(erro)) return;
 
     renderizarEstadoVazio(lista, {
-      icone: '⚠️',
+      icone: 'alerta',
       titulo: 'Não conseguimos carregar os parceiros',
       texto: erro.message || 'Tente novamente em instantes.',
       acao: { texto: 'Tentar de novo', onClick: carregar },

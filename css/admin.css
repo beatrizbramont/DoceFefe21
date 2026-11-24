@@ -157,6 +157,9 @@ body.admin {
 
 .admin-nav__item {
   flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  gap: var(--esp-2);
   padding: var(--esp-2) var(--esp-4);
   border-radius: var(--raio-md) var(--raio-md) 0 0;
   font-size: var(--txt-sm);
@@ -164,6 +167,12 @@ body.admin {
   color: var(--cor-bege-500);
   white-space: nowrap;
   transition: background-color var(--transicao), color var(--transicao);
+}
+
+.admin-nav__icone {
+  width: 17px;
+  height: 17px;
+  flex-shrink: 0;
 }
 
 .admin-nav__item:hover {

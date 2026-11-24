@@ -363,6 +363,14 @@ strong {
 /* -----------------------------------------------------------------------------
    5. BOTÕES
    -------------------------------------------------------------------------- */
+/* Ícone dentro de botão: dimensionado em `em` para acompanhar as variações
+   de tamanho (btn--pequeno, btn--grande) sem regra extra para cada uma. */
+.btn > svg {
+  flex-shrink: 0;
+  width: 1.15em;
+  height: 1.15em;
+}
+
 .btn {
   display: inline-flex;
   align-items: center;
@@ -715,6 +723,15 @@ strong {
   margin-bottom: var(--esp-5);
 }
 
+/* O ícone do alerta acompanha o tamanho do texto e não encolhe quando a
+   mensagem é longa. */
+.alerta > svg {
+  flex-shrink: 0;
+  width: 1.25em;
+  height: 1.25em;
+  margin-top: 1px;
+}
+
 .alerta p { max-width: none; }
 
 .alerta--sucesso { background: var(--cor-sucesso-fundo); border-color: var(--cor-sucesso); color: #1E5A38; }
@@ -764,8 +781,10 @@ strong {
 
 .toast__icone {
   flex-shrink: 0;
-  font-size: 1.1rem;
-  line-height: 1;
+  width: 1.15rem;
+  height: 1.15rem;
+  font-size: 1.15rem;
+  margin-top: 1px;
 }
 
 .toast__texto {
@@ -849,11 +868,17 @@ strong {
   margin-inline: auto;
 }
 
+/* O ícone é um <svg> dimensionado em `1em`, então quem manda no tamanho é o
+   `font-size` daqui. `display:block` porque margem vertical não se aplica a
+   elemento em linha — e sem ela o ícone encostaria no título. */
 .estado-vazio__icone {
-  font-size: 3.5rem;
-  line-height: 1;
-  margin-bottom: var(--esp-4);
-  opacity: 0.75;
+  display: block;
+  width: 1em;
+  height: 1em;
+  font-size: 3rem;
+  margin: 0 auto var(--esp-4);
+  color: var(--cor-dourado-600);
+  opacity: 0.85;
 }
 
 .estado-vazio__titulo {
@@ -1154,6 +1179,11 @@ strong {
 }
 
 .em-construcao__icone {
+  display: block;
+  width: 2.75rem;
+  height: 2.75rem;
+  margin-inline: auto;
+  color: var(--cor-dourado-600);
   font-size: 2.75rem;
   margin-bottom: var(--esp-4);
 }
@@ -1162,4 +1192,30 @@ strong {
   margin-inline: auto;
   color: var(--cor-texto-suave);
   margin-bottom: var(--esp-6);
+}
+
+/* -----------------------------------------------------------------------------
+   ÍCONES DECLARADOS NO HTML
+
+   `ativarIcones` (components/icons.js) injeta o <svg> dentro do marcador, já
+   dimensionado em `1em`. Estas regras garantem que o desenho não escape da
+   caixa quando o contêiner tem tamanho fixo em vez de font-size.
+   -------------------------------------------------------------------------- */
+[data-icone] {
+  display: inline-grid;
+  place-items: center;
+  line-height: 1;
+}
+
+[data-icone] > svg {
+  max-width: 100%;
+  max-height: 100%;
+}
+
+/* Ícone criado por JavaScript dentro de blocos que só definem font-size. */
+.situacao-revenda__icone,
+.filtro-chip__icone {
+  flex-shrink: 0;
+  width: 1.25em;
+  height: 1.25em;
 }

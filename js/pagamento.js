@@ -27,6 +27,7 @@ import {
   confirmar,
 } from './lib/ui.js';
 import { moeda, dataHora } from './lib/format.js';
+import { icone } from './components/icons.js';
 import { montarLinkWhatsApp } from './whatsapp.js';
 import { ROTAS, rota, urlMidia } from './config.js';
 
@@ -102,7 +103,7 @@ function mostrarEscolha() {
     'button',
     { class: 'forma-pagamento', type: 'button' },
     [
-      criar('span', { class: 'forma-pagamento__icone', texto: '💵', 'aria-hidden': 'true' }),
+      criar('span', { class: 'forma-pagamento__icone' }, [icone('dinheiro')]),
       criar('span', { class: 'forma-pagamento__info' }, [
         criar('strong', { texto: 'Dinheiro' }),
         criar('span', { texto: 'Combine com a gente pelo WhatsApp e pague na entrega ou retirada.' }),
@@ -115,7 +116,7 @@ function mostrarEscolha() {
     'button',
     { class: 'forma-pagamento forma-pagamento--destaque', type: 'button' },
     [
-      criar('span', { class: 'forma-pagamento__icone', texto: '📱', 'aria-hidden': 'true' }),
+      criar('span', { class: 'forma-pagamento__icone' }, [icone('pix')]),
       criar('span', { class: 'forma-pagamento__info' }, [
         criar('strong', { texto: 'Pix' }),
         criar('span', { texto: 'Pague agora pelo QR Code e envie o comprovante.' }),
@@ -151,11 +152,7 @@ function mostrarDinheiro() {
 
   container.replaceChildren(
     criar('div', { class: 'pagamento-passo' }, [
-      criar('div', {
-        class: 'pagamento-passo__icone',
-        texto: '💵',
-        'aria-hidden': 'true',
-      }),
+      criar('div', { class: 'pagamento-passo__icone' }, [icone('dinheiro')]),
       criar('h2', { class: 'pagamento-passo__titulo', texto: 'Combinar pagamento' }),
       criar('p', {
         class: 'pagamento-passo__texto',
@@ -221,7 +218,7 @@ function mostrarPix() {
 
       // Aviso honesto: o QR não traz o valor preenchido.
       criar('div', { class: 'alerta alerta--aviso mt-4' }, [
-        criar('span', { texto: '⚠️', 'aria-hidden': 'true' }),
+        icone('alerta'),
         criar('div', {}, [
           criar('p', {
             class: 'sem-margem negrito',
@@ -272,7 +269,7 @@ function criarEnvioComprovante() {
     'label',
     { class: 'escolher-arquivo', for: 'comprovante' },
     [
-      criar('span', { class: 'escolher-arquivo__icone', texto: '📎', 'aria-hidden': 'true' }),
+      icone('anexo', 'escolher-arquivo__icone', '1em'),
       criar('span', { class: 'escolher-arquivo__texto', texto: 'Escolher comprovante' }),
       criar('span', {
         class: 'escolher-arquivo__dica',
@@ -344,7 +341,7 @@ function mostrarPrevia(container, arquivo) {
   if (arquivo.type === 'application/pdf') {
     container.replaceChildren(
       criar('div', { class: 'comprovante-previa__pdf' }, [
-        criar('span', { texto: '📄', 'aria-hidden': 'true' }),
+        icone('documento'),
         criar('span', { class: 'texto-pequeno', texto: arquivo.name }),
       ])
     );
@@ -420,11 +417,7 @@ async function enviarComprovante(botao, erro) {
 /** Estado depois do envio: o que o cliente precisa saber agora. */
 function criarComprovanteEnviado() {
   const filhos = [
-    criar('div', {
-      class: 'comprovante-enviado__icone',
-      texto: '✓',
-      'aria-hidden': 'true',
-    }),
+    criar('div', { class: 'comprovante-enviado__icone' }, [icone('verificado')]),
     criar('h3', {
       class: 'envio-comprovante__titulo',
       texto: 'Comprovante recebido',
@@ -444,7 +437,7 @@ function criarComprovanteEnviado() {
   // conferência. Dizer "pagamento confirmado" aqui seria falso.
   filhos.push(
     criar('div', { class: 'alerta alerta--info mt-4' }, [
-      criar('span', { texto: '🔎', 'aria-hidden': 'true' }),
+      icone('busca'),
       criar('div', {}, [
         criar('p', { class: 'sem-margem negrito', texto: 'Estamos conferindo' }),
         criar('p', {
@@ -601,11 +594,7 @@ function mostrarJaPago() {
 
   container.replaceChildren(
     criar('div', { class: 'pagamento-passo' }, [
-      criar('div', {
-        class: 'pagamento-passo__icone',
-        texto: '✓',
-        'aria-hidden': 'true',
-      }),
+      criar('div', { class: 'pagamento-passo__icone' }, [icone('verificado')]),
       criar('h2', { class: 'pagamento-passo__titulo', texto: 'Pagamento confirmado' }),
       criar('p', {
         class: 'pagamento-passo__texto',
@@ -626,11 +615,7 @@ function mostrarErro(titulo, texto) {
 
   container.replaceChildren(
     criar('div', { class: 'pagamento-passo' }, [
-      criar('div', {
-        class: 'pagamento-passo__icone',
-        texto: '🍫',
-        'aria-hidden': 'true',
-      }),
+      criar('div', { class: 'pagamento-passo__icone' }, [icone('doce')]),
       criar('h2', { class: 'pagamento-passo__titulo', texto: titulo }),
       criar('p', { class: 'pagamento-passo__texto', texto }),
       criar('a', {

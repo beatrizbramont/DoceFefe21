@@ -16,6 +16,7 @@ import { api, ErroApi } from './lib/api.js';
 import { $, criar, toastErro, toastSucesso, renderizarEstadoVazio } from './lib/ui.js';
 import { adicionar, atualizarContador } from './cart.js';
 import { moeda, peso } from './lib/format.js';
+import { icone, iconeDaCategoria } from './components/icons.js';
 import { renderizarProdutos } from './components/product-card.js';
 import { montarLinkWhatsApp } from './whatsapp.js';
 import { ROTAS, rota, urlMidia } from './config.js';
@@ -42,11 +43,11 @@ function renderizarGaleria(produto) {
     container.replaceChildren(
       criar('div', { class: 'produto-galeria__principal' }, [
         criar('div', { class: 'produto-card__sem-foto' }, [
-          criar('span', {
-            class: 'produto-card__sem-foto-icone',
-            texto: produto.categoria?.icone || '🍫',
-            'aria-hidden': 'true',
-          }),
+          icone(
+            iconeDaCategoria(produto.categoria?.slug),
+            'produto-card__sem-foto-icone',
+            '1em'
+          ),
           criar('span', {
             class: 'produto-card__sem-foto-texto',
             texto: 'Foto em breve',
@@ -498,7 +499,7 @@ function mostrarErro(titulo, texto) {
 
   container.removeAttribute('hidden');
   renderizarEstadoVazio(container, {
-    icone: '🍫',
+    icone: 'doce',
     titulo,
     texto,
     acao: { texto: 'Ver todos os doces', href: rota(ROTAS.produtos) },

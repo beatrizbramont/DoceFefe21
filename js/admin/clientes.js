@@ -145,7 +145,7 @@ function renderizarLista() {
 
   if (clientes.length === 0) {
     renderizarEstadoVazio(lista, {
-      icone: '👥',
+      icone: 'clientes',
       titulo: busca ? 'Nenhum cliente encontrado' : 'Nenhum cliente cadastrado',
       texto: busca
         ? 'Tente outro nome ou e-mail.'
@@ -177,7 +177,7 @@ async function carregar() {
     if (await tratarErroDeSessao(erro)) return;
 
     renderizarEstadoVazio(lista, {
-      icone: '⚠️',
+      icone: 'alerta',
       titulo: 'Não conseguimos carregar os clientes',
       texto: erro.message || 'Tente novamente em instantes.',
       acao: { texto: 'Tentar de novo', onClick: carregar },

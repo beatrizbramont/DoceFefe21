@@ -20,6 +20,7 @@
 
 import { iniciarPainel, tratarErroDeSessao } from './sessao.js';
 import { api } from '../lib/api.js';
+import { icone } from '../components/icons.js';
 import {
   $,
   criar,
@@ -165,12 +166,15 @@ function criarConferencia(pedido) {
   if (pagamento.temComprovante) {
     const area = criar('div', { class: 'comprovante-area' });
 
-    const botaoVer = criar('button', {
-      class: 'btn btn--secundario btn--pequeno',
-      type: 'button',
-      texto: '🔍 Ver comprovante',
-      on: { click: (e) => abrirComprovante(pedido.codigo, area, e.currentTarget) },
-    });
+    const botaoVer = criar(
+      'button',
+      {
+        class: 'btn btn--secundario btn--pequeno',
+        type: 'button',
+        on: { click: (e) => abrirComprovante(pedido.codigo, area, e.currentTarget) },
+      },
+      [icone('busca'), 'Ver comprovante']
+    );
 
     filhos.push(criar('div', { class: 'mt-3' }, [botaoVer]), area);
   }
@@ -179,7 +183,7 @@ function criarConferencia(pedido) {
   if (pagamento.conferidoEm) {
     filhos.push(
       criar('div', { class: 'alerta alerta--sucesso mt-3' }, [
-        criar('span', { texto: '✓', 'aria-hidden': 'true' }),
+        icone('verificado'),
         criar('p', {
           class: 'sem-margem',
           texto: `Conferido em ${dataHora(pagamento.conferidoEm)}`,
@@ -194,7 +198,7 @@ function criarConferencia(pedido) {
   if (pagamento.observacao && !pagamento.conferidoEm) {
     filhos.push(
       criar('div', { class: 'alerta alerta--aviso mt-3' }, [
-        criar('span', { texto: '!', 'aria-hidden': 'true' }),
+        icone('alerta'),
         criar('p', {
           class: 'sem-margem',
           texto: `Recusado antes: ${pagamento.observacao}`,
@@ -221,17 +225,17 @@ function criarBotoesConferencia(pedido) {
     'aria-label': 'Motivo da recusa',
   });
 
-  const aprovar = criar('button', {
-    class: 'btn btn--primario btn--pequeno',
-    type: 'button',
-    texto: '✓ Aprovar pagamento',
-  });
+  const aprovar = criar(
+    'button',
+    { class: 'btn btn--primario btn--pequeno', type: 'button' },
+    [icone('verificado'), 'Aprovar pagamento']
+  );
 
-  const recusar = criar('button', {
-    class: 'btn btn--secundario btn--pequeno',
-    type: 'button',
-    texto: '✕ Recusar',
-  });
+  const recusar = criar(
+    'button',
+    { class: 'btn btn--secundario btn--pequeno', type: 'button' },
+    [icone('recusar'), 'Recusar']
+  );
 
   aprovar.addEventListener('click', async () => {
     const confirmado = await confirmar(
@@ -354,13 +358,16 @@ async function abrirComprovante(codigo, area, botao) {
     area.replaceChildren(
       criar('div', { class: 'comprovante-visor' }, [
         ehPdf
-          ? criar('a', {
-              class: 'btn btn--primario btn--pequeno',
-              href: url,
-              target: '_blank',
-              rel: 'noopener noreferrer',
-              texto: '📄 Abrir PDF',
-            })
+          ? criar(
+              'a',
+              {
+                class: 'btn btn--primario btn--pequeno',
+                href: url,
+                target: '_blank',
+                rel: 'noopener noreferrer',
+              },
+              [icone('documento'), 'Abrir PDF']
+            )
           : criar('img', {
               src: url,
               alt: `Comprovante do pedido ${codigo}`,
@@ -487,7 +494,7 @@ async function carregarPedidos() {
 
     if (pedidos.length === 0) {
       renderizarEstadoVazio(lista, {
-        icone: filtroAtual === 'comprovante_enviado' ? '✓' : '📦',
+        icone: filtroAtual === 'comprovante_enviado' ? 'verificado' : 'caixa',
         titulo:
           filtroAtual === 'comprovante_enviado'
             ? 'Nenhum comprovante para conferir'
@@ -508,7 +515,7 @@ async function carregarPedidos() {
     if (await tratarErroDeSessao(erro)) return;
 
     renderizarEstadoVazio(lista, {
-      icone: '⚠️',
+      icone: 'alerta',
       titulo: 'Não conseguimos carregar os pedidos',
       texto: erro.message || 'Tente novamente em instantes.',
       acao: { texto: 'Tentar de novo', onClick: carregarPedidos },

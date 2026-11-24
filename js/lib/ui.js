@@ -11,6 +11,8 @@
  * apareceria como texto literal na tela, e não seria executado.
  */
 
+import { icone } from '../components/icons.js';
+
 /* =============================================================================
  * 1. SELETORES E CRIAÇÃO DE ELEMENTOS
  * ========================================================================== */
@@ -77,11 +79,12 @@ export function criar(tag, props = {}, filhos = []) {
  * 2. TOASTS (avisos flutuantes)
  * ========================================================================== */
 
+/** Nome do ícone de cada tipo de aviso — ver components/icons.js. */
 const ICONES_TOAST = {
-  sucesso: '✓',
-  erro: '✕',
-  aviso: '!',
-  info: 'i',
+  sucesso: 'verificado',
+  erro: 'fechar',
+  aviso: 'alerta',
+  info: 'informacao',
 };
 
 /** Cria (uma única vez) o contêiner onde os toasts são empilhados. */
@@ -110,11 +113,7 @@ export function toast(mensagem, tipo = 'info', duracao = 4000) {
   const container = obterContainerToasts();
 
   const el = criar('div', { class: `toast toast--${tipo}` }, [
-    criar('span', {
-      class: 'toast__icone',
-      texto: ICONES_TOAST[tipo] || ICONES_TOAST.info,
-      'aria-hidden': 'true',
-    }),
+    icone(ICONES_TOAST[tipo] || ICONES_TOAST.info, 'toast__icone', '1em'),
     criar('p', { class: 'toast__texto', texto: mensagem }),
     criar('button', {
       class: 'toast__fechar',
@@ -229,15 +228,22 @@ export const barraProgresso = {
 
 /**
  * Renderiza a mensagem de "nada aqui" dentro de um contêiner.
+ *
+ * `icone` é o NOME de um ícone de components/icons.js — não um emoji. Ver a
+ * explicação no topo daquele arquivo: emoji muda de desenho conforme o
+ * sistema de quem abre a página.
+ *
  * @param {HTMLElement} container
  * @param {{icone?:string, titulo:string, texto?:string, acao?:{texto:string, href?:string, onClick?:Function}}} opcoes
  */
 export function renderizarEstadoVazio(container, opcoes) {
   if (!container) return;
-  const { icone = '🍫', titulo, texto, acao } = opcoes;
+  const { icone: nomeIcone = 'vazio', titulo, texto, acao } = opcoes;
+
+  const desenho = icone(nomeIcone, 'estado-vazio__icone', '1em');
 
   const filhos = [
-    criar('div', { class: 'estado-vazio__icone', texto: icone, 'aria-hidden': 'true' }),
+    desenho,
     criar('h3', { class: 'estado-vazio__titulo', texto: titulo }),
   ];
 

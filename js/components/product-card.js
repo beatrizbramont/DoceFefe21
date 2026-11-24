@@ -11,6 +11,7 @@
  */
 
 import { criar } from '../lib/ui.js';
+import { icone, iconeDaCategoria } from './icons.js';
 import { moeda, peso, resumir } from '../lib/format.js';
 import { ROTAS, rota, urlMidia } from '../config.js';
 
@@ -76,11 +77,11 @@ function criarMidia(produto) {
   } else {
     filhos.push(
       criar('div', { class: 'produto-card__sem-foto' }, [
-        criar('span', {
-          class: 'produto-card__sem-foto-icone',
-          texto: produto.categoria?.icone || '🍫',
-          'aria-hidden': 'true',
-        }),
+        icone(
+          iconeDaCategoria(produto.categoria?.slug),
+          'produto-card__sem-foto-icone',
+          '1em'
+        ),
         criar('span', {
           class: 'produto-card__sem-foto-texto',
           texto: 'Foto em breve',

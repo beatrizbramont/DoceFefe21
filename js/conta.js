@@ -37,6 +37,7 @@ import {
 import { moeda, data as formatarData, telefone as formatarTelefone,
          somenteDigitos } from './lib/format.js';
 import { descreverStatus } from './lib/status-pedido.js';
+import { icone } from './components/icons.js';
 import { ROTAS, rota } from './config.js';
 import { montarLinkWhatsApp } from './whatsapp.js';
 
@@ -260,7 +261,7 @@ function mostrarAvisoConfirmacao(formulario, email) {
   }
 
   caixa.replaceChildren(
-    criar('span', { texto: '✉️', 'aria-hidden': 'true' }),
+    icone('email'),
     criar('div', {}, [
       criar('p', {
         class: 'sem-margem',
@@ -457,7 +458,7 @@ async function carregarPedidos() {
 
     if (!pedidos || pedidos.length === 0) {
       renderizarEstadoVazio(container, {
-        icone: '🧾',
+        icone: 'pedidos',
         titulo: 'Você ainda não fez pedidos',
         texto: 'Quando fizer sua primeira compra, ela aparece aqui.',
         acao: { texto: 'Ver nossos doces', href: rota(ROTAS.produtos) },
@@ -470,7 +471,7 @@ async function carregarPedidos() {
     console.error('[conta] Falha ao carregar pedidos:', erro);
 
     renderizarEstadoVazio(container, {
-      icone: '⚠️',
+      icone: 'alerta',
       titulo: 'Não conseguimos carregar seus pedidos',
       texto: 'Tente novamente em instantes.',
       acao: { texto: 'Tentar de novo', onClick: carregarPedidos },
@@ -566,7 +567,7 @@ function iniciar() {
   if (!autenticacaoDisponivel) {
     areaAcesso.replaceChildren(
       criar('div', { class: 'alerta alerta--aviso' }, [
-        criar('span', { texto: '⚙️', 'aria-hidden': 'true' }),
+        icone('engrenagem'),
         criar('div', {}, [
           criar('p', {
             class: 'sem-margem',

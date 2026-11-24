@@ -24,6 +24,13 @@
   }
 }
 
+/* Caixa redonda que emoldura o ícone. O desenho em si entra como <svg>
+   dentro dela e segue o `font-size` definido aqui. */
+.pagamento-passo__icone > svg {
+  width: 1em;
+  height: 1em;
+}
+
 .pagamento-passo__icone {
   width: 66px;
   height: 66px;
@@ -110,6 +117,12 @@
 
 .forma-pagamento--destaque:hover {
   border-color: var(--cor-chocolate-800);
+}
+
+.forma-pagamento__icone > svg,
+.comprovante-enviado__icone > svg {
+  width: 1em;
+  height: 1em;
 }
 
 .forma-pagamento__icone {
@@ -302,9 +315,10 @@
   padding: var(--esp-4);
 }
 
-.comprovante-previa__pdf span:first-child {
-  font-size: 1.6rem;
-  line-height: 1;
+.comprovante-previa__pdf > svg {
+  flex-shrink: 0;
+  width: 1.6rem;
+  height: 1.6rem;
 }
 
 /* -----------------------------------------------------------------------------

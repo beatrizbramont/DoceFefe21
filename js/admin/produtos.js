@@ -22,6 +22,7 @@
 
 import { iniciarPainel, tratarErroDeSessao } from './sessao.js';
 import { api } from '../lib/api.js';
+import { icone } from '../components/icons.js';
 import {
   $,
   criar,
@@ -83,12 +84,12 @@ function selosDoProduto(produto) {
 function miniatura(produto) {
   const principal = produto.fotos[0];
 
+  // Produto sem foto não pode parecer erro de carregamento: o quadro fica,
+  // com o ícone de câmera dizendo "falta foto aqui".
   if (!principal) {
-    return criar('div', {
-      class: 'admin-produto__foto admin-produto__foto--vazia',
-      texto: '📷',
-      'aria-hidden': 'true',
-    });
+    return criar('div', { class: 'admin-produto__foto admin-produto__foto--vazia' }, [
+      icone('camera'),
+    ]);
   }
 
   return criar('img', {
@@ -126,7 +127,7 @@ function botoesDoProduto(produto) {
       criar('button', {
         class: 'btn btn--secundario btn--pequeno',
         type: 'button',
-        texto: '✎ Editar',
+        texto: 'Editar',
         on: { click: () => abrirFormulario(produto.id) },
       }),
 
@@ -779,7 +780,7 @@ function renderizarLista() {
 
   if (produtos.length === 0) {
     renderizarEstadoVazio(lista, {
-      icone: '🍫',
+      icone: 'produtos',
       titulo: busca ? 'Nenhum produto com esse nome' : 'Nenhum produto por aqui',
       texto: busca
         ? 'Tente outro termo ou troque o filtro.'
@@ -822,7 +823,7 @@ async function carregar() {
     if (await tratarErroDeSessao(erro)) return;
 
     renderizarEstadoVazio(lista, {
-      icone: '⚠️',
+      icone: 'alerta',
       titulo: 'Não conseguimos carregar o catálogo',
       texto: erro.message || 'Tente novamente em instantes.',
       acao: { texto: 'Tentar de novo', onClick: carregar },
