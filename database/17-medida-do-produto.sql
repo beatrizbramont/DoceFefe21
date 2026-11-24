@@ -5,6 +5,14 @@
 --
 -- EXECUTE DEPOIS DE 16.
 --
+-- ⚠️ ESTE ARQUIVO SAIU COM UM DEFEITO — CORRIGIDO PELO 18
+--
+--   A visão recriada aqui foi copiada da versão do arquivo 09, e com isso
+--   perdeu a coluna `ordem`, que o arquivo 10 havia acrescentado. O site
+--   inteiro parou de listar produtos até o arquivo 18 restaurá-la.
+--
+--   Se você está executando a sequência do zero, rode o 18 logo em seguida.
+--
 -- POR QUE A TROCA
 --
 --   "90g" não ajuda ninguém a imaginar o doce. "5x5 cm" sim: a pessoa vê o
