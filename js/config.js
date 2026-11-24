@@ -64,8 +64,19 @@ export const CONTATO = {
   whatsappExibicao: '(11) 97978-8231',
   instagram: 'docefefe.21',
   instagramUrl: 'https://instagram.com/docefefe.21',
+  /*
+    E-mail comercial da marca, informado pela Doce Fefê.21.
+
+    É a mesma caixa que vai enviar os e-mails de login quando o SMTP for
+    configurado no Supabase — assim a cliente recebe de um endereço que ela
+    reconhece, em vez do remetente genérico do Supabase.
+
+    ⚠️ Só o ENDEREÇO mora aqui. Este arquivo vai inteiro para o navegador:
+    senha e Senha de App do Gmail jamais podem encostar nele. Elas ficam no
+    painel do Supabase, que é quem envia.
+  */
+  email: 'docefefe.21@gmail.com',
   /** TODO: confirmar com a cliente antes de publicar. */
-  email: '',
   cidade: '',
 };
 

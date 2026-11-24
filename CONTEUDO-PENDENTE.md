@@ -46,7 +46,7 @@ no lugar certo.
 |---|---|---|
 | **WhatsApp** | ✅ (11) 97978-8231 | Site inteiro |
 | **Instagram** | ✅ @docefefe.21 | Rodapé, contato, home |
-| **E-mail comercial** | ⬜ Pendente | Rodapé, contato |
+| **E-mail comercial** | ✅ docefefe.21@gmail.com | Rodapé, contato |
 | **Cidade / região de atendimento** | ⬜ Pendente | Rodapé, contato, FAQ |
 | **Endereço para retirada** | ⬜ Pendente | Checkout (Fase 7) |
 | **Prazo de produção** | ⬜ Pendente | FAQ, checkout |
