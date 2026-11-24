@@ -34,6 +34,25 @@ import {
   patchStatusPedido,
   getSessaoAdmin,
 } from '../controllers/admin-controller.js';
+import {
+  getResumoAdmin,
+  getClientesAdmin,
+} from '../controllers/admin-painel-controller.js';
+import {
+  getProdutosAdmin,
+  getProdutoAdmin,
+  postProduto,
+  patchProduto,
+  deleteProduto,
+  postFotoProduto,
+  patchFotoProduto,
+  deleteFotoProduto,
+  getEstoque,
+  getMovimentosEstoque,
+  postMovimentoEstoque,
+  patchConfiguracaoEstoque,
+  getLimitesCatalogo,
+} from '../controllers/admin-catalogo-controller.js';
 import { verificarConexao } from '../../services/database.js';
 import { limitadorLeitura, limitadorEscrita } from '../middleware/seguranca.js';
 
@@ -211,6 +230,108 @@ export const ROTAS = [
     metodo: 'PATCH',
     padrao: '/api/admin/pedidos/:codigo/status',
     manipulador: patchStatusPedido,
+    limitador: limitadorEscrita,
+  },
+
+  // --- Painel: visão geral ---
+  // Faturamento e dados pessoais de clientes. As duas rotas de leitura mais
+  // sensíveis do sistema — ver admin-painel-controller.js.
+  {
+    metodo: 'GET',
+    padrao: '/api/admin/resumo',
+    manipulador: getResumoAdmin,
+    limitador: limitadorLeitura,
+  },
+  {
+    metodo: 'GET',
+    padrao: '/api/admin/clientes',
+    manipulador: getClientesAdmin,
+    limitador: limitadorLeitura,
+  },
+
+  // --- Painel: catálogo ---
+  {
+    metodo: 'GET',
+    padrao: '/api/admin/catalogo/limites',
+    manipulador: getLimitesCatalogo,
+    limitador: limitadorLeitura,
+  },
+  {
+    metodo: 'GET',
+    padrao: '/api/admin/produtos',
+    manipulador: getProdutosAdmin,
+    limitador: limitadorLeitura,
+  },
+  {
+    metodo: 'POST',
+    padrao: '/api/admin/produtos',
+    manipulador: postProduto,
+    limitador: limitadorEscrita,
+  },
+  {
+    metodo: 'GET',
+    padrao: '/api/admin/produtos/:id',
+    manipulador: getProdutoAdmin,
+    limitador: limitadorLeitura,
+  },
+  {
+    metodo: 'PATCH',
+    padrao: '/api/admin/produtos/:id',
+    manipulador: patchProduto,
+    limitador: limitadorEscrita,
+  },
+  // DELETE aqui significa ARQUIVAR. Apagar de verdade quebraria o histórico
+  // de vendas, que aponta para o produto. Ver o controlador.
+  {
+    metodo: 'DELETE',
+    padrao: '/api/admin/produtos/:id',
+    manipulador: deleteProduto,
+    limitador: limitadorEscrita,
+  },
+
+  // --- Painel: fotos dos produtos ---
+  {
+    metodo: 'POST',
+    padrao: '/api/admin/produtos/:id/fotos',
+    manipulador: postFotoProduto,
+    limitador: limitadorEscrita,
+  },
+  {
+    metodo: 'PATCH',
+    padrao: '/api/admin/produtos/:id/fotos/:fotoId',
+    manipulador: patchFotoProduto,
+    limitador: limitadorEscrita,
+  },
+  {
+    metodo: 'DELETE',
+    padrao: '/api/admin/produtos/:id/fotos/:fotoId',
+    manipulador: deleteFotoProduto,
+    limitador: limitadorEscrita,
+  },
+
+  // --- Painel: estoque ---
+  {
+    metodo: 'GET',
+    padrao: '/api/admin/estoque',
+    manipulador: getEstoque,
+    limitador: limitadorLeitura,
+  },
+  {
+    metodo: 'GET',
+    padrao: '/api/admin/estoque/:id/movimentos',
+    manipulador: getMovimentosEstoque,
+    limitador: limitadorLeitura,
+  },
+  {
+    metodo: 'POST',
+    padrao: '/api/admin/estoque/:id',
+    manipulador: postMovimentoEstoque,
+    limitador: limitadorEscrita,
+  },
+  {
+    metodo: 'PATCH',
+    padrao: '/api/admin/estoque/:id',
+    manipulador: patchConfiguracaoEstoque,
     limitador: limitadorEscrita,
   },
 ];

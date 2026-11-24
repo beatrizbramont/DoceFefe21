@@ -129,6 +129,15 @@ function montarParametros(filtros = {}) {
   for (const [chave, valor] of Object.entries(filtros)) {
     if (valor === null || valor === undefined || valor === '') continue;
 
+    // `or` não é uma coluna: é a condição "qualquer uma destas", escrita como
+    //     or=(nome.ilike.*ana*,email.ilike.*ana*)
+    // Sem esta exceção, o parêntese inicial não casaria com o teste de
+    // operador abaixo e o valor ganharia um "eq." na frente.
+    if (chave === 'or' || chave === 'and') {
+      params.append(chave, valor);
+      continue;
+    }
+
     // Se já vier com operador ("eq.", "ilike.", "gte."), usa como está.
     // Caso contrário, assume igualdade.
     const temOperador = typeof valor === 'string' && /^[a-z]+\./.test(valor);

@@ -348,16 +348,68 @@ export function aplicarErrosServidor(formulario, erros) {
  * ========================================================================== */
 
 /**
- * Pede confirmação antes de uma ação destrutiva (remover item, cancelar pedido).
+ * Pede confirmação antes de uma ação destrutiva (arquivar produto, recusar
+ * comprovante, remover foto).
  *
- * Nesta fase usa o `confirm` nativo, que é acessível e funciona em todos os
- * navegadores. Na Fase 9 será substituído por um modal com a identidade visual
- * da marca — a assinatura assíncrona já está pronta para essa troca.
+ * POR QUE `<dialog>` NATIVO E NÃO UMA `<div>` COM POSITION FIXED
+ *   O elemento `<dialog>` em modo modal entrega de graça aquilo que costuma
+ *   ser esquecido numa implementação própria: o foco fica preso dentro da
+ *   caixa, o resto da página sai da árvore de acessibilidade, Esc fecha, e o
+ *   fundo escurecido é um pseudo-elemento em vez de mais um nó no DOM.
  *
+ *   O `confirm` nativo também tinha essas qualidades — e nenhuma identidade
+ *   visual. Esta versão mantém o comportamento e ganha a cara da marca.
+ *
+ * @param {string} mensagem
+ * @param {{confirmar?: string, cancelar?: string}} [rotulos]
  * @returns {Promise<boolean>}
  */
-export async function confirmar(mensagem) {
-  return window.confirm(mensagem);
+export async function confirmar(mensagem, rotulos = {}) {
+  const { confirmar: textoConfirmar = 'Confirmar', cancelar = 'Cancelar' } = rotulos;
+
+  // Navegador sem suporte a <dialog> cai no diálogo do sistema. Perde o
+  // visual, mantém a decisão — que é o que importa numa ação destrutiva.
+  if (typeof HTMLDialogElement === 'undefined') {
+    return window.confirm(mensagem);
+  }
+
+  return new Promise((resolver) => {
+    const dialogo = criar('dialog', { class: 'dialogo' }, [
+      criar('p', { class: 'dialogo__texto', texto: mensagem }),
+      criar('div', { class: 'dialogo__acoes' }, [
+        criar('button', {
+          class: 'btn btn--secundario',
+          type: 'button',
+          texto: cancelar,
+          on: { click: () => dialogo.close('cancelar') },
+        }),
+        criar('button', {
+          class: 'btn btn--primario',
+          type: 'button',
+          texto: textoConfirmar,
+          on: { click: () => dialogo.close('confirmar') },
+        }),
+      ]),
+    ]);
+
+    // Clicar fora da caixa equivale a cancelar — mas só quando o clique cai
+    // no próprio <dialog>, que é a área do fundo escurecido.
+    dialogo.addEventListener('click', (evento) => {
+      if (evento.target === dialogo) dialogo.close('cancelar');
+    });
+
+    dialogo.addEventListener('close', () => {
+      dialogo.remove();
+      resolver(dialogo.returnValue === 'confirmar');
+    });
+
+    document.body.append(dialogo);
+    dialogo.showModal();
+
+    // O foco começa no "Cancelar": numa ação destrutiva, a tecla Enter
+    // apertada por reflexo precisa cair na opção que não faz nada.
+    $('.btn--secundario', dialogo)?.focus();
+  });
 }
 
 /* =============================================================================

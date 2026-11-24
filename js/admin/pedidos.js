@@ -1,33 +1,31 @@
 /**
- * admin/painel.js
+ * admin/pedidos.js
  * -----------------------------------------------------------------------------
- * Painel administrativo — login e conferência de pedidos.
+ * Painel administrativo — conferência de pedidos e pagamentos.
  *
- * ESCOPO DELIBERADAMENTE ENXUTO
- *   Este painel resolve o que o editor de tabelas do Supabase NÃO resolve:
- *   abrir um comprovante guardado em bucket privado e aprovar o pagamento
- *   respeitando o fluxo de status.
- *
- *   Cadastrar produto, ajustar preço e estoque continuam possíveis pelo
- *   painel do próprio Supabase, que já faz isso bem.
+ * O QUE ESTA TELA RESOLVE
+ *   O cliente paga o Pix e envia o comprovante. Alguém precisa abrir o
+ *   arquivo — guardado em bucket privado —, comparar com o extrato e decidir.
+ *   É a única ação do sistema que transforma "o cliente diz que pagou" em
+ *   "a loja confirmou que recebeu".
  *
  * ⚠️ A INTERFACE NÃO É A PROTEÇÃO
  *   Esconder esta tela de quem não é administrador é conveniência. A barreira
  *   real está no servidor: toda rota /api/admin/* passa por `exigirAdmin`,
  *   que confere o perfil no banco. Chamar a API direto não adianta.
+ *
+ * Login, cabeçalho e menu ficam em admin/sessao.js, compartilhados com as
+ * outras telas do painel.
  */
 
-import { entrar, sair, estaLogado, autenticacaoDisponivel, ErroAuth } from '../auth.js';
-import { api, ErroApi } from '../lib/api.js';
+import { iniciarPainel, tratarErroDeSessao } from './sessao.js';
+import { api } from '../lib/api.js';
 import {
   $,
-  $$,
   criar,
   toastSucesso,
   toastErro,
   botaoCarregando,
-  marcarErroCampo,
-  limparErrosFormulario,
   renderizarEstadoVazio,
   confirmar,
 } from '../lib/ui.js';
@@ -48,53 +46,6 @@ const PROXIMOS_STATUS = {
   pronto_para_retirada: ['entregue', 'cancelado'],
   saiu_para_entrega: ['entregue', 'cancelado'],
 };
-
-/* =============================================================================
- * LOGIN
- * ========================================================================== */
-
-async function processarLogin(formulario, botao) {
-  limparErrosFormulario(formulario);
-
-  const email = formulario.elements.email;
-  const senha = formulario.elements.senha;
-
-  if (!email.value.trim()) {
-    marcarErroCampo(email, 'Informe seu e-mail.');
-    email.focus();
-    return;
-  }
-  if (!senha.value) {
-    marcarErroCampo(senha, 'Informe sua senha.');
-    senha.focus();
-    return;
-  }
-
-  botaoCarregando(botao, true);
-
-  try {
-    await entrar({ email: email.value, senha: senha.value });
-
-    // Entrar não basta: é preciso SER administrador. A checagem acontece no
-    // servidor — se não for, a chamada devolve 403.
-    await api.get('/admin/sessao');
-
-    toastSucesso('Bem-vinda!');
-    mostrarPainel();
-  } catch (erro) {
-    if (erro instanceof ErroApi && erro.status === 403) {
-      // Conta válida, mas sem permissão. Encerramos a sessão para não deixar
-      // um login pela metade.
-      await sair();
-      toastErro('Esta conta não tem acesso ao painel administrativo.');
-      return;
-    }
-
-    toastErro(erro instanceof ErroAuth ? erro.message : 'Não foi possível entrar.');
-  } finally {
-    botaoCarregando(botao, false);
-  }
-}
 
 /* =============================================================================
  * CARD DE PEDIDO
@@ -553,12 +504,8 @@ async function carregarPedidos() {
   } catch (erro) {
     console.error('[admin] Falha ao carregar pedidos:', erro);
 
-    if (erro instanceof ErroApi && (erro.status === 401 || erro.status === 403)) {
-      await sair();
-      mostrarLogin();
-      toastErro('Sua sessão expirou. Entre novamente.');
-      return;
-    }
+    // Sessão vencida ou sem permissão: a casca fecha o painel sozinha.
+    if (await tratarErroDeSessao(erro)) return;
 
     renderizarEstadoVazio(lista, {
       icone: '⚠️',
@@ -570,75 +517,17 @@ async function carregarPedidos() {
 }
 
 /* =============================================================================
- * TROCA DE TELA
- * ========================================================================== */
-
-function mostrarLogin() {
-  $('[data-area-painel]')?.setAttribute('hidden', '');
-  $('[data-area-login]')?.removeAttribute('hidden');
-}
-
-function mostrarPainel() {
-  $('[data-area-login]')?.setAttribute('hidden', '');
-  $('[data-area-painel]')?.removeAttribute('hidden');
-
-  montarFiltros();
-  carregarPedidos();
-}
-
-/* =============================================================================
  * INÍCIO
  * ========================================================================== */
 
-async function iniciar() {
-  const areaLogin = $('[data-area-login]');
-  if (!areaLogin) return;
-
-  if (!autenticacaoDisponivel) {
-    areaLogin.replaceChildren(
-      criar('div', { class: 'alerta alerta--aviso' }, [
-        criar('span', { texto: '⚙️', 'aria-hidden': 'true' }),
-        criar('p', {
-          class: 'sem-margem',
-          texto:
-            'Autenticação não configurada. Faltam VITE_SUPABASE_URL e ' +
-            'VITE_SUPABASE_ANON_KEY no arquivo .env',
-        }),
-      ])
-    );
-    return;
-  }
-
-  const formulario = $('[data-formulario-admin]');
-  formulario?.setAttribute('novalidate', '');
-
-  formulario?.addEventListener('submit', (evento) => {
-    evento.preventDefault();
-    processarLogin(formulario, $('[type="submit"]', formulario));
+function iniciar() {
+  iniciarPainel({
+    titulo: 'Pedidos e pagamentos',
+    aoEntrar: () => {
+      montarFiltros();
+      carregarPedidos();
+    },
   });
-
-  $('[data-sair-admin]')?.addEventListener('click', async () => {
-    await sair();
-    mostrarLogin();
-    toastSucesso('Você saiu do painel.');
-  });
-
-  $$('input', formulario || document).forEach((campo) => {
-    campo.addEventListener('input', () => limparErrosFormulario(formulario));
-  });
-
-  // Já logada? Confirma que é administradora antes de abrir o painel.
-  if (estaLogado()) {
-    try {
-      await api.get('/admin/sessao');
-      mostrarPainel();
-      return;
-    } catch {
-      // Sessão válida mas sem permissão, ou expirada.
-    }
-  }
-
-  mostrarLogin();
 }
 
 if (document.readyState === 'loading') {

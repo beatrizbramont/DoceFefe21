@@ -1,11 +1,17 @@
 /* =============================================================================
    DOCE FEFÊ.21 — admin.css
-   Painel administrativo: login, pedidos e conferência de comprovantes.
+   Painel administrativo: visão geral, pedidos, produtos, estoque e clientes.
 
-   ESCOPO
-     Cobre as telas construídas: login e pedidos. As demais páginas do admin
-     seguem com o aviso de "em construção" — produtos, preços e estoque são
-     geridos pelo painel do Supabase por enquanto.
+   ORGANIZAÇÃO
+     1. Login            6. Catálogo (produtos e fotos)
+     2. Estrutura        7. Estoque
+     3. Métricas         8. Clientes
+     4. Card de pedido   9. Formulários do painel
+     5. Pagamento
+
+   O painel reaproveita o design system de global.css — cores, tipografia,
+   botões e campos. Aqui só entram os blocos que existem exclusivamente na
+   área administrativa.
    ========================================================================== */
 
 body.admin {
@@ -133,6 +139,83 @@ body.admin {
   padding: var(--esp-6) var(--esp-5) var(--esp-16);
 }
 
+/* -----------------------------------------------------------------------------
+   2.1 Menu entre as telas
+
+   Rola na horizontal no celular em vez de quebrar em duas linhas: com cinco
+   telas, a quebra empurraria o conteúdo para baixo em toda página.
+   -------------------------------------------------------------------------- */
+.admin-nav {
+  display: flex;
+  gap: var(--esp-1);
+  max-width: var(--largura-max);
+  margin-inline: auto;
+  padding: 0 var(--esp-5) var(--esp-2);
+  overflow-x: auto;
+  scrollbar-width: thin;
+}
+
+.admin-nav__item {
+  flex-shrink: 0;
+  padding: var(--esp-2) var(--esp-4);
+  border-radius: var(--raio-md) var(--raio-md) 0 0;
+  font-size: var(--txt-sm);
+  font-weight: 600;
+  color: var(--cor-bege-500);
+  white-space: nowrap;
+  transition: background-color var(--transicao), color var(--transicao);
+}
+
+.admin-nav__item:hover {
+  background-color: rgba(255, 249, 241, 0.12);
+  color: var(--cor-creme);
+}
+
+.admin-nav__item--ativo,
+.admin-nav__item--ativo:hover {
+  background-color: var(--cor-creme-200);
+  color: var(--cor-chocolate-800);
+}
+
+/* -----------------------------------------------------------------------------
+   2.2 Blocos de conteúdo
+   -------------------------------------------------------------------------- */
+.admin-cartao {
+  padding: var(--esp-5);
+  background-color: var(--cor-branco);
+  border: 1px solid var(--cor-borda);
+  border-radius: var(--raio-lg);
+  box-shadow: var(--sombra-sm);
+}
+
+.admin-secao__titulo {
+  font-size: var(--txt-lg);
+  margin-bottom: var(--esp-4);
+  color: var(--cor-chocolate-800);
+}
+
+.admin-colunas {
+  display: grid;
+  gap: var(--esp-5);
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 320px), 1fr));
+}
+
+/* Barra de busca e ação principal da tela. */
+.admin-barra {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--esp-3);
+}
+
+.admin-busca {
+  flex: 1 1 240px;
+}
+
+.admin-busca input {
+  width: 100%;
+}
+
 /* =============================================================================
    3. MÉTRICAS
    ========================================================================== */
@@ -178,6 +261,67 @@ body.admin {
   letter-spacing: 0.08em;
   text-transform: uppercase;
   color: var(--cor-texto-claro);
+}
+
+.admin-metrica__apoio {
+  display: block;
+  margin-top: var(--esp-1);
+  font-size: var(--txt-xs);
+  color: var(--cor-texto-suave);
+}
+
+/* Contador que exige ação — fica vermelho, não dourado: dourado é a cor de
+   destaque da marca, e aqui a mensagem é "resolve isso". */
+.admin-metrica--alerta {
+  background-color: var(--cor-erro-fundo);
+  border-color: var(--cor-erro);
+}
+
+.admin-metrica--alerta .admin-metrica__valor {
+  color: var(--cor-erro);
+}
+
+/* O botão da fila ocupa a linha inteira embaixo dos contadores. */
+.admin-metricas__acao {
+  grid-column: 1 / -1;
+  justify-self: start;
+}
+
+/* -----------------------------------------------------------------------------
+   3.1 Rankings (mais vendidos, estoque baixo)
+   -------------------------------------------------------------------------- */
+.admin-ranking {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.admin-ranking li {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--esp-3);
+  padding-block: var(--esp-3);
+  font-size: var(--txt-sm);
+  border-top: 1px solid var(--cor-borda);
+}
+
+.admin-ranking li:first-child {
+  border-top: 0;
+}
+
+.admin-ranking__posicao {
+  min-width: 28px;
+  font-weight: 800;
+  color: var(--cor-dourado-700);
+  font-variant-numeric: tabular-nums;
+}
+
+/* O nome empurra o resto para a direita e é o primeiro a encolher. */
+.admin-ranking__nome {
+  flex: 1 1 140px;
+  min-width: 0;
+  font-weight: 600;
 }
 
 /* =============================================================================
@@ -350,7 +494,272 @@ body.admin {
 }
 
 /* =============================================================================
-   6. TELAS AINDA NÃO CONSTRUÍDAS
+   6. CATÁLOGO
+   ========================================================================== */
+
+.admin-produto {
+  padding: var(--esp-5);
+  margin-top: var(--esp-4);
+  background-color: var(--cor-branco);
+  border: 1px solid var(--cor-borda);
+  border-radius: var(--raio-lg);
+  box-shadow: var(--sombra-sm);
+}
+
+.admin-produto__topo {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  gap: var(--esp-4);
+}
+
+.admin-produto__info {
+  flex: 1 1 220px;
+  min-width: 0;
+}
+
+.admin-produto__nome {
+  font-size: var(--txt-base);
+  margin: 0;
+  color: var(--cor-chocolate-800);
+}
+
+.admin-produto__foto {
+  flex-shrink: 0;
+  width: 72px;
+  height: 72px;
+  object-fit: cover;
+  border-radius: var(--raio-md);
+  border: 1px solid var(--cor-borda);
+  background-color: var(--cor-creme-200);
+}
+
+/* Produto sem foto não pode parecer um erro de carregamento: o quadro
+   continua lá, com o ícone, dizendo "falta foto aqui". */
+.admin-produto__foto--vazia {
+  display: grid;
+  place-items: center;
+  font-size: var(--txt-2xl);
+}
+
+/* -----------------------------------------------------------------------------
+   6.1 Galeria de fotos
+   -------------------------------------------------------------------------- */
+.admin-galeria__grade {
+  display: grid;
+  gap: var(--esp-4);
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 160px), 1fr));
+}
+
+.admin-foto {
+  position: relative;
+  margin: 0;
+  padding: var(--esp-2);
+  background-color: var(--cor-creme-200);
+  border: 1px solid var(--cor-borda);
+  border-radius: var(--raio-md);
+  text-align: center;
+}
+
+.admin-foto img {
+  display: block;
+  width: 100%;
+  aspect-ratio: 1;
+  object-fit: cover;
+  border-radius: var(--raio-sm);
+}
+
+.admin-foto__selo,
+.admin-foto__acao {
+  margin-top: var(--esp-2);
+}
+
+.admin-foto__remover {
+  position: absolute;
+  top: var(--esp-2);
+  right: var(--esp-2);
+  width: 28px;
+  height: 28px;
+  display: grid;
+  place-items: center;
+  border: 0;
+  border-radius: 50%;
+  background-color: rgba(46, 24, 16, 0.75);
+  color: var(--cor-creme);
+  font-size: var(--txt-lg);
+  line-height: 1;
+  cursor: pointer;
+  transition: background-color var(--transicao);
+}
+
+.admin-foto__remover:hover {
+  background-color: var(--cor-erro);
+}
+
+/* =============================================================================
+   7. ESTOQUE
+   ========================================================================== */
+
+.admin-estoque-item {
+  padding: var(--esp-5);
+  margin-top: var(--esp-4);
+  background-color: var(--cor-branco);
+  border: 1px solid var(--cor-borda);
+  border-radius: var(--raio-lg);
+  box-shadow: var(--sombra-sm);
+}
+
+.admin-estoque-item__topo {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--esp-4);
+  padding-bottom: var(--esp-4);
+  border-bottom: 1px solid var(--cor-borda);
+}
+
+.admin-saldo {
+  text-align: right;
+}
+
+.admin-saldo__numero {
+  display: block;
+  font-family: var(--fonte-titulo);
+  font-size: var(--txt-2xl);
+  font-weight: 700;
+  line-height: 1;
+  color: var(--cor-chocolate-800);
+  font-variant-numeric: tabular-nums;
+}
+
+.admin-saldo__rotulo {
+  display: block;
+  font-size: var(--txt-xs);
+  color: var(--cor-texto-claro);
+}
+
+/* Abaixo do mínimo: o número vira o alerta, sem precisar de ícone. */
+.admin-saldo--critico .admin-saldo__numero {
+  color: var(--cor-erro);
+}
+
+.admin-movimento {
+  padding-block: var(--esp-4);
+}
+
+.admin-movimento__campos {
+  display: grid;
+  gap: var(--esp-3);
+  grid-template-columns: 1fr;
+}
+
+/* No celular os campos empilham; a partir de 640px o movimento inteiro cabe
+   numa linha só — tipo, quantidade, motivo e botão. */
+@media (min-width: 640px) {
+  .admin-movimento__campos {
+    grid-template-columns: 150px 110px 1fr auto;
+    align-items: center;
+  }
+}
+
+.admin-config {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--esp-3);
+  padding-top: var(--esp-4);
+  border-top: 1px dashed var(--cor-bege-500);
+  font-size: var(--txt-sm);
+}
+
+.campo__controle--curto {
+  width: 90px;
+}
+
+/* -----------------------------------------------------------------------------
+   7.1 Histórico de movimentos
+   -------------------------------------------------------------------------- */
+.admin-historico__lista {
+  list-style: none;
+  padding: 0;
+  margin-top: var(--esp-3);
+}
+
+.admin-historico__lista li {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--esp-3);
+  padding-block: var(--esp-2);
+  border-top: 1px solid var(--cor-borda);
+}
+
+.admin-historico__delta {
+  min-width: 48px;
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+}
+
+.admin-historico__delta.positivo { color: var(--cor-sucesso); }
+.admin-historico__delta.negativo { color: var(--cor-erro); }
+
+.admin-historico__tipo {
+  flex: 1 1 120px;
+  font-size: var(--txt-sm);
+  font-weight: 600;
+}
+
+/* =============================================================================
+   8. CLIENTES
+   ========================================================================== */
+
+.admin-cliente {
+  padding: var(--esp-5);
+  margin-top: var(--esp-4);
+  background-color: var(--cor-branco);
+  border: 1px solid var(--cor-borda);
+  border-radius: var(--raio-lg);
+  box-shadow: var(--sombra-sm);
+}
+
+.admin-cliente__topo {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--esp-3);
+  padding-bottom: var(--esp-3);
+  border-bottom: 1px solid var(--cor-borda);
+}
+
+/* =============================================================================
+   9. FORMULÁRIOS DO PAINEL
+   ========================================================================== */
+
+/* Duas colunas a partir do tablet: os campos do produto são curtos, e uma
+   coluna só deixaria o formulário com rolagem infinita. */
+.admin-grade {
+  display: grid;
+  gap: var(--esp-4);
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 220px), 1fr));
+}
+
+.admin-caixas {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--esp-4);
+  padding: var(--esp-4);
+  margin-top: var(--esp-4);
+  background-color: var(--cor-creme-200);
+  border-radius: var(--raio-md);
+}
+
+/* =============================================================================
+   10. TELAS AINDA NÃO CONSTRUÍDAS
+
+   Revendedores (Fase 10), cupons e relatórios (Fase 11) seguem com o aviso
+   de "em construção" — e por isso ficam fora do menu.
    ========================================================================== */
 
 body.admin .em-construcao {

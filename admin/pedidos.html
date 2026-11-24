@@ -25,77 +25,18 @@
 <body class="admin">
   <main id="conteudo">
 
-    <!-- =====================================================================
-         LOGIN
+    <!--
+      Login, cabeçalho e menu são montados por js/admin/sessao.js, igual ao
+      cabeçalho do site público. Com cinco telas administrativas, manter esse
+      HTML copiado em cada arquivo garantiria que uma delas ficasse para trás.
 
-         ⚠️ Esconder o painel é conveniência, não segurança. A barreira real
-         está no servidor: toda rota /api/admin/* confere o perfil no banco.
-         ================================================================== -->
-    <div class="admin-login" data-area-login>
-      <div class="admin-login__caixa">
-        <img src="../assets/images/logo.jpeg" alt="Doce Fefê.21"
-             class="admin-login__logo" width="72" height="72">
+      ⚠️ Esconder o painel é conveniência, não segurança. A barreira real está
+      no servidor: toda rota /api/admin/* confere o perfil no banco.
+    -->
+    <div data-admin-login></div>
 
-        <h1 class="admin-login__titulo">Painel Administrativo</h1>
-        <p class="admin-login__texto">Entre com sua conta de administrador.</p>
-
-        <!--
-          `method="post"` é uma rede de segurança, não a forma de envio.
-          O envio normal é interceptado por JavaScript.
-
-          POR QUE IMPORTA: se o JavaScript falhar, o navegador envia o
-          formulário sozinho. Com o método padrão (GET), e-mail e SENHA iriam
-          parar na URL — e daí para o histórico do navegador e os logs do
-          servidor. Com POST, vão no corpo da requisição, que não é registrado
-          em lugar nenhum.
-        -->
-        <form data-formulario-admin method="post" novalidate>
-          <div class="campo">
-            <label class="campo__rotulo" for="admin-email">E-mail</label>
-            <input type="email" id="admin-email" name="email"
-                   autocomplete="email" placeholder="seu@email.com" required>
-            <span class="campo__erro"></span>
-          </div>
-
-          <div class="campo">
-            <label class="campo__rotulo" for="admin-senha">Senha</label>
-            <input type="password" id="admin-senha" name="senha"
-                   autocomplete="current-password" required>
-            <span class="campo__erro"></span>
-          </div>
-
-          <button type="submit" class="btn btn--primario btn--grande btn--bloco">
-            Entrar
-          </button>
-        </form>
-
-        <a href="../index.html" class="admin-login__voltar">← Voltar ao site</a>
-      </div>
-    </div>
-
-    <!-- =====================================================================
-         PAINEL
-         ================================================================== -->
-    <div class="admin-painel" data-area-painel hidden>
-
-      <header class="admin-topo">
-        <div class="admin-topo__interno">
-          <div class="admin-topo__marca">
-            <img src="../assets/images/logo.jpeg" alt="" width="40" height="40">
-            <div>
-              <strong>Doce Fefê.21</strong>
-              <span>Pedidos e pagamentos</span>
-            </div>
-          </div>
-
-          <div class="flex gap-2 itens-centro">
-            <button type="button" class="btn btn--secundario btn--pequeno"
-                    data-sair-admin>
-              Sair
-            </button>
-          </div>
-        </div>
-      </header>
+    <div class="admin-painel" data-admin-painel hidden>
+      <div data-admin-topo></div>
 
       <div class="admin-conteudo">
 
@@ -106,23 +47,6 @@
         <div class="filtros-categorias mt-6" data-filtros-admin
              role="group" aria-label="Filtrar pedidos"></div>
 
-        <!--
-          AVISO DE ESCOPO
-          Este painel cobre pedidos e conferência de comprovantes. O cadastro
-          de produtos, preços e estoque é feito pelo painel do Supabase.
-        -->
-        <div class="alerta alerta--info mt-6">
-          <span aria-hidden="true">ℹ️</span>
-          <div>
-            <p class="sem-margem negrito">Este painel cobre pedidos e pagamentos</p>
-            <p class="sem-margem mt-1 texto-pequeno">
-              Para cadastrar produtos, mudar preços ou ajustar estoque, use o
-              editor de tabelas do Supabase. As demais telas administrativas
-              ainda serão construídas.
-            </p>
-          </div>
-        </div>
-
         <!-- Lista de pedidos -->
         <div class="mt-6" data-lista-admin></div>
 
@@ -131,6 +55,6 @@
 
   </main>
 
-  <script type="module" src="../js/admin/painel.js"></script>
+  <script type="module" src="../js/admin/pedidos.js"></script>
 </body>
 </html>

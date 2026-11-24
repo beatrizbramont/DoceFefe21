@@ -14,6 +14,7 @@ pagamentos e painel administrativo.
 - [Estrutura do projeto](#-estrutura-do-projeto)
 - [Variáveis de ambiente](#-variáveis-de-ambiente)
 - [Decisões de arquitetura](#-decisões-de-arquitetura)
+- [Painel administrativo](#-painel-administrativo)
 - [Segurança](#-segurança)
 - [Roteiro de fases](#-roteiro-de-fases)
 - [Identidade visual](#-identidade-visual)
@@ -30,7 +31,7 @@ pagamentos e painel administrativo.
 | Banco de dados | PostgreSQL via Supabase |
 | Autenticação | Supabase Auth |
 | Imagens | Supabase Storage |
-| Pagamentos | Mercado Pago (Pix e cartão) |
+| Pagamentos | Pix com comprovante, conferido no painel |
 | Versionamento | Git / GitHub |
 
 **Não são usados** React, Vue, Angular, Next.js ou qualquer framework de
@@ -106,7 +107,14 @@ DoceFefe21/
 ├── minha-conta.html             Área do cliente
 ├── politica-privacidade.html    LGPD e políticas
 │
-├── admin/                       Painel administrativo (9 páginas)
+├── admin/                       Painel administrativo
+│   ├── index.html               Redireciona para a visão geral
+│   ├── dashboard.html           Faturamento, fila de trabalho, alertas
+│   ├── pedidos.html             Conferência de comprovantes e status
+│   ├── produtos.html            Cadastro, preços e fotos
+│   ├── estoque.html             Saldo, movimentos e histórico
+│   ├── clientes.html            Cadastros e histórico de compras
+│   └── (revendedores, cupons e relatórios: Fases 10 e 11)
 │
 ├── assets/
 │   ├── images/                  Logomarca e fotos dos produtos
@@ -122,6 +130,7 @@ DoceFefe21/
 │   ├── produtos.css             Catálogo            (Fase 3)
 │   ├── carrinho.css             Carrinho            (Fase 4)
 │   ├── checkout.css             Checkout            (Fase 7)
+│   ├── pagamento.css            Pagamento           (Fase 8)
 │   └── admin.css                Painel              (Fase 9)
 │
 ├── js/
@@ -146,25 +155,37 @@ DoceFefe21/
 │   │   ├── accordion.js         Sanfona acessível (FAQ)
 │   │   └── icons.js             Ícones SVG inline
 │   │
-│   └── admin/                   Scripts do painel  (Fase 9)
+│   └── admin/                   Painel             (Fase 9)
+│       ├── sessao.js            ★ Login, cabeçalho e menu compartilhados
+│       ├── dashboard.js
+│       ├── pedidos.js
+│       ├── produtos.js
+│       ├── estoque.js
+│       └── clientes.js
 │
 ├── backend/                                        (Fase 5)
 │   ├── server.js
-│   ├── routes/
+│   ├── routes/index.js          ★ Tabela única de rotas
 │   ├── controllers/
-│   ├── middleware/
-│   └── webhooks/
+│   └── middleware/
 │
 ├── services/                                       (Fase 5)
-│   ├── database.js
-│   ├── auth-service.js
+│   ├── database.js              Acesso ao PostgreSQL via PostgREST
+│   ├── auth-service.js          Quem é o usuário e o que ele pode
 │   ├── order-service.js
-│   └── payment-service.js
+│   ├── payment-service.js
+│   ├── product-service.js       Catálogo do visitante
+│   ├── upload.js                Validação e gravação de arquivos
+│   ├── product-admin-service.js Catálogo da loja     (Fase 9)
+│   └── admin-service.js         Resumo, estoque e clientes (Fase 9)
 │
-├── database/                                       (Fase 5)
-│   ├── schema.sql               Tabelas e relacionamentos
-│   ├── rls.sql                  Políticas de segurança
-│   └── seed.sql                 Dados de demonstração
+├── database/                    Arquivos SQL, executados EM ORDEM
+│   ├── 01-schema.sql            Tabelas e relacionamentos
+│   ├── 02-rls.sql               Políticas de segurança
+│   ├── 03-seed.sql              Dados de demonstração
+│   ├── …                        Correções e ajustes de catálogo
+│   ├── 13-criar-admin.sql       Promove uma conta a administradora
+│   └── 14-painel-admin.sql      Fotos, estoque e resumo  (Fase 9)
 │
 ├── robots.txt
 ├── sitemap.xml
@@ -197,8 +218,11 @@ para o cliente — não depende de disciplina do desenvolvedor.
 | Serviço | Onde obter | Quando |
 |---|---|---|
 | **Supabase** | [supabase.com](https://supabase.com) → Project Settings → API | Fase 5 |
-| **Mercado Pago** | [Painel do desenvolvedor](https://www.mercadopago.com.br/developers) → Suas integrações → Credenciais | Fase 8 |
 | **Google Analytics** *(opcional)* | [analytics.google.com](https://analytics.google.com) | Fase 11 |
+
+> A Fase 8 foi entregue com **Pix por comprovante**, conferido pela loja no
+> painel — sem intermediador de pagamento. Nenhuma credencial de gateway é
+> necessária hoje.
 
 Do Supabase são necessárias três informações:
 
@@ -251,6 +275,44 @@ por construção, e não por lembrança.
 
 ---
 
+## 🔐 Painel administrativo
+
+Fica em `/admin/`. Cinco telas, um login só.
+
+| Tela | Para quê |
+|---|---|
+| **Visão geral** | Faturamento do período, fila de trabalho, produtos acabando |
+| **Pedidos** | Abrir o comprovante, conferir no extrato, aprovar e avançar o pedido |
+| **Produtos** | Cadastrar, editar preço, enviar foto, publicar e arquivar |
+| **Estoque** | Entrada, saída, perda, contagem — tudo com histórico |
+| **Clientes** | Cadastros, contato e quanto cada pessoa já comprou |
+
+### Como ganhar acesso
+
+1. Crie sua conta normalmente pelo site, em `minha-conta.html`
+2. Abra `database/13-criar-admin.sql`, troque o e-mail e execute no Supabase
+3. Entre em `/admin/dashboard.html`
+
+Não existe tela para promover administrador, e isso é deliberado: a permissão
+mais sensível do sistema não deve ter superfície exposta à internet. Quem
+promove precisa ter a senha do banco.
+
+### O que o painel NÃO faz
+
+- **Não apaga produto.** Arquiva. `order_items` aponta para o produto, e
+  apagar transformaria o histórico de vendas em "produto removido".
+- **Não edita cliente.** Alterar dado pessoal exigiria registrar quem alterou
+  o quê e quando. Enquanto esse registro não existir, a tela é só leitura.
+- **Não promove ninguém.** Ver acima.
+
+### Antes de usar
+
+O painel depende de `database/14-painel-admin.sql` — ele cria o bucket das
+fotos e as funções de estoque e resumo. Execute os arquivos SQL **em ordem
+numérica**; o 14 vem por último.
+
+---
+
 ## 🛡 Segurança
 
 Implementado ou preparado:
@@ -260,19 +322,38 @@ Implementado ou preparado:
 - [x] `rel="noopener noreferrer"` em todo link que abre nova aba
 - [x] Painel administrativo com `noindex, nofollow`
 - [x] `.env` no `.gitignore`
-- [ ] Validação de dados no servidor *(Fase 5)*
-- [ ] Rate limiting *(Fase 5)*
-- [ ] Políticas RLS no Supabase *(Fase 5)*
-- [ ] Autorização por perfil nas rotas admin *(Fase 9)*
-- [ ] Validação de assinatura dos webhooks *(Fase 8)*
+- [x] Validação de dados no servidor *(Fase 5)*
+- [x] Rate limiting por rota *(Fase 5)*
+- [x] Políticas RLS no Supabase *(Fase 5)*
+- [x] Autorização por perfil nas rotas admin *(Fase 9)*
+- [x] Arquivos validados pela assinatura binária, não pela extensão *(Fases 8 e 9)*
 - [ ] HTTPS obrigatório *(Fase 12)*
 
 ### Pagamentos
 
-A confirmação de pagamento **nunca** acontece porque o cliente voltou à
-página de sucesso. Ela ocorre apenas quando o webhook do Mercado Pago é
-recebido, tem a assinatura validada e o valor confere com o pedido
-registrado no banco.
+A confirmação de pagamento **nunca** acontece porque o cliente disse que
+pagou. O fluxo tem dois estados separados de propósito:
+
+```
+comprovante_enviado  →  "o cliente afirma que pagou"
+pagamento_aprovado   →  "a loja conferiu no extrato"
+```
+
+Só o painel administrativo, atrás de `exigirAdmin`, consegue levar um pedido
+do primeiro estado ao segundo. É o mesmo princípio do webhook de um
+intermediador: a confirmação precisa vir de uma fonte que o cliente não
+controla. Aqui essa fonte é a pessoa que olha a conta bancária.
+
+### Dois buckets, duas naturezas
+
+| Bucket | Acesso | Por quê |
+|---|---|---|
+| `comprovantes` | **Privado** — link assinado que expira em 5 min | Traz nome, banco, valor e horário: dado pessoal de um cliente |
+| `produtos` | **Público para leitura** | É foto de brownie, feita para o mundo ver |
+
+Nos dois casos a **escrita** é exclusiva do backend: nenhum bucket tem
+política de insert, então o RLS do Storage nega gravação para as chaves
+pública e autenticada.
 
 ---
 
@@ -288,7 +369,7 @@ registrado no banco.
 | 6 | Autenticação e cadastro de clientes | ✅ Concluída |
 | 7 | Checkout e pedidos | ✅ Concluída |
 | 8 | Pagamentos | ✅ Concluída |
-| 9 | Painel administrativo | ⬜ |
+| 9 | Painel administrativo | ✅ Concluída |
 | 10 | Revendedores e atacado | ⬜ |
 | 11 | Marketing e relatórios | ⬜ |
 | 12 | Testes, segurança e publicação | ⬜ |

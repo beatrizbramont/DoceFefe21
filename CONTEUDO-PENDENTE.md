@@ -4,7 +4,7 @@ Lista do que ainda precisa ser fornecido pela Doce Fefê.21 para o site ficar
 completo. Nada desta lista será inventado — os espaços ficam reservados até o
 material chegar.
 
-Atualizado em: 22/11/2026
+Atualizado em: 24/11/2026
 
 ---
 
@@ -16,12 +16,18 @@ Atualizado em: 22/11/2026
 | **Foto do Fefê** | Nossa História — abertura | Retrato 3:4, mín. 800×1067 | ⬜ Pendente |
 | **Arte do Super Fefê** | Nossa História — seção própria | Quadrada ou retrato | ⬜ Pendente |
 | **Fotos da caminhada** (3) | Nossa História — galeria | Quadradas, mín. 800×800 | ⬜ Pendente |
-| **Fotos dos produtos** | Catálogo, página inicial | Quadradas, mín. 1000×1000 | ⬜ Pendente (Fase 3) |
+| **Fotos dos produtos** | Catálogo, página inicial | Quadradas, mín. 1000×1000 | ⬜ Pendente — envie pelo painel |
 | **Foto da produção** | Página inicial, Nossa História | Paisagem 4:3 | ⬜ Opcional |
 
-**Como enviar:** salve os arquivos em `assets/images/` com nomes simples e sem
-acentos (ex.: `fefe-retrato.jpg`, `super-fefe.png`, `galeria-01.jpg`) e me avise.
-Eu coloco no lugar certo.
+**Fotos de produto você mesma coloca agora.** Desde a Fase 9 o painel tem
+envio de foto: abra `/admin/produtos.html`, clique em **Editar** no produto e
+use o campo **Enviar foto**. Aceita JPG, PNG e WEBP até 5 MB, e a primeira
+foto enviada vira a principal automaticamente.
+
+**As demais imagens** (Nossa História) continuam entrando pelo código: salve
+os arquivos em `assets/images/` com nomes simples e sem acentos (ex.:
+`fefe-retrato.jpg`, `super-fefe.png`, `galeria-01.jpg`) e me avise. Eu coloco
+no lugar certo.
 
 ---
 
@@ -30,8 +36,8 @@ Eu coloco no lugar certo.
 | O quê | Situação |
 |---|---|
 | **História da marca** | ✅ Recebida e publicada na íntegra |
-| **Descrição dos produtos** | ⬜ Pendente (Fase 3) |
-| **Ingredientes de cada produto** | ⬜ Pendente (Fase 3) |
+| **Descrição dos produtos** | ⬜ Pendente — edite pelo painel |
+| **Ingredientes de cada produto** | ⬜ Pendente — edite pelo painel |
 | **Política de trocas e devoluções** | ⬜ Pendente (Fase 12) |
 
 ---
@@ -62,10 +68,12 @@ Nenhuma credencial foi inventada. Estas são necessárias nas fases indicadas:
 
 | Serviço | O que pegar | Fase |
 |---|---|---|
-| **Supabase** | Project URL, anon key, service_role key | 5 |
-| **Mercado Pago** | Access Token, Public Key, segredo do webhook | 8 |
+| **Supabase** | Project URL, anon key, service_role key | 5 ✅ |
 | **Google Analytics** | ID de medição (G-XXXXXXXXXX) | 11 (opcional) |
 | **Domínio** | Registro de `docefefe21.com.br` ou similar | 12 |
+
+> Nenhuma credencial de intermediador de pagamento é necessária: a loja
+> recebe por Pix e confere o comprovante no painel.
 
 Instruções detalhadas de onde obter cada uma estão no `README.md`.
 
@@ -85,9 +93,13 @@ Publicar um QR Code estático de Pix em site aberto traz dois problemas:
 2. **Exposição de dados** — nome completo da titular e chave bancária ficam
    acessíveis a qualquer visitante.
 
-A partir da **Fase 8**, o Pix será gerado pelo Mercado Pago com um QR Code
-único por pedido, valor já preenchido e **confirmação automática** por webhook.
-Mais seguro para a marca e mais simples para o cliente.
+O que a **Fase 8** entregou no lugar: o cliente paga pelo próprio banco e
+envia o comprovante pelo site. O arquivo vai para um bucket privado, e a
+loja confere no extrato antes de aprovar — na tela **Pedidos** do painel.
+
+Resolve a rastreabilidade (cada comprovante fica preso a um pedido) sem expor
+chave nem nome de titular a visitante nenhum. A contrapartida é que a
+confirmação não é automática: alguém precisa olhar.
 
 O arquivo foi mantido na pasta (pode ser útil para impressão ou uso presencial),
 apenas renomeado para deixar claro que não vai para o site.

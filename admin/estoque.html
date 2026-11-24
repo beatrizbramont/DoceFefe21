@@ -8,7 +8,7 @@
   <title>Estoque | Admin Doce Fefê.21</title>
   <meta name="description" content="Entradas, saídas e alertas.">
 
-  <!-- O painel administrativo NUNCA deve ser indexado por buscadores. -->
+  <!-- O painel NUNCA deve ser indexado por buscadores. -->
   <meta name="robots" content="noindex, nofollow">
 
   <link rel="icon" type="image/jpeg" href="../assets/images/logo.jpeg">
@@ -22,26 +22,39 @@
 </head>
 
 <body class="admin">
-  <main id="conteudo" class="container">
-    <!--
-      ATENÇÃO: bloco temporário da Fase 1.
-      O painel administrativo completo será implementado na FASE 9.
+  <main id="conteudo">
 
-      SEGURANÇA: esta página é apenas a casca visual. O controle de acesso
-      real acontece no servidor — toda rota /api/admin/* exigirá autenticação
-      e perfil de administrador validados no backend. Esconder a interface
-      NUNCA é proteção suficiente.
+    <!--
+      ⚠️ O acesso é decidido no servidor: toda rota /api/admin/* passa por
+      `exigirAdmin`. Esta página é apenas a interface.
     -->
-    <div class="em-construcao">
-      <div class="em-construcao__icone" aria-hidden="true">🔒</div>
-      <h2>Controle de Estoque</h2>
-      <p>Entradas, saídas, quantidades, alertas de estoque baixo e histórico de movimentações.</p>
-      <p class="texto-pequeno">
-        Implementação prevista para a <strong>Fase 9</strong>. O acesso será
-        protegido por autenticação e autorização validadas no servidor.
-      </p>
-      <a href="../index.html" class="btn btn--secundario">Voltar ao site</a>
+    <div data-admin-login></div>
+
+    <div class="admin-painel" data-admin-painel hidden>
+      <div data-admin-topo></div>
+
+      <div class="admin-conteudo">
+
+        <div class="admin-barra">
+          <div class="admin-busca">
+            <label class="visualmente-oculto" for="busca-estoque">Buscar produto</label>
+            <input type="search" id="busca-estoque" class="campo__controle"
+                   placeholder="Buscar pelo nome…" data-busca autocomplete="off">
+          </div>
+        </div>
+
+        <!--
+          O saldo mostrado é o DISPONÍVEL: o que existe menos o que já está
+          reservado para pedidos em andamento. É esse número que decide se a
+          loja consegue aceitar mais um pedido.
+        -->
+        <div class="mt-6" data-lista-estoque></div>
+
+      </div>
     </div>
+
   </main>
+
+  <script type="module" src="../js/admin/estoque.js"></script>
 </body>
 </html>

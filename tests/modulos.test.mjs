@@ -107,7 +107,14 @@ const modulos = [
   'js/pagamento.js',
   'js/conta.js',
   'js/contato.js',
-  'js/admin/painel.js',
+
+  // --- Painel administrativo (Fase 9) ---
+  'js/admin/sessao.js',
+  'js/admin/dashboard.js',
+  'js/admin/pedidos.js',
+  'js/admin/produtos.js',
+  'js/admin/estoque.js',
+  'js/admin/clientes.js',
 ];
 
 const carregados = {};

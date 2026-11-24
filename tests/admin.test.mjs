@@ -21,6 +21,22 @@ import {
   getSessaoAdmin,
 } from '../backend/controllers/admin-controller.js';
 import {
+  getResumoAdmin,
+  getClientesAdmin,
+} from '../backend/controllers/admin-painel-controller.js';
+import {
+  getProdutosAdmin,
+  postProduto,
+  patchProduto,
+  deleteProduto,
+  postFotoProduto,
+  deleteFotoProduto,
+  getEstoque,
+  postMovimentoEstoque,
+  patchConfiguracaoEstoque,
+} from '../backend/controllers/admin-catalogo-controller.js';
+import { validarProduto, gerarSlug } from '../services/product-admin-service.js';
+import {
   bancoConfigurado,
   verificarConexao,
   selecionarUm,
@@ -46,19 +62,138 @@ const verificar = (nome, condicao, detalhe = '') => {
 const semToken = () => ({ headers: {} });
 const comToken = (t) => ({ headers: { authorization: `Bearer ${t}` } });
 
+/** Imprime o placar e sai com o código apropriado. */
+const encerrar = () => {
+  console.log(`\n${'─'.repeat(50)}`);
+  console.log(`  ${ok} verificações passaram · ${falhas} falharam`);
+  console.log(`${'─'.repeat(50)}\n`);
+
+  process.exit(falhas > 0 ? 1 : 0);
+};
+
+/* =============================================================================
+ * 1. VALIDAÇÃO DO CADASTRO DE PRODUTO
+ *
+ * Vem ANTES da checagem de banco de propósito: são funções puras, e regra de
+ * preço não pode deixar de ser testada só porque a rede caiu.
+ *
+ * Estas regras existem em duas camadas: aqui, para explicar o erro em
+ * português, e no banco, como restrição. Os testes cobrem a primeira — a
+ * segunda é garantida pelo próprio PostgreSQL.
+ * ========================================================================== */
+
+console.log('\n── Validação do produto ──\n');
+
+const PRODUTO_VALIDO = {
+  nome: 'Brownie de Teste',
+  categoriaId: '11111111-1111-1111-1111-111111111111',
+  precoVarejo: 1000,
+};
+
+const validar = (mudancas, parcial = false) =>
+  validarProduto({ ...(parcial ? {} : PRODUTO_VALIDO), ...mudancas }, { parcial });
+
+verificar('produto completo é aceito', Object.keys(validar({}).erros).length === 0);
+
+verificar('preço zero é recusado', Boolean(validar({ precoVarejo: 0 }).erros.precoVarejo));
+
+verificar(
+  'preço negativo é recusado',
+  Boolean(validar({ precoVarejo: -500 }).erros.precoVarejo)
+);
+
+verificar(
+  'promoção maior que o varejo é recusada',
+  Boolean(validar({ precoPromocional: 2000 }).erros.precoPromocional)
+);
+
+verificar(
+  'promoção igual ao varejo é recusada (desconto de zero não é promoção)',
+  Boolean(validar({ precoPromocional: 1000 }).erros.precoPromocional)
+);
+
+verificar(
+  'atacado maior que o varejo é recusado',
+  Boolean(validar({ precoAtacado: 1200 }).erros.precoAtacado)
+);
+
+verificar('nome de uma letra é recusado', Boolean(validar({ nome: 'X' }).erros.nome));
+
+verificar(
+  'categoria que não é uuid é recusada',
+  Boolean(validar({ categoriaId: 'brownies' }).erros.categoriaId)
+);
+
+verificar('peso negativo é recusado', Boolean(validar({ pesoGramas: -10 }).erros.pesoGramas));
+
+verificar(
+  'mínimo de atacado zero é recusado',
+  Boolean(validar({ minimoAtacado: 0 }).erros.minimoAtacado)
+);
+
+// `vendas_total` é contabilidade de vendas, não cadastro. Mandar o campo pelo
+// formulário não pode virar coluna gravada.
+const { colunas: colunasForjadas } = validarProduto(
+  { ...PRODUTO_VALIDO, vendas_total: 99999, vendasTotal: 99999, id: 'outro' },
+  { parcial: false }
+);
+
+verificar(
+  'campos fora do formulário são descartados',
+  !('vendas_total' in colunasForjadas) && !('id' in colunasForjadas)
+);
+
+verificar(
+  'edição parcial não exige todos os campos',
+  Object.keys(validar({ publicado: true }, true).erros).length === 0
+);
+
 /* -----------------------------------------------------------------------------
- * Pré-requisitos
+ * Slug — é o que entra na URL do produto
+ * -------------------------------------------------------------------------- */
+
+console.log('\n── Endereço do produto (slug) ──\n');
+
+verificar(
+  'acentos viram letras simples',
+  gerarSlug('Pão de Mel Tradicional') === 'pao-de-mel-tradicional',
+  gerarSlug('Pão de Mel Tradicional')
+);
+
+verificar(
+  'cedilha vira c',
+  gerarSlug('Maçã do Amor') === 'maca-do-amor',
+  gerarSlug('Maçã do Amor')
+);
+
+verificar(
+  'caracteres de caminho não sobrevivem',
+  gerarSlug('../../etc/passwd') === 'etc-passwd',
+  gerarSlug('../../etc/passwd')
+);
+
+verificar(
+  'slug não começa nem termina com hífen',
+  !/^-|-$/.test(gerarSlug('  Brownie!!  ')),
+  gerarSlug('  Brownie!!  ')
+);
+
+/* -----------------------------------------------------------------------------
+ * Pré-requisitos do restante da suíte
+ *
+ * Daqui para baixo tudo depende do banco. Sem ele, o que já foi verificado
+ * continua valendo — por isso o placar é impresso antes de sair.
  * -------------------------------------------------------------------------- */
 
 if (!bancoConfigurado) {
-  console.log('\n  ⊘ Banco não configurado — suíte do admin pulada.\n');
-  process.exit(0);
+  console.log('\n  ⊘ Banco não configurado — testes de acesso pulados.');
+  encerrar();
 }
 
 const conexao = await verificarConexao();
 if (!conexao.conectado || !conexao.esquemaAplicado) {
-  console.log(`\n  ⊘ ${conexao.mensagem}\n  Suíte do admin pulada.\n`);
-  process.exit(0);
+  console.log(`\n  ⊘ ${conexao.mensagem}\n  Testes de acesso pulados.`);
+  encerrar();
 }
 
 const SUPABASE_URL = (env.SUPABASE_URL || '').replace(/\/+$/, '');
@@ -91,10 +226,81 @@ const ROTAS_ADMIN = [
         corpo: { status: 'pagamento_aprovado' },
       }),
   ],
+
+  // --- Fase 9: visão geral, catálogo e estoque ---
+  //
+  // O resumo expõe o faturamento da loja e a lista de clientes expõe dado
+  // pessoal. As rotas de escrita mexem no catálogo e no estoque. Todas
+  // entram na mesma matriz: a permissão precisa ser checada ANTES de
+  // qualquer coisa, inclusive da validação do corpo.
+  ['GET /api/admin/resumo', (req) => getResumoAdmin({ req, query: {} })],
+  ['GET /api/admin/clientes', (req) => getClientesAdmin({ req, query: {} })],
+  ['GET /api/admin/produtos', (req) => getProdutosAdmin({ req, query: {} })],
+  [
+    'POST produto',
+    (req) => postProduto({ req, corpo: { nome: 'Invasor', precoVarejo: 100 } }),
+  ],
+  [
+    'PATCH produto',
+    (req) =>
+      patchProduto({
+        req,
+        params: { id: '00000000-0000-0000-0000-000000000000' },
+        corpo: { publicado: true },
+      }),
+  ],
+  [
+    'DELETE produto',
+    (req) =>
+      deleteProduto({
+        req,
+        params: { id: '00000000-0000-0000-0000-000000000000' },
+        query: {},
+      }),
+  ],
+  [
+    'POST foto',
+    (req) =>
+      postFotoProduto({
+        req,
+        params: { id: '00000000-0000-0000-0000-000000000000' },
+        corpo: { arquivo: 'x', tipo: 'image/jpeg' },
+      }),
+  ],
+  [
+    'DELETE foto',
+    (req) =>
+      deleteFotoProduto({
+        req,
+        params: {
+          id: '00000000-0000-0000-0000-000000000000',
+          fotoId: '00000000-0000-0000-0000-000000000000',
+        },
+      }),
+  ],
+  ['GET /api/admin/estoque', (req) => getEstoque({ req, query: {} })],
+  [
+    'POST movimento de estoque',
+    (req) =>
+      postMovimentoEstoque({
+        req,
+        params: { id: '00000000-0000-0000-0000-000000000000' },
+        corpo: { tipo: 'entrada', quantidade: 999 },
+      }),
+  ],
+  [
+    'PATCH configuração de estoque',
+    (req) =>
+      patchConfiguracaoEstoque({
+        req,
+        params: { id: '00000000-0000-0000-0000-000000000000' },
+        corpo: { alertaMinimo: 0 },
+      }),
+  ],
 ];
 
 /* =============================================================================
- * 1. SEM SESSÃO
+ * 2. SEM SESSÃO
  * ========================================================================== */
 
 console.log('\n── Acesso sem sessão ──\n');
@@ -109,7 +315,7 @@ for (const [nome, chamar] of ROTAS_ADMIN) {
 }
 
 /* =============================================================================
- * 2. TOKENS FORJADOS
+ * 3. TOKENS FORJADOS
  * ========================================================================== */
 
 console.log('\n── Tokens forjados ──\n');
@@ -141,7 +347,7 @@ for (const [nome, token] of forjados) {
 }
 
 /* =============================================================================
- * 3. CLIENTE COMUM
+ * 4. CLIENTE COMUM
  *
  * Uma conta de verdade, válida, mas sem perfil de administrador.
  * ========================================================================== */
@@ -205,7 +411,7 @@ try {
   }
 
   /* ---------------------------------------------------------------------
-   * 4. O PEDIDO NÃO PODE SER APROVADO POR FORA
+   * 5. O PEDIDO NÃO PODE SER APROVADO POR FORA
    * ------------------------------------------------------------------ */
 
   console.log('\n── Pagamento não é aprovado por fora do admin ──\n');
@@ -329,7 +535,7 @@ try {
 }
 
 /* =============================================================================
- * 5. VALIDAÇÃO DA CONFERÊNCIA
+ * 6. VALIDAÇÃO DA CONFERÊNCIA
  * ========================================================================== */
 
 console.log('\n── Regras da conferência ──\n');
@@ -349,6 +555,8 @@ verificar(
   recusaSemMotivo.status === 401,
   `obtido: ${recusaSemMotivo.status} — validar antes vazaria se a rota existe`
 );
+
+encerrar();
 
 /* -----------------------------------------------------------------------------
  * Resultado

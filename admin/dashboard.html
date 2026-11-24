@@ -5,10 +5,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="theme-color" content="#4A2C18">
 
-  <title>Dashboard | Admin Doce Fefê.21</title>
+  <title>Visão geral | Admin Doce Fefê.21</title>
   <meta name="description" content="Indicadores comerciais.">
 
-  <!-- O painel administrativo NUNCA deve ser indexado por buscadores. -->
+  <!-- O painel NUNCA deve ser indexado por buscadores. -->
   <meta name="robots" content="noindex, nofollow">
 
   <link rel="icon" type="image/jpeg" href="../assets/images/logo.jpeg">
@@ -18,30 +18,57 @@
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,700;0,800;1,500;1,700&family=Nunito+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
 
   <link rel="stylesheet" href="../css/global.css">
+  <!-- produtos.css traz os chips de filtro, reaproveitados aqui. -->
+  <link rel="stylesheet" href="../css/produtos.css">
   <link rel="stylesheet" href="../css/admin.css">
 </head>
 
 <body class="admin">
-  <main id="conteudo" class="container">
-    <!--
-      ATENÇÃO: bloco temporário da Fase 1.
-      O painel administrativo completo será implementado na FASE 9.
+  <main id="conteudo">
 
-      SEGURANÇA: esta página é apenas a casca visual. O controle de acesso
-      real acontece no servidor — toda rota /api/admin/* exigirá autenticação
-      e perfil de administrador validados no backend. Esconder a interface
-      NUNCA é proteção suficiente.
+    <!--
+      ⚠️ Esta página é só a casca visual. O controle de acesso acontece no
+      servidor: toda rota /api/admin/* passa por `exigirAdmin`, que confere o
+      perfil no banco. Esconder a interface NUNCA é proteção suficiente.
     -->
-    <div class="em-construcao">
-      <div class="em-construcao__icone" aria-hidden="true">🔒</div>
-      <h2>Dashboard</h2>
-      <p>Faturamento, total de pedidos, pedidos pendentes, produtos mais vendidos e indicadores comerciais.</p>
-      <p class="texto-pequeno">
-        Implementação prevista para a <strong>Fase 9</strong>. O acesso será
-        protegido por autenticação e autorização validadas no servidor.
-      </p>
-      <a href="../index.html" class="btn btn--secundario">Voltar ao site</a>
+    <div data-admin-login></div>
+
+    <div class="admin-painel" data-admin-painel hidden>
+      <div data-admin-topo></div>
+
+      <div class="admin-conteudo">
+
+        <!-- Período analisado -->
+        <div class="filtros-categorias" data-periodos
+             role="group" aria-label="Período do resumo"></div>
+
+        <!-- Faturamento, ticket médio, clientes novos -->
+        <div class="admin-metricas mt-5" data-metricas></div>
+
+        <!-- O que exige ação agora -->
+        <section class="mt-8" aria-labelledby="titulo-fila">
+          <h2 id="titulo-fila" class="admin-secao__titulo">Precisa de atenção</h2>
+          <div class="admin-metricas" data-fila></div>
+        </section>
+
+        <!-- Mais vendidos e estoque baixo, lado a lado -->
+        <div class="admin-colunas mt-8">
+          <section class="admin-cartao" aria-labelledby="titulo-vendidos">
+            <h2 id="titulo-vendidos" class="admin-secao__titulo">Mais vendidos</h2>
+            <div data-mais-vendidos></div>
+          </section>
+
+          <section class="admin-cartao" aria-labelledby="titulo-estoque">
+            <h2 id="titulo-estoque" class="admin-secao__titulo">Estoque acabando</h2>
+            <div data-estoque-baixo></div>
+          </section>
+        </div>
+
+      </div>
     </div>
+
   </main>
+
+  <script type="module" src="../js/admin/dashboard.js"></script>
 </body>
 </html>
