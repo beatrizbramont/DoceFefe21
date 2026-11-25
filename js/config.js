@@ -98,10 +98,20 @@ export const MENSAGENS_WHATSAPP = {
  * `iconeDaCategoria` (components/icons.js). Guardar o ícone aqui E no banco
  * significaria dois lugares para manter em dia — e um deles ficaria para trás.
  * -------------------------------------------------------------------------- */
+/*
+ * Nome no SINGULAR porque hoje existe um sabor de cada. "Brownies" no filtro
+ * promete variedade que o catálogo ainda não tem: quem clica esperando
+ * escolher encontra um só.
+ *
+ * O SLUG continua no plural, de propósito. Ele sustenta os endereços das
+ * páginas e o mapa de ícones em `iconeDaCategoria`. Nome é texto de vitrine
+ * e muda quando o catálogo cresce; slug é endereço, e endereço que muda
+ * quebra link já compartilhado.
+ */
 export const CATEGORIAS = [
-  { slug: 'brownies', nome: 'Brownies' },
-  { slug: 'paes-de-mel', nome: 'Pães de Mel' },
-  { slug: 'alfajores', nome: 'Alfajores' },
+  { slug: 'brownies', nome: 'Brownie' },
+  { slug: 'paes-de-mel', nome: 'Pão de Mel' },
+  { slug: 'alfajores', nome: 'Alfajor' },
   { slug: 'fit', nome: 'Doce Fefê Fit' },
   { slug: 'sazonais', nome: 'Sazonais' },
 ];

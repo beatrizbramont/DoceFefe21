@@ -30,9 +30,11 @@
 -- =============================================================================
 
 insert into public.categories (slug, nome, descricao, icone, ordem, ativa) values
-  ('brownies',    'Brownies',       'Brownies artesanais, densos e úmidos.',                    '🍫', 1, true),
-  ('paes-de-mel', 'Pães de Mel',    'Pães de mel recheados e cobertos com chocolate.',          '🍯', 2, true),
-  ('alfajores',   'Alfajores',      'Alfajores artesanais com recheio cremoso.',                '🥮', 3, true),
+  -- Nome no singular: existe um sabor de cada. O slug fica no plural porque
+  -- é endereço de página, não texto de vitrine — ver 21-categorias-no-singular.sql.
+  ('brownies',    'Brownie',        'Brownie artesanal, denso e úmido.',                        '🍫', 1, true),
+  ('paes-de-mel', 'Pão de Mel',     'Pão de mel recheado e coberto com chocolate.',             '🍯', 2, true),
+  ('alfajores',   'Alfajor',        'Alfajor artesanal com recheio cremoso.',                   '🥮', 3, true),
   ('fit',         'Doce Fefê Fit',  'Opções mais leves, sem abrir mão do sabor.',               '🌿', 4, true),
   ('sazonais',    'Sazonais',       'Produtos especiais de Páscoa, Natal e datas comemorativas.','🎁', 5, true)
 on conflict (slug) do update set
