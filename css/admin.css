@@ -977,16 +977,64 @@ body.admin .em-construcao {
    formulário é largo e cabe numa tela só, sem rolagem em etapas.
    -------------------------------------------------------------------------- */
 .dialogo--largo {
-  width: min(680px, 94vw);
-  max-height: 88vh;
-  overflow-y: auto;
+  width: min(620px, 100%);
+  /* `margin: auto` centra o diálogo; sem isto ele encosta no topo e a parte
+     de baixo fica fora da tela, que foi o que apareceu no primeiro teste. */
+  margin: auto;
+  max-height: min(85vh, 760px);
+  display: flex;
+  flex-direction: column;
+  padding: 0;
+  overflow: hidden;
 }
 
+/* O título vinha com o tamanho de um título de página — ocupava um quinto
+   da altura útil do diálogo. Aqui ele é rótulo de janela, não manchete. */
+.dialogo--largo .dialogo__titulo {
+  font-size: var(--txt-lg);
+  margin: 0;
+  padding: var(--esp-4) var(--esp-5);
+  border-bottom: 1px solid var(--cor-borda);
+  position: sticky;
+  top: 0;
+  background-color: var(--cor-branco);
+  z-index: 1;
+}
+
+/* Só o miolo rola. O título fica fixo em cima e os botões fixos embaixo,
+   para o "Lançar pedido" nunca sumir da vista no celular. */
 .formulario-pedido {
   display: flex;
   flex-direction: column;
   gap: var(--esp-4);
   text-align: left;
+  padding: var(--esp-5);
+  overflow-y: auto;
+  flex: 1;
+}
+
+.dialogo--largo .dialogo__acoes {
+  padding: var(--esp-4) var(--esp-5);
+  border-top: 1px solid var(--cor-borda);
+  background-color: var(--cor-branco);
+  margin: 0;
+}
+
+/* `.campo` traz uma margem pensada para formulário de página inteira. Aqui
+   quem cuida do espaçamento é o `gap` — as duas somadas abriam um buraco
+   entre as linhas. */
+.formulario-pedido .campo {
+  margin-bottom: 0;
+}
+
+.formulario-pedido .campo__dica {
+  font-size: var(--txt-xs);
+  color: var(--cor-texto-suave);
+  line-height: 1.35;
+}
+
+.formulario-pedido textarea {
+  min-height: 72px;
 }
 
 /* No celular as colunas viram linhas: digitar nome e telefone lado a lado
@@ -997,25 +1045,36 @@ body.admin .em-construcao {
   gap: var(--esp-3);
 }
 
-@media (min-width: 720px) {
+@media (min-width: 640px) {
   .formulario-pedido__linha {
-    grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
-    align-items: end;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    /* `start`, e não `end`: alinhado pela base, um campo com dica de duas
+       linhas empurrava o vizinho para baixo e a linha ficava torta. */
+    align-items: start;
   }
 }
 
 .formulario-pedido__itens {
-  border: 1px solid var(--cor-borda);
+  border: 1.5px solid var(--cor-borda);
   border-radius: var(--raio-md);
-  padding: var(--esp-4);
+  padding: var(--esp-3);
+  margin: 0;
   display: flex;
   flex-direction: column;
-  gap: var(--esp-3);
+  gap: var(--esp-2);
 }
 
 .formulario-pedido__itens legend {
+  font-size: var(--txt-sm);
   font-weight: 700;
+  color: var(--cor-chocolate-700);
   padding: 0 var(--esp-2);
+}
+
+/* O botão de adicionar fica alinhado à esquerda, abaixo dos itens: é a
+   continuação natural da lista, não uma ação de destaque. */
+.formulario-pedido__itens > .btn {
+  align-self: flex-start;
 }
 
 .itens-pedido {
@@ -1024,40 +1083,90 @@ body.admin .em-construcao {
   gap: var(--esp-2);
 }
 
-/* O seletor do doce ocupa o espaço que sobra; quantidade, subtotal e o
-   botão de remover têm largura fixa para alinharem entre as linhas. */
+/* No celular, o nome do doce ganha a linha inteira e quantidade, valor e
+   lixeira descem para uma segunda linha. Espremer os quatro numa tela de
+   360px deixava o seletor com uns 90px — larguras em que "Brownie de
+   Nutella 5x5" vira "Browni…". */
 .item-pedido {
   display: grid;
-  grid-template-columns: 1fr 72px auto auto;
+  grid-template-columns: 1fr auto auto;
+  grid-template-areas:
+    'produto produto produto'
+    'qtd     valor   remover';
   gap: var(--esp-2);
   align-items: center;
+  padding: var(--esp-3);
+  background-color: var(--cor-creme);
+  border-radius: var(--raio-md);
+}
+
+.item-pedido [data-produto] { grid-area: produto; }
+.item-pedido [data-quantidade] { grid-area: qtd; }
+.item-pedido__subtotal { grid-area: valor; }
+.item-pedido > button { grid-area: remover; }
+
+@media (min-width: 640px) {
+  .item-pedido {
+    grid-template-columns: 1fr 78px auto auto;
+    grid-template-areas: 'produto qtd valor remover';
+  }
 }
 
 .campo__controle--curto {
   text-align: center;
+  /* O seletor numérico do navegador rouba largura e não serve de nada numa
+     caixa de três dígitos. */
+  padding-inline: var(--esp-2);
 }
 
 .item-pedido__subtotal {
-  min-width: 76px;
+  min-width: 82px;
   text-align: right;
+  font-weight: 700;
   font-variant-numeric: tabular-nums;
-  color: var(--cor-texto-suave);
+  color: var(--cor-chocolate-700);
 }
 
+/* A caixa de "já pagou" precisa de área de toque confortável no celular:
+   marcar errado aqui registra dinheiro que não entrou. */
 .campo--caixa {
   flex-direction: row;
   align-items: center;
-  gap: var(--esp-2);
+  gap: var(--esp-3);
   cursor: pointer;
+  padding: var(--esp-3);
+  border: 1.5px solid var(--cor-borda);
+  border-radius: var(--raio-md);
+  font-weight: 700;
+  color: var(--cor-chocolate-700);
+}
+
+.campo--caixa input[type='checkbox'] {
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+  accent-color: var(--cor-dourado-600);
+  cursor: pointer;
+}
+
+/* Campo desabilitado precisa PARECER desabilitado. Sem isto, a forma de
+   pagamento some do alcance sem explicar por quê. */
+.formulario-pedido select:disabled {
+  background-color: var(--cor-creme);
+  color: var(--cor-texto-suave);
+  cursor: not-allowed;
 }
 
 .resumo-pedido {
   display: flex;
   justify-content: space-between;
-  align-items: baseline;
+  align-items: center;
+  gap: var(--esp-3);
   padding: var(--esp-3) var(--esp-4);
   background-color: var(--cor-creme);
+  border: 1.5px solid var(--cor-dourado-600);
   border-radius: var(--raio-md);
+  font-weight: 700;
 }
 
 .resumo-pedido__valor {

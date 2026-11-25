@@ -271,7 +271,7 @@ export async function abrirNovoPedido(aoCriar) {
           placeholder: '11988887777',
           inputmode: 'numeric',
         }),
-        'Com DDD. Pode digitar com parênteses e traço.'
+        'Com DDD.'
       ),
     ]),
 
@@ -281,14 +281,15 @@ export async function abrirNovoPedido(aoCriar) {
         'Entrega',
         selecao('tipoEntrega', [['retirada', 'Retirada'], ['entrega', 'Entrega']], 'retirada')
       ),
+      // "(opcional)" no rótulo em vez de dica embaixo: uma linha a menos, e
+      // a informação chega antes de a pessoa começar a preencher.
       campo(
-        'Para quando',
+        'Para quando (opcional)',
         criar('input', {
           class: 'campo__controle',
           name: 'dataDesejada',
           type: 'date',
-        }),
-        'Opcional.'
+        })
       ),
     ]),
 
@@ -316,7 +317,7 @@ export async function abrirNovoPedido(aoCriar) {
     ]),
 
     campo(
-      'Observações',
+      'Observações (opcional)',
       criar('textarea', {
         class: 'campo__controle',
         name: 'observacoes',
