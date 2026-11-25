@@ -54,6 +54,12 @@ export default defineConfig({
         minhaConta: pagina('minha-conta.html'),
         politicaPrivacidade: pagina('politica-privacidade.html'),
 
+        // A página de erro precisa estar aqui como qualquer outra: o Vite só
+        // inclui no build o que está declarado nesta lista. Sem a linha, o
+        // arquivo existe no repositório, some do `dist/`, e a regra de
+        // rewrite do Render aponta para o nada.
+        naoEncontrada: pagina('404.html'),
+
         // --- Painel administrativo ---
         adminIndex: pagina('admin/index.html'),
         adminDashboard: pagina('admin/dashboard.html'),
