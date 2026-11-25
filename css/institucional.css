@@ -781,3 +781,59 @@
   text-transform: uppercase;
   color: var(--cor-texto-claro);
 }
+/* -----------------------------------------------------------------------------
+   PARTE 4 — TEXTO LEGAL (política de privacidade)
+
+   Coluna estreita e espaçamento generoso: texto jurídico já é penoso de ler,
+   e linha longa demais faz o olho perder a próxima.
+   -------------------------------------------------------------------------- */
+.conteudo-legal {
+  max-width: 68ch;
+  margin-inline: auto;
+}
+
+.conteudo-legal h2 {
+  font-size: var(--txt-xl);
+  margin-top: var(--esp-10);
+  margin-bottom: var(--esp-4);
+  padding-bottom: var(--esp-2);
+  border-bottom: 2px solid var(--cor-bege-400);
+}
+
+.conteudo-legal h3 {
+  font-size: var(--txt-lg);
+  margin-top: var(--esp-6);
+  margin-bottom: var(--esp-3);
+  color: var(--cor-chocolate-700);
+}
+
+.conteudo-legal p {
+  margin-bottom: var(--esp-4);
+  line-height: 1.75;
+  max-width: none;
+}
+
+.lista-legal {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 var(--esp-5);
+}
+
+.lista-legal li {
+  position: relative;
+  padding-left: var(--esp-6);
+  margin-bottom: var(--esp-3);
+  line-height: 1.7;
+}
+
+/* Marcador dourado em vez do ponto padrão: o mesmo detalhe do resto do site. */
+.lista-legal li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0.65em;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background-color: var(--cor-dourado-600);
+}
