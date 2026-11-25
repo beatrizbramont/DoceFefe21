@@ -55,9 +55,18 @@
   que sobra.
 */
 .produto-card__midia img {
+  /* `block` resolve o descolamento das fotos dos kits.
+     Imagem é `inline` por padrão: ela se apoia na linha de texto, e a folga
+     reservada para as descidas das letras (o "p", o "g") empurra a foto
+     dentro da moldura quadrada. O resultado era a arte encostada no alto com
+     uma sobra de creme embaixo. Sem linha de texto, não há folga. */
+  display: block;
   width: 100%;
   height: 100%;
   object-fit: contain;
+  /* Explícito mesmo sendo o padrão: deixa claro que centralizar é intenção,
+     e protege de alguém mudar sem perceber o que depende disso. */
+  object-position: center;
   padding: var(--esp-2);
   transition: transform 600ms ease;
 }
@@ -496,9 +505,13 @@
 
 /* `contain` pelo mesmo motivo do card: nada da arte pode ser cortado. */
 .produto-galeria__principal img {
+  /* Mesmo motivo do card: sem `block`, a folga da linha de texto desloca a
+     foto dentro da moldura. */
+  display: block;
   width: 100%;
   height: 100%;
   object-fit: contain;
+  object-position: center;
   padding: var(--esp-4);
 }
 
@@ -522,9 +535,11 @@
 }
 
 .produto-galeria__miniatura img {
+  display: block;
   width: 100%;
   height: 100%;
   object-fit: contain;
+  object-position: center;
   padding: 2px;
 }
 

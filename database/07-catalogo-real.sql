@@ -116,7 +116,9 @@ from (values
     'kit-natal-2-cesta',
     'Kit 2 — Cesta de Natal',
     'Cesta natalina com 2 pães de mel ou 2 alfajores.',
-    'Cesta decorada com tema de Natal, finalizada com laço dourado. Escolha entre 2 pães de mel ou 2 alfajores. Quantidade limitada de embalagem.',
+    -- Sem a cor do laço: a embalagem muda de lote e a página passaria a
+    -- mentir. Ver 22-sem-cor-na-descricao.sql.
+    'Cesta decorada com tema de Natal, finalizada com laço. Escolha entre 2 pães de mel ou 2 alfajores. Quantidade limitada de embalagem.',
     'Conforme o doce escolhido: pão de mel (mel, farinha de trigo, açúcar mascavo, cacau, especiarias, leite, ovos, doce de leite, chocolate) ou alfajor (farinha de trigo, amido de milho, manteiga, açúcar, ovos, doce de leite, chocolate).',
     'Contém glúten, leite e ovos.',
     2600
@@ -125,7 +127,7 @@ from (values
     'kit-natal-3-papai-noel',
     'Kit 3 — Cesta de Papai Noel',
     'Cesta do Papai Noel com 3 pães de mel ou 3 alfajores.',
-    'Cesta especial com a estampa do Papai Noel e laço verde. Escolha entre 3 pães de mel ou 3 alfajores. Quantidade limitada de embalagem.',
+    'Cesta especial com a estampa do Papai Noel e laço. Escolha entre 3 pães de mel ou 3 alfajores. Quantidade limitada de embalagem.',
     'Conforme o doce escolhido: pão de mel (mel, farinha de trigo, açúcar mascavo, cacau, especiarias, leite, ovos, doce de leite, chocolate) ou alfajor (farinha de trigo, amido de milho, manteiga, açúcar, ovos, doce de leite, chocolate).',
     'Contém glúten, leite e ovos.',
     3500
@@ -134,7 +136,7 @@ from (values
     'kit-natal-4-papai-noel-especial',
     'Kit 4 — Papai Noel Especial',
     'Caixa Feliz Natal com 3 pães de mel ou 3 alfajores.',
-    'Caixa vermelha Feliz Natal, elegante e pronta para presentear. Escolha entre 3 pães de mel ou 3 alfajores. Quantidade limitada de embalagem.',
+    'Caixa Feliz Natal, elegante e pronta para presentear. Escolha entre 3 pães de mel ou 3 alfajores. Quantidade limitada de embalagem.',
     'Conforme o doce escolhido: pão de mel (mel, farinha de trigo, açúcar mascavo, cacau, especiarias, leite, ovos, doce de leite, chocolate) ou alfajor (farinha de trigo, amido de milho, manteiga, açúcar, ovos, doce de leite, chocolate).',
     'Contém glúten, leite e ovos.',
     3400
@@ -201,15 +203,15 @@ from (values
 
   ('kit-natal-2-cesta',
    'assets/images/kitnatal2.jpeg',
-   'Kit 2 Cesta de Natal da Doce Fefê.21: cesta decorada com laço dourado e dois pães de mel embalados'),
+   'Kit 2 Cesta de Natal da Doce Fefê.21: cesta decorada com laço e dois pães de mel embalados'),
 
   ('kit-natal-3-papai-noel',
    'assets/images/kitnatal3.jpeg',
-   'Kit 3 Cesta de Papai Noel da Doce Fefê.21: cesta com estampa de Papai Noel, laço verde e três pães de mel embalados'),
+   'Kit 3 Cesta de Papai Noel da Doce Fefê.21: cesta com estampa de Papai Noel, laço e três pães de mel embalados'),
 
   ('kit-natal-4-papai-noel-especial',
    'assets/images/kitnatal4.jpeg',
-   'Kit 4 Papai Noel Especial da Doce Fefê.21: caixa vermelha Feliz Natal com três pães de mel embalados')
+   'Kit 4 Papai Noel Especial da Doce Fefê.21: caixa Feliz Natal com três pães de mel embalados')
 ) as d(slug, url, alt)
 join public.products p on p.slug = d.slug;
 
