@@ -5,6 +5,25 @@
    ========================================================================== */
 
 /* -----------------------------------------------------------------------------
+   O invólucro precisa sair da frente
+
+   O JavaScript monta o cabeçalho dentro de <div id="cabecalho">. Só que um
+   elemento `position: sticky` gruda APENAS dentro do pai dele — e esse pai
+   tem exatamente a altura do cabeçalho. Resultado: não sobrava espaço para
+   deslizar, e o cabeçalho ia embora junto com a div ao rolar a página.
+
+   Na tela de produtos o efeito era visível: a barra de filtros parava em
+   `top: var(--altura-header)`, reservando 76px para um cabeçalho que já não
+   estava lá, e os produtos passavam por dentro desse vão.
+
+   `display: contents` dissolve a div: os filhos passam a pertencer ao fluxo
+   da página, e o cabeçalho volta a ter a página inteira para grudar.
+   -------------------------------------------------------------------------- */
+#cabecalho {
+  display: contents;
+}
+
+/* -----------------------------------------------------------------------------
    Cabeçalho
    -------------------------------------------------------------------------- */
 .cabecalho {
