@@ -35,6 +35,11 @@ import {
   getSessaoAdmin,
 } from '../controllers/admin-controller.js';
 import {
+  postPedidoManual,
+  postCancelarPedido,
+  deletePedido,
+} from '../controllers/admin-pedido-manual-controller.js';
+import {
   getResumoAdmin,
   getClientesAdmin,
   getSeparacao,
@@ -257,6 +262,31 @@ export const ROTAS = [
     metodo: 'PATCH',
     padrao: '/api/admin/pedidos/:codigo/status',
     manipulador: patchStatusPedido,
+    limitador: limitadorEscrita,
+  },
+
+  // --- Painel: pedido lançado pela loja (FASE 13) ---
+  // A venda do WhatsApp precisa entrar no sistema para baixar estoque e
+  // contar no faturamento. Sem isto, o painel mostra uma loja menor do que
+  // ela é — ver backend/controllers/admin-pedido-manual-controller.js.
+  {
+    metodo: 'POST',
+    padrao: '/api/admin/pedidos',
+    manipulador: postPedidoManual,
+    limitador: limitadorEscrita,
+  },
+  {
+    metodo: 'POST',
+    padrao: '/api/admin/pedidos/:codigo/cancelar',
+    manipulador: postCancelarPedido,
+    limitador: limitadorEscrita,
+  },
+  // A única rota do sistema que destrói informação. O banco recusa se o
+  // pedido ainda não estiver cancelado, então apagar exige dois passos.
+  {
+    metodo: 'DELETE',
+    padrao: '/api/admin/pedidos/:codigo',
+    manipulador: deletePedido,
     limitador: limitadorEscrita,
   },
 
