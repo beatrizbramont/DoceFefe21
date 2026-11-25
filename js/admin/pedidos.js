@@ -32,6 +32,11 @@ import {
 } from '../lib/ui.js';
 import { moeda, dataHora, telefone as formatarTelefone } from '../lib/format.js';
 import { descreverStatus, ROTULOS_ETAPAS } from '../lib/status-pedido.js';
+import {
+  abrirNovoPedido,
+  cancelarPedido,
+  apagarPedido,
+} from './pedido-manual.js';
 
 /* =============================================================================
  * ESTADO
@@ -39,6 +44,13 @@ import { descreverStatus, ROTULOS_ETAPAS } from '../lib/status-pedido.js';
 
 let filtroAtual = 'comprovante_enviado';
 let pedidos = [];
+
+/** Como a origem aparece no card. `site` não entra: ver criarCardPedido. */
+const ROTULOS_ORIGEM = {
+  whatsapp: 'WhatsApp',
+  instagram: 'Instagram',
+  presencial: 'Presencial',
+};
 
 /** Próximos status possíveis, para os botões de avanço. */
 const PROXIMOS_STATUS = {
@@ -348,6 +360,54 @@ function criarAvancoStatus(pedido) {
   ]);
 }
 
+/**
+ * Cancelar e apagar.
+ *
+ * As duas ficam separadas do avanço de status, embaixo e discretas, porque
+ * são o caminho de exceção. Botão destrutivo com o mesmo peso visual do
+ * botão do dia a dia é convite a clique errado.
+ *
+ * APAGAR SÓ APARECE EM PEDIDO JÁ CANCELADO. Não é teimosia da interface: o
+ * servidor recusa de qualquer jeito, porque é o cancelamento que devolve os
+ * doces ao estoque. Apagar direto deixaria um buraco invisível na prateleira.
+ */
+function criarDesfazer(pedido) {
+  const cancelado = pedido.status === 'cancelado';
+
+  // Pedido entregue não volta: o doce saiu de casa.
+  if (pedido.status === 'entregue') return null;
+
+  const botoes = [];
+
+  if (!cancelado) {
+    botoes.push(
+      criar(
+        'button',
+        {
+          class: 'btn btn--texto btn--perigo btn--pequeno',
+          type: 'button',
+          on: { click: () => cancelarPedido(pedido.codigo, carregarPedidos) },
+        },
+        [icone('recusar'), criar('span', { texto: 'Cancelar pedido' })]
+      )
+    );
+  } else {
+    botoes.push(
+      criar(
+        'button',
+        {
+          class: 'btn btn--texto btn--perigo btn--pequeno',
+          type: 'button',
+          on: { click: () => apagarPedido(pedido.codigo, carregarPedidos) },
+        },
+        [icone('lixeira'), criar('span', { texto: 'Apagar para sempre' })]
+      )
+    );
+  }
+
+  return criar('div', { class: 'admin-pedido__desfazer' }, botoes);
+}
+
 function criarCardPedido(pedido) {
   const status = descreverStatus(pedido.status);
 
@@ -360,7 +420,20 @@ function criarCardPedido(pedido) {
           texto: dataHora(pedido.criadoEm),
         }),
       ]),
-      criar('span', { class: `selo ${status.classe}`, texto: status.rotulo }),
+      criar('div', { class: 'admin-pedido__selos' }, [
+        // A origem só aparece quando NÃO é o site. Marcar "site" em quase
+        // todo card seria ruído: o olho aprende a ignorar o que está sempre
+        // presente, e aí deixaria de notar o que é diferente.
+        ...(pedido.origem && pedido.origem !== 'site'
+          ? [
+              criar('span', {
+                class: 'selo selo--origem',
+                texto: ROTULOS_ORIGEM[pedido.origem] || pedido.origem,
+              }),
+            ]
+          : []),
+        criar('span', { class: `selo ${status.classe}`, texto: status.rotulo }),
+      ]),
     ]),
 
     criarDadosCliente(pedido),
@@ -376,6 +449,9 @@ function criarCardPedido(pedido) {
 
   const avanco = criarAvancoStatus(pedido);
   if (avanco) filhos.push(avanco);
+
+  const desfazer = criarDesfazer(pedido);
+  if (desfazer) filhos.push(desfazer);
 
   return criar(
     'article',
@@ -476,6 +552,19 @@ function montarFiltros() {
   if (!container) return;
 
   container.replaceChildren(
+    // O botão de lançar pedido mora junto dos filtros, e não escondido num
+    // menu, porque a venda do WhatsApp é o caminho mais usado da loja — não
+    // uma exceção. Ver js/admin/pedido-manual.js.
+    criar(
+      'button',
+      {
+        class: 'btn btn--primario btn--pequeno',
+        type: 'button',
+        on: { click: () => abrirNovoPedido(carregarPedidos) },
+      },
+      [icone('mais'), criar('span', { texto: 'Novo pedido' })]
+    ),
+
     ...FILTROS.map((f) =>
       criar('button', {
         class: `filtro-chip${filtroAtual === f.valor ? ' filtro-chip--ativo' : ''}`,

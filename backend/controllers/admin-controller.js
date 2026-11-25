@@ -59,7 +59,9 @@ export async function getPedidosAdmin({ req, query = {} } = {}) {
     colunas:
       'id,codigo,cliente_nome,cliente_whatsapp,cliente_email,status,tipo_entrega,' +
       'endereco_entrega,data_desejada,observacoes,subtotal_centavos,' +
-      'desconto_centavos,frete_centavos,total_centavos,criado_em',
+      // `origem` distingue a venda do site da que a loja lançou à mão. Sem
+      // ela na lista, os dois tipos ficam indistinguíveis na tela.
+      'desconto_centavos,frete_centavos,total_centavos,criado_em,origem',
     filtros,
     ordenar: 'criado_em.desc',
     limite,
@@ -113,6 +115,8 @@ export async function getPedidosAdmin({ req, query = {} } = {}) {
           codigo: p.codigo,
           status: p.status,
           statusRotulo: ROTULOS_STATUS[p.status] || p.status,
+          // Pedidos criados antes da Fase 13 não têm a coluna preenchida.
+          origem: p.origem || 'site',
           cliente: {
             nome: p.cliente_nome,
             whatsapp: p.cliente_whatsapp,

@@ -60,6 +60,37 @@ DELETE /api/admin/pedidos/:codigo
 
 Todas atrás de `exigirAdmin`. Carregamento das rotas verificado.
 
+### A tela ✅
+
+- `js/admin/pedido-manual.js` — formulário, cancelar e apagar
+- `js/admin/pedidos.js` — botão "Novo pedido", selo de origem, botões de desfazer
+- `css/admin.css` — estilos da Fase 13
+- `js/components/icons.js` — ícones `mais` e `lixeira`
+
+---
+
+## ⚠️ A suíte de testes está vermelha — e não é por causa da Fase 13
+
+Quatro suítes falham: `pedido`, `pagamento`, `conferencia`, `separacao`.
+
+**Causa:** elas criam pedido **anônimo** e esperam `201`. Quando o pedido
+passou a exigir login (commit `b4d084b`, "Pedido passa a exigir conta"), a
+API passou a devolver `401` — corretamente. Os testes é que ficaram para
+trás, e ninguém atualizou.
+
+```
+✗ status 201   obtido: 401
+```
+
+**A criação de pedido em produção está certa.** O que está errado é o teste.
+
+**O que fazer:** nas quatro suítes, autenticar antes de criar o pedido —
+`admin.test.mjs` já tem o padrão de criar conta de teste e usar o token.
+O caso "anônimo não recebe atacado" deve virar o oposto: anônimo recebe
+`401`.
+
+---
+
 ## O que falta
 
 ### 1. A tela — `admin/pedidos.html` + `js/admin/pedidos.js`

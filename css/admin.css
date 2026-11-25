@@ -1,17 +1,17 @@
 /* =============================================================================
-   DOCE FEFÊ.21 — admin.css
-   Painel administrativo: visão geral, pedidos, produtos, estoque e clientes.
+   DOCE FEFÃŠ.21 â€” admin.css
+   Painel administrativo: visÃ£o geral, pedidos, produtos, estoque e clientes.
 
-   ORGANIZAÇÃO
-     1. Login            6. Catálogo (produtos e fotos)
+   ORGANIZAÃ‡ÃƒO
+     1. Login            6. CatÃ¡logo (produtos e fotos)
      2. Estrutura        7. Estoque
-     3. Métricas         8. Clientes
-     4. Card de pedido   9. Formulários do painel
+     3. MÃ©tricas         8. Clientes
+     4. Card de pedido   9. FormulÃ¡rios do painel
      5. Pagamento
 
-   O painel reaproveita o design system de global.css — cores, tipografia,
-   botões e campos. Aqui só entram os blocos que existem exclusivamente na
-   área administrativa.
+   O painel reaproveita o design system de global.css â€” cores, tipografia,
+   botÃµes e campos. Aqui sÃ³ entram os blocos que existem exclusivamente na
+   Ã¡rea administrativa.
    ========================================================================== */
 
 body.admin {
@@ -122,7 +122,7 @@ body.admin {
   color: var(--cor-bege-500);
 }
 
-/* Os botões do topo precisam aparecer sobre o fundo escuro. */
+/* Os botÃµes do topo precisam aparecer sobre o fundo escuro. */
 .admin-topo .btn--secundario {
   color: var(--cor-creme);
   border-color: rgba(255, 249, 241, 0.45);
@@ -143,7 +143,7 @@ body.admin {
    2.1 Menu entre as telas
 
    Rola na horizontal no celular em vez de quebrar em duas linhas: com cinco
-   telas, a quebra empurraria o conteúdo para baixo em toda página.
+   telas, a quebra empurraria o conteÃºdo para baixo em toda pÃ¡gina.
    -------------------------------------------------------------------------- */
 .admin-nav {
   display: flex;
@@ -187,7 +187,7 @@ body.admin {
 }
 
 /* -----------------------------------------------------------------------------
-   2.2 Blocos de conteúdo
+   2.2 Blocos de conteÃºdo
    -------------------------------------------------------------------------- */
 .admin-cartao {
   padding: var(--esp-5);
@@ -209,7 +209,7 @@ body.admin {
   grid-template-columns: repeat(auto-fit, minmax(min(100%, 320px), 1fr));
 }
 
-/* Barra de busca e ação principal da tela. */
+/* Barra de busca e aÃ§Ã£o principal da tela. */
 .admin-barra {
   display: flex;
   flex-wrap: wrap;
@@ -226,7 +226,7 @@ body.admin {
 }
 
 /* =============================================================================
-   3. MÉTRICAS
+   3. MÃ‰TRICAS
    ========================================================================== */
 
 .admin-metricas {
@@ -243,7 +243,7 @@ body.admin {
   text-align: center;
 }
 
-/* O contador de "a conferir" é o que exige ação — ganha destaque. */
+/* O contador de "a conferir" Ã© o que exige aÃ§Ã£o â€” ganha destaque. */
 .admin-metrica--destaque {
   background-color: var(--cor-aviso-fundo);
   border-color: var(--cor-aviso);
@@ -279,8 +279,8 @@ body.admin {
   color: var(--cor-texto-suave);
 }
 
-/* Contador que exige ação — fica vermelho, não dourado: dourado é a cor de
-   destaque da marca, e aqui a mensagem é "resolve isso". */
+/* Contador que exige aÃ§Ã£o â€” fica vermelho, nÃ£o dourado: dourado Ã© a cor de
+   destaque da marca, e aqui a mensagem Ã© "resolve isso". */
 .admin-metrica--alerta {
   background-color: var(--cor-erro-fundo);
   border-color: var(--cor-erro);
@@ -290,7 +290,7 @@ body.admin {
   color: var(--cor-erro);
 }
 
-/* O botão da fila ocupa a linha inteira embaixo dos contadores. */
+/* O botÃ£o da fila ocupa a linha inteira embaixo dos contadores. */
 .admin-metricas__acao {
   grid-column: 1 / -1;
   justify-self: start;
@@ -326,7 +326,7 @@ body.admin {
   font-variant-numeric: tabular-nums;
 }
 
-/* O nome empurra o resto para a direita e é o primeiro a encolher. */
+/* O nome empurra o resto para a direita e Ã© o primeiro a encolher. */
 .admin-ranking__nome {
   flex: 1 1 140px;
   min-width: 0;
@@ -389,7 +389,7 @@ body.admin {
   font-size: var(--txt-sm);
 }
 
-/* Endereço e observações ocupam a linha inteira. */
+/* EndereÃ§o e observaÃ§Ãµes ocupam a linha inteira. */
 .admin-dado--largo {
   grid-column: 1 / -1;
 }
@@ -443,7 +443,7 @@ body.admin {
 }
 
 /* =============================================================================
-   5. PAGAMENTO E CONFERÊNCIA
+   5. PAGAMENTO E CONFERÃŠNCIA
    ========================================================================== */
 
 .admin-pagamento {
@@ -503,7 +503,7 @@ body.admin {
 }
 
 /* =============================================================================
-   6. CATÁLOGO
+   6. CATÃLOGO
    ========================================================================== */
 
 .admin-produto {
@@ -543,8 +543,8 @@ body.admin {
   background-color: var(--cor-creme-200);
 }
 
-/* Produto sem foto não pode parecer um erro de carregamento: o quadro
-   continua lá, com o ícone, dizendo "falta foto aqui". */
+/* Produto sem foto nÃ£o pode parecer um erro de carregamento: o quadro
+   continua lÃ¡, com o Ã­cone, dizendo "falta foto aqui". */
 .admin-produto__foto--vazia {
   display: grid;
   place-items: center;
@@ -648,7 +648,7 @@ body.admin {
   color: var(--cor-texto-claro);
 }
 
-/* Abaixo do mínimo: o número vira o alerta, sem precisar de ícone. */
+/* Abaixo do mÃ­nimo: o nÃºmero vira o alerta, sem precisar de Ã­cone. */
 .admin-saldo--critico .admin-saldo__numero {
   color: var(--cor-erro);
 }
@@ -664,7 +664,7 @@ body.admin {
 }
 
 /* No celular os campos empilham; a partir de 640px o movimento inteiro cabe
-   numa linha só — tipo, quantidade, motivo e botão. */
+   numa linha sÃ³ â€” tipo, quantidade, motivo e botÃ£o. */
 @media (min-width: 640px) {
   .admin-movimento__campos {
     grid-template-columns: 150px 110px 1fr auto;
@@ -687,7 +687,7 @@ body.admin {
 }
 
 /* -----------------------------------------------------------------------------
-   7.1 Histórico de movimentos
+   7.1 HistÃ³rico de movimentos
    -------------------------------------------------------------------------- */
 .admin-historico__lista {
   list-style: none;
@@ -743,11 +743,11 @@ body.admin {
 }
 
 /* =============================================================================
-   9. FORMULÁRIOS DO PAINEL
+   9. FORMULÃRIOS DO PAINEL
    ========================================================================== */
 
-/* Duas colunas a partir do tablet: os campos do produto são curtos, e uma
-   coluna só deixaria o formulário com rolagem infinita. */
+/* Duas colunas a partir do tablet: os campos do produto sÃ£o curtos, e uma
+   coluna sÃ³ deixaria o formulÃ¡rio com rolagem infinita. */
 .admin-grade {
   display: grid;
   gap: var(--esp-4);
@@ -765,11 +765,11 @@ body.admin {
 }
 
 /* =============================================================================
-   10. SEPARAÇÃO DO DIA
+   10. SEPARAÃ‡ÃƒO DO DIA
    ========================================================================== */
 
-/* Caixa vazia para riscar à caneta. No papel é o que marca o que já saiu do
-   forno; na tela, dá a mesma leitura de lista de tarefas. */
+/* Caixa vazia para riscar Ã  caneta. No papel Ã© o que marca o que jÃ¡ saiu do
+   forno; na tela, dÃ¡ a mesma leitura de lista de tarefas. */
 .marcador {
   flex-shrink: 0;
   display: inline-block;
@@ -841,8 +841,8 @@ body.admin {
   line-height: 1.5;
 }
 
-/* "Sem nozes", "escrever Parabéns na caixa" — é o que mais gera erro quando
-   passa despercebido. Na folha, não pode parecer nota de rodapé. */
+/* "Sem nozes", "escrever ParabÃ©ns na caixa" â€” Ã© o que mais gera erro quando
+   passa despercebido. Na folha, nÃ£o pode parecer nota de rodapÃ©. */
 .pedido-separacao__observacao {
   margin: var(--esp-3) 0 0;
   padding: var(--esp-3);
@@ -852,7 +852,7 @@ body.admin {
   font-size: var(--txt-sm);
 }
 
-/* O cabeçalho da folha só existe no papel — na tela, a página já se
+/* O cabeÃ§alho da folha sÃ³ existe no papel â€” na tela, a pÃ¡gina jÃ¡ se
    identifica pelo menu. */
 .folha__cabecalho {
   display: none;
@@ -865,19 +865,19 @@ body.admin {
 }
 
 /* =============================================================================
-   11. IMPRESSÃO
+   11. IMPRESSÃƒO
 
-   A folha é a entrega desta tela: ela vai para a bancada e volta riscada.
-   Por isso o papel recebe um tratamento próprio, e não a página encolhida.
+   A folha Ã© a entrega desta tela: ela vai para a bancada e volta riscada.
+   Por isso o papel recebe um tratamento prÃ³prio, e nÃ£o a pÃ¡gina encolhida.
 
-   O QUE SAI DA PÁGINA AO IMPRIMIR
-     menu, filtros, botões, selos de status e o fundo creme — nada disso
-     ajuda quem está separando, e tinta de fundo gasta cartucho à toa.
+   O QUE SAI DA PÃGINA AO IMPRIMIR
+     menu, filtros, botÃµes, selos de status e o fundo creme â€” nada disso
+     ajuda quem estÃ¡ separando, e tinta de fundo gasta cartucho Ã  toa.
    ========================================================================== */
 
 @media print {
   /* Fundo branco e texto preto: economiza tinta e sobrevive a impressora
-     monocromática, que é a que a maioria tem. */
+     monocromÃ¡tica, que Ã© a que a maioria tem. */
   body.admin {
     background-color: #fff;
     color: #000;
@@ -909,7 +909,7 @@ body.admin {
   }
 
   /* Sem sombra, sem canto arredondado, sem fundo colorido: no papel esses
-     efeitos viram borrão cinza. */
+     efeitos viram borrÃ£o cinza. */
   .admin-cartao,
   .pedido-separacao,
   .admin-metrica {
@@ -932,8 +932,8 @@ body.admin {
     color: #000;
   }
 
-  /* Um pedido não pode começar no fim de uma folha e terminar na seguinte:
-     quem separa perderia metade da informação de vista. */
+  /* Um pedido nÃ£o pode comeÃ§ar no fim de uma folha e terminar na seguinte:
+     quem separa perderia metade da informaÃ§Ã£o de vista. */
   .pedido-separacao,
   .lista-separacao li {
     break-inside: avoid;
@@ -953,19 +953,151 @@ body.admin {
     border-color: #000;
   }
 
-  /* Endereço e WhatsApp precisam ser legíveis de longe, com a mão ocupada. */
+  /* EndereÃ§o e WhatsApp precisam ser legÃ­veis de longe, com a mÃ£o ocupada. */
   .pedido-separacao__endereco {
     font-size: 11pt;
   }
 }
 
 /* =============================================================================
-   12. TELAS AINDA NÃO CONSTRUÍDAS
+   12. TELAS AINDA NÃƒO CONSTRUÃDAS
 
-   Cupons segue com o aviso de "em construção" — e por isso fica fora do
-   menu. A loja decidiu não trabalhar com cupons por enquanto.
+   Cupons segue com o aviso de "em construÃ§Ã£o" â€” e por isso fica fora do
+   menu. A loja decidiu nÃ£o trabalhar com cupons por enquanto.
    ========================================================================== */
 
 body.admin .em-construcao {
   margin: var(--esp-16) auto;
+}
+
+/* -----------------------------------------------------------------------------
+   Pedido lançado pela loja (FASE 13)
+
+   A venda do WhatsApp é o caminho mais usado, não uma exceção — por isso o
+   formulário é largo e cabe numa tela só, sem rolagem em etapas.
+   -------------------------------------------------------------------------- */
+.dialogo--largo {
+  width: min(680px, 94vw);
+  max-height: 88vh;
+  overflow-y: auto;
+}
+
+.formulario-pedido {
+  display: flex;
+  flex-direction: column;
+  gap: var(--esp-4);
+  text-align: left;
+}
+
+/* No celular as colunas viram linhas: digitar nome e telefone lado a lado
+   numa tela de 360px deixaria os dois campos pequenos demais. */
+.formulario-pedido__linha {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--esp-3);
+}
+
+@media (min-width: 720px) {
+  .formulario-pedido__linha {
+    grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+    align-items: end;
+  }
+}
+
+.formulario-pedido__itens {
+  border: 1px solid var(--cor-borda);
+  border-radius: var(--raio-md);
+  padding: var(--esp-4);
+  display: flex;
+  flex-direction: column;
+  gap: var(--esp-3);
+}
+
+.formulario-pedido__itens legend {
+  font-weight: 700;
+  padding: 0 var(--esp-2);
+}
+
+.itens-pedido {
+  display: flex;
+  flex-direction: column;
+  gap: var(--esp-2);
+}
+
+/* O seletor do doce ocupa o espaço que sobra; quantidade, subtotal e o
+   botão de remover têm largura fixa para alinharem entre as linhas. */
+.item-pedido {
+  display: grid;
+  grid-template-columns: 1fr 72px auto auto;
+  gap: var(--esp-2);
+  align-items: center;
+}
+
+.campo__controle--curto {
+  text-align: center;
+}
+
+.item-pedido__subtotal {
+  min-width: 76px;
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+  color: var(--cor-texto-suave);
+}
+
+.campo--caixa {
+  flex-direction: row;
+  align-items: center;
+  gap: var(--esp-2);
+  cursor: pointer;
+}
+
+.resumo-pedido {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  padding: var(--esp-3) var(--esp-4);
+  background-color: var(--cor-creme);
+  border-radius: var(--raio-md);
+}
+
+.resumo-pedido__valor {
+  font-size: var(--txt-lg);
+  font-variant-numeric: tabular-nums;
+}
+
+/* -----------------------------------------------------------------------------
+   Cancelar e apagar
+
+   Discretos de propósito. Botão destrutivo com o mesmo peso visual do botão
+   do dia a dia é convite a clique errado.
+   -------------------------------------------------------------------------- */
+.admin-pedido__desfazer {
+  display: flex;
+  justify-content: flex-end;
+  padding-top: var(--esp-3);
+  margin-top: var(--esp-3);
+  border-top: 1px solid var(--cor-borda);
+}
+
+.btn--perigo,
+.botao-icone--perigo {
+  color: var(--cor-erro);
+}
+
+.btn--perigo:hover,
+.botao-icone--perigo:hover {
+  background-color: rgba(192, 57, 43, 0.08);
+}
+
+.admin-pedido__selos {
+  display: flex;
+  gap: var(--esp-2);
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.selo--origem {
+  background-color: var(--cor-creme);
+  color: var(--cor-cacau);
+  border: 1px solid var(--cor-borda);
 }

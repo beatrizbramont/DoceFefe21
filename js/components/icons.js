@@ -47,6 +47,15 @@ const DESENHOS = {
 
   fechar: '<path d="M18 6 6 18M6 6l12 12"/>',
 
+  /* Somar e descartar, usados nos formulários do painel. `mais` é um X
+     girado; `lixeira` precisa da tampa e do corpo separados para continuar
+     legível em 16px, que é o tamanho dos botões de linha. */
+  mais: '<path d="M12 5v14M5 12h14"/>',
+
+  lixeira:
+    '<path d="M4 7h16M10 4h4M9 7v12M15 7v12"/>' +
+    '<path d="M6 7l1 13a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1l1-13"/>',
+
   busca: '<circle cx="11" cy="11" r="7"/><path d="m20 20-3.2-3.2"/>',
 
   usuario:
