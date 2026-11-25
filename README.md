@@ -409,7 +409,9 @@ Implementado ou preparado:
 - [x] Políticas RLS no Supabase *(Fase 5)*
 - [x] Autorização por perfil nas rotas admin *(Fase 9)*
 - [x] Arquivos validados pela assinatura binária, não pela extensão *(Fases 8 e 9)*
-- [ ] HTTPS obrigatório *(Fase 12)*
+- [x] HTTPS obrigatório — certificado emitido pelo Render *(Fase 12)*
+- [x] Política de privacidade descrevendo os dados realmente coletados *(Fase 12)*
+- [x] Teste de invasão com a chave pública, a partir de fora *(Fase 12)*
 
 ### Pagamentos
 
@@ -459,7 +461,18 @@ pública e autenticada.
 | 9 | Painel administrativo | ✅ Concluída |
 | 10 | Revendedores e atacado | ✅ Concluída |
 | 11 | Separação do dia | ✅ Concluída |
-| 12 | Testes, segurança e publicação | ⬜ |
+| 12 | Testes, segurança e publicação | ✅ Concluída |
+
+**O site está no ar:** <https://docefefe21.onrender.com>
+
+A Fase 12 entregou as 15 suítes de teste, a auditoria de segurança (incluindo
+um teste de invasão feito de fora, usando só a chave pública que todo
+navegador baixa), a **política de privacidade**, a página 404, o `sitemap.xml`
+e a publicação no Render. O passo a passo está em [`DEPLOY.md`](DEPLOY.md).
+
+O que ficou registrado como melhoria futura, e não como pendência: o plano
+gratuito do Render hiberna a API depois de 15 minutos parada, e a primeira
+visita seguinte espera até um minuto carregando.
 
 ---
 

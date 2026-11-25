@@ -11,7 +11,7 @@
     "serve": "node --use-system-ca dev-server.mjs",
     "test": "node --use-system-ca tests/executar.mjs",
     "dev": "vite",
-    "build": "vite build",
+    "build": "vite build && node scripts/copiar-assets.mjs",
     "preview": "vite preview",
     "db:check": "node --use-system-ca tests/conexao-banco.mjs",
     "server": "node --use-system-ca backend/server.js",

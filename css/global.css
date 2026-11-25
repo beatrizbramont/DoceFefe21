@@ -106,13 +106,22 @@
   --transicao-rapida: 140ms ease;
   --transicao: 240ms cubic-bezier(0.4, 0, 0.2, 1);
 
-  /* --- Camadas (z-index centralizado evita guerra de números mágicos) --- */
+  /* --- Camadas (z-index centralizado evita guerra de números mágicos) ---
+   *
+   * A ORDEM IMPORTA, e foi a causa de um defeito real: a cortina escura
+   * (`--z-overlay`) estava ACIMA do menu lateral. No celular, todo toque
+   * num link do menu acertava a cortina em vez do link — o menu fechava e
+   * a página nunca abria.
+   *
+   * A regra: a cortina existe para escurecer o que está ATRÁS do painel.
+   * Então ela fica sempre logo abaixo dele, nunca por cima. O botão
+   * flutuante do WhatsApp desce junto, para ficar escurecido também. */
   --z-base: 1;
   --z-sticky: 100;
   --z-header: 200;
-  --z-menu-mobile: 300;
-  --z-whatsapp: 400;
-  --z-overlay: 500;
+  --z-whatsapp: 300;
+  --z-overlay: 400;
+  --z-menu-mobile: 500;
   --z-modal: 600;
   --z-toast: 700;
 }
