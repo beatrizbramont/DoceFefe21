@@ -233,40 +233,21 @@ function descreverDisponibilidade(produto) {
 }
 
 /* =============================================================================
- * FICHA TÉCNICA
+ * A FICHA TÉCNICA SAIU DA PÁGINA
+ *
+ * Ela listava categoria, medida, ingredientes e alérgenos. Foi retirada a
+ * pedido da loja: a produção é artesanal e varia conforme o doce escolhido,
+ * então uma lista fixa de ingredientes na página dizia mais do que a cozinha
+ * pode garantir — e informação de alérgeno que não se sustenta é pior que
+ * nenhuma.
+ *
+ * As colunas `ingredientes` e `alergenicos` continuam no banco e no painel.
+ * Não foram apagadas: o texto que já foi escrito segue guardado, e voltar a
+ * exibir é devolver este bloco. Apagar coluna é irreversível; esconder não.
+ *
+ * A medida (5x5, 6x6) continua aparecendo no selo do card do catálogo e no
+ * `schema.org` da página, que é o que o Google lê.
  * ========================================================================== */
-
-function renderizarFicha(produto) {
-  const container = $('[data-ficha]');
-  if (!container) return;
-
-  const linhas = [];
-
-  const adicionar = (rotulo, valor) => {
-    if (!valor) return;
-    linhas.push(
-      criar('div', { class: 'ficha__linha' }, [
-        criar('span', { class: 'ficha__rotulo', texto: rotulo }),
-        criar('span', { class: 'ficha__valor', texto: valor }),
-      ])
-    );
-  };
-
-  adicionar('Categoria', produto.categoria?.nome);
-  adicionar('Medida', produto.medida);
-  adicionar('Ingredientes', produto.ingredientes);
-  adicionar('Alérgenos', produto.alergenicos);
-
-  if (linhas.length === 0) {
-    container.replaceChildren();
-    return;
-  }
-
-  container.replaceChildren(
-    criar('h2', { class: 'mb-4', texto: 'Ficha técnica' }),
-    ...linhas
-  );
-}
 
 /* =============================================================================
  * RENDERIZAÇÃO PRINCIPAL
@@ -349,9 +330,7 @@ function renderizarProduto(produto) {
     descricaoEl.textContent = produto.descricao || produto.descricaoCurta || '';
   }
 
-  // --- Ficha e quantidade ---
-  renderizarFicha(produto);
-
+  // --- Quantidade ---
   if (produto.emEstoque) {
     renderizarSeletorQuantidade(produto);
     ativarBotaoCarrinho(produto);

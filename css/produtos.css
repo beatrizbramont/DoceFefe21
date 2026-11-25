@@ -586,31 +586,12 @@
 }
 
 /* -----------------------------------------------------------------------------
-   5.3 Ficha técnica
+   5.3 — vago
+
+   Aqui ficava a ficha técnica (categoria, medida, ingredientes, alérgenos).
+   O bloco saiu da página de produto; o estilo foi junto, para não sobrar
+   regra sem dono. Ver o comentário em js/produto.js.
    -------------------------------------------------------------------------- */
-.ficha {
-  margin-bottom: var(--esp-8);
-}
-
-.ficha__linha {
-  display: flex;
-  gap: var(--esp-4);
-  padding-block: var(--esp-3);
-  border-bottom: 1px solid var(--cor-borda);
-  font-size: var(--txt-sm);
-}
-
-.ficha__rotulo {
-  flex-shrink: 0;
-  width: 120px;
-  font-weight: 700;
-  color: var(--cor-chocolate-700);
-}
-
-.ficha__valor {
-  color: var(--cor-texto-suave);
-  max-width: none;
-}
 
 /* -----------------------------------------------------------------------------
    5.4 Compra
