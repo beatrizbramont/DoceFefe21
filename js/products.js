@@ -554,11 +554,26 @@ async function carregarPromocao() {
     renderizarProdutos(grade, resultado.produtos);
 
     // Mostra até quando vale, usando a data que veio do servidor.
+    //
+    // ⚠️ A MENOR data, e não a primeira da lista.
+    //
+    //   Antes era `find()` — pegava o primeiro produto que tivesse prazo. Só
+    //   que a ordem da vitrine muda conforme as vendas, então o aviso trocava
+    //   de produto sozinho e parecia que a data estava andando: num dia 11/12,
+    //   no outro 12/12.
+    //
+    //   Quando os produtos têm prazos diferentes, a menor data é a única
+    //   honesta: é quando a primeira oferta sai do ar. Anunciar a maior faria
+    //   a loja prometer um desconto que já teria acabado para alguns doces.
     const prazo = $('[data-prazo-promocao]');
-    const comPrazo = resultado.produtos.find((p) => p.promocaoAte);
 
-    if (prazo && comPrazo) {
-      prazo.textContent = `Válido até ${dataCurta(comPrazo.promocaoAte)}`;
+    const limite = resultado.produtos
+      .map((p) => p.promocaoAte)
+      .filter(Boolean)
+      .sort()[0];
+
+    if (prazo && limite) {
+      prazo.textContent = `Válido até ${dataCurta(limite)}`;
       prazo.hidden = false;
     } else if (prazo) {
       prazo.hidden = true;

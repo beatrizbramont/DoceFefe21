@@ -279,7 +279,31 @@ const emReais = (centavos) =>
   centavos == null ? '' : (centavos / 100).toFixed(2).replace('.', ',');
 
 /** A validade da promoção é digitada como data; o banco guarda com hora. */
-const emDataLocal = (iso) => (iso ? String(iso).slice(0, 10) : '');
+/**
+ * Instante do banco → data para o campo <input type="date">.
+ *
+ * ⚠️ NÃO fatie os 10 primeiros caracteres do ISO.
+ *
+ *   Era o que esta função fazia, e isso fez a promoção andar um dia por vez.
+ *   O banco guarda um INSTANTE em UTC. "2026-12-13T02:59:59Z" é 12/12 às
+ *   23:59 no Brasil — a fatia devolvia "2026-12-13", um dia à frente. Quem
+ *   abrisse o produto e salvasse gravava 13/12; na vez seguinte lia 14/12.
+ *   Cada visita ao formulário empurrava a data.
+ *
+ *   `getFullYear`/`getMonth`/`getDate` leem o instante no fuso de quem está
+ *   olhando, que é o fuso em que a loja pensa a data.
+ */
+const emDataLocal = (iso) => {
+  if (!iso) return '';
+
+  const d = new Date(iso);
+  if (Number.isNaN(d.getTime())) return '';
+
+  const mes = String(d.getMonth() + 1).padStart(2, '0');
+  const dia = String(d.getDate()).padStart(2, '0');
+
+  return `${d.getFullYear()}-${mes}-${dia}`;
+};
 
 function montarFormulario(produto) {
   const novo = !produto;
@@ -457,7 +481,16 @@ function lerFormulario(formulario, novo) {
 
     // A data vem como "2026-12-10". O fim do dia é o que a pessoa espera:
     // uma promoção "até dia 10" vale o dia 10 inteiro.
-    promocaoAte: valor('promocaoAte') ? `${valor('promocaoAte')}T23:59:59` : null,
+    //
+    // ⚠️ O `toISOString()` no fim não é enfeite. Mandar "2026-12-10T23:59:59"
+    // cru deixa o instante SEM FUSO, e o banco o interpreta como UTC — ou
+    // seja, 20:59 no Brasil do dia 10, e a data volta como dia 11 na leitura.
+    // `new Date('...T23:59:59')` interpreta no fuso de quem está salvando,
+    // que é o fuso em que a loja pensa a data; `toISOString` então converte
+    // para UTC de forma explícita, sem ambiguidade.
+    promocaoAte: valor('promocaoAte')
+      ? new Date(`${valor('promocaoAte')}T23:59:59`).toISOString()
+      : null,
 
     minimoAtacado: Number(valor('minimoAtacado')) || 1,
     medida: valor('medida'),
