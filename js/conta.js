@@ -515,8 +515,54 @@ async function salvarDados(formulario, botao) {
  * Pedidos
  * -------------------------------------------------------------------------- */
 
+/**
+ * Leva o pedido de volta à tela de pagamento, quando ainda falta algo ali.
+ *
+ * O QUE ISTO RESOLVE
+ *   A cliente fecha o pedido, sai da aba para abrir o aplicativo do banco e
+ *   volta. O carrinho está vazio — correto, o pedido já nasceu — mas o Pix
+ *   ficou para trás, e "Meus pedidos" só dizia "aguardando pagamento" sem
+ *   oferecer caminho nenhum. O pedido existia e não havia como concluí-lo.
+ *
+ *   É o momento mais frágil da compra: a venda já foi decidida e se perde
+ *   por falta de um link.
+ *
+ * Aparece em dois estados, com pesos diferentes:
+ *   • aguardando_pagamento — botão cheio: falta uma ação dela
+ *   • comprovante_enviado  — link discreto: já fez a parte dela, mas pode
+ *     precisar reenviar se o comprovante vier recusado
+ */
+function criarAcaoPagamento(pedido) {
+  const PRECISA = {
+    aguardando_pagamento: {
+      classe: 'btn btn--primario btn--bloco',
+      rotulo: 'Pagar e enviar comprovante',
+      icone: 'pix',
+    },
+    comprovante_enviado: {
+      classe: 'btn btn--texto btn--pequeno',
+      rotulo: 'Ver pagamento',
+      icone: 'recibo',
+    },
+  };
+
+  const acao = PRECISA[pedido.status];
+  if (!acao) return null;
+
+  return criar(
+    'a',
+    {
+      class: `${acao.classe} pedido-card__acao`,
+      href: `${rota(ROTAS.pagamento)}?pedido=${encodeURIComponent(pedido.codigo)}`,
+    },
+    [icone(acao.icone), criar('span', { texto: acao.rotulo })]
+  );
+}
+
 function criarCardPedido(pedido) {
   const status = descreverStatus(pedido.status);
+
+  const acao = criarAcaoPagamento(pedido);
 
   return criar('article', { class: 'pedido-card' }, [
     criar('div', { class: 'pedido-card__topo' }, [
@@ -537,6 +583,8 @@ function criarCardPedido(pedido) {
       }),
       criar('strong', { class: 'preco', texto: moeda(pedido.total) }),
     ]),
+
+    ...(acao ? [acao] : []),
   ]);
 }
 

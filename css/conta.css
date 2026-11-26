@@ -369,6 +369,28 @@
   border-top: 1px solid var(--cor-borda);
 }
 
+/* -----------------------------------------------------------------------------
+   Retomar o pagamento
+
+   A cliente sai da aba para abrir o banco e volta. O carrinho já esvaziou,
+   porque o pedido nasceu — correto. Mas sem este caminho, "aguardando
+   pagamento" virava um beco: o pedido existia e não havia como concluí-lo.
+   -------------------------------------------------------------------------- */
+.pedido-card__acao {
+  margin-top: var(--esp-4);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--esp-2);
+}
+
+/* Quem já enviou o comprovante fez a parte dela. O link de reenvio existe
+   para o caso de ser recusado, mas não compete com o botão de quem ainda
+   precisa pagar. */
+.pedido-card__acao.btn--texto {
+  margin-top: var(--esp-3);
+}
+
 /* =============================================================================
    4. CABEÇALHO: ESTADO DE LOGIN
    ========================================================================== */
