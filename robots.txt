@@ -10,4 +10,4 @@ Disallow: /checkout.html
 Disallow: /carrinho.html
 Disallow: /minha-conta.html
 
-Sitemap: https://docefefe21.com.br/sitemap.xml
+Sitemap: https://docefefe.com.br/sitemap.xml
