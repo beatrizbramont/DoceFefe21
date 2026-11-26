@@ -5,6 +5,13 @@
 Loja virtual completa de doces artesanais: catálogo, carrinho, checkout,
 pagamentos e painel administrativo.
 
+**No ar em [docefefe.com.br](https://docefefe.com.br)**
+
+São dois sistemas ligados ao mesmo banco: a loja que a cliente vê e o painel
+que administra o negócio por trás dela. Uma venda no site baixa o estoque na
+hora; um pedido fechado pelo WhatsApp é lançado no painel e passa pelas
+mesmas regras, baixa o mesmo estoque e entra no mesmo faturamento.
+
 ---
 
 ## 📑 Índice
@@ -25,14 +32,30 @@ pagamentos e painel administrativo.
 
 | Camada | Tecnologia |
 |---|---|
-| Frontend | HTML5, CSS3, JavaScript puro (sem frameworks) |
+| Frontend | HTML5, CSS3, JavaScript puro (ES Modules, sem frameworks) |
 | Build | Vite 6 (multipágina) |
-| Backend | Node.js 20+, Express |
-| Banco de dados | PostgreSQL via Supabase |
-| Autenticação | Supabase Auth |
+| Backend | Node.js 20+, módulo `http` nativo |
+| Banco de dados | PostgreSQL via Supabase (PostgREST) |
+| Autenticação | Supabase Auth, confirmação por código |
 | Imagens | Supabase Storage |
 | Pagamentos | Pix com comprovante, conferido no painel |
+| Testes | Suíte própria em Node, sem framework |
+| Publicação | Render (Static Site + Web Service), domínio próprio e HTTPS |
 | Versionamento | Git / GitHub |
+
+### Zero dependências em produção
+
+O `package.json` não tem a seção `dependencies`. Vite e Concurrently existem
+só em desenvolvimento e não vão para o servidor.
+
+O backend usa o módulo `http` que já vem no Node — **não há Express**. O
+roteamento é uma tabela de rotas em `backend/routes/index.js`, independente
+de framework, e o servidor a percorre.
+
+A escolha é deliberada e tem um custo: foi preciso escrever à mão o que um
+framework daria pronto — leitura de corpo, CORS, limitação de requisições,
+upload de arquivo. Em troca, não há camada mágica entre o código e o que
+realmente acontece, e nenhuma atualização de terceiro pode quebrar a loja.
 
 **Não são usados** React, Vue, Angular, Next.js ou qualquer framework de
 frontend — conforme a especificação do projeto.
@@ -83,7 +106,7 @@ npm start
 | `npm run dev` | Servidor de desenvolvimento do Vite (porta 5173) |
 | `npm run build` | Gera a versão de produção em `dist/` |
 | `npm run preview` | Serve o `dist/` para conferir antes de publicar |
-| `npm run server` | Sobe apenas a API Express (porta 3000) |
+| `npm run server` | Sobe apenas a API (porta 3000) |
 | `npm start` | Sobe o site e a API ao mesmo tempo |
 
 > **Nota:** até a Fase 5 o backend ainda não existe. `npm run dev` é o
@@ -177,9 +200,11 @@ DoceFefe21/
 │   ├── product-service.js       Catálogo do visitante
 │   ├── upload.js                Validação e gravação de arquivos
 │   ├── product-admin-service.js Catálogo da loja     (Fase 9)
-│   └── admin-service.js         Resumo, estoque e clientes (Fase 9)
+│   ├── admin-service.js         Resumo, estoque e clientes (Fase 9)
+│   ├── reseller-service.js      Candidaturas e desconto  (Fase 10)
+│   └── manual-order-service.js  Pedido do WhatsApp      (Fase 13)
 │
-├── database/                    Arquivos SQL, executados EM ORDEM
+├── database/                    24 arquivos SQL, executados EM ORDEM
 │   ├── 01-schema.sql            Tabelas e relacionamentos
 │   ├── 02-rls.sql               Políticas de segurança
 │   ├── 03-seed.sql              Dados de demonstração
@@ -187,7 +212,12 @@ DoceFefe21/
 │   ├── 13-criar-admin.sql       Promove uma conta a administradora
 │   ├── 14-painel-admin.sql      Fotos, estoque e resumo  (Fase 9)
 │   ├── 15-revendedores.sql      Desconto e pedido mínimo (Fase 10)
-│   └── 16-conferencia-sem-comprovante.sql   Correção
+│   ├── 19-estoque-nao-vaza-rascunho.sql     Correção de segurança
+│   ├── 20-pedido-manual.sql     Lançar, cancelar e apagar (Fase 13)
+│   ├── 24-perfil-guarda-o-telefone.sql      Correção
+│   └── LIMPEZA-dados-de-teste.sql
+│                                ⚠️ Apaga dados. SEM número de propósito:
+│                                não é migração e não se roda duas vezes.
 │
 ├── robots.txt
 ├── sitemap.xml
@@ -462,13 +492,20 @@ pública e autenticada.
 | 10 | Revendedores e atacado | ✅ Concluída |
 | 11 | Separação do dia | ✅ Concluída |
 | 12 | Testes, segurança e publicação | ✅ Concluída |
+| 13 | A loja lança pedido | ✅ Tela e API prontas |
 
-**O site está no ar:** <https://docefefe21.onrender.com>
+**O site está no ar:** <https://docefefe.com.br>
 
 A Fase 12 entregou as 15 suítes de teste, a auditoria de segurança (incluindo
 um teste de invasão feito de fora, usando só a chave pública que todo
 navegador baixa), a **política de privacidade**, a página 404, o `sitemap.xml`
 e a publicação no Render. O passo a passo está em [`DEPLOY.md`](DEPLOY.md).
+
+A **Fase 13** nasceu de uma lacuna percebida com a loja já no ar: o painel
+sabia conferir, separar e despachar — mas não sabia **criar** um pedido. Como
+a maior parte da venda fecha no WhatsApp, o sistema estava cego justamente
+para o caminho principal do negócio, e mostrava uma loja menor do que ela é.
+Detalhes e o que ainda falta em [`FASE-13.md`](FASE-13.md).
 
 O que ficou registrado como melhoria futura, e não como pendência: o plano
 gratuito do Render hiberna a API depois de 15 minutos parada, e a primeira
