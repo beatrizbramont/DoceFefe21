@@ -803,11 +803,28 @@ language plpgsql
 security definer
 set search_path = public
 as $$
+declare
+  v_telefone text;
 begin
-  insert into public.profiles (id, nome, perfil)
+  -- O formulário manda o telefone junto do nome. Sem copiar aqui, ele ficaria
+  -- parado em `auth.users` e o perfil apareceria vazio para quem acabou de
+  -- digitá-lo — ver 24-perfil-guarda-o-telefone.sql.
+  v_telefone := regexp_replace(
+    coalesce(new.raw_user_meta_data->>'telefone', ''), '\D', '', 'g'
+  );
+
+  -- ⚠️ Fora do formato, guarda nulo em vez de deixar a restrição estourar.
+  -- Este gatilho roda DENTRO da inserção em auth.users: uma exceção aqui
+  -- derrubaria o cadastro inteiro, e a pessoa não conseguiria criar conta.
+  if v_telefone !~ '^[0-9]{10,11}$' then
+    v_telefone := null;
+  end if;
+
+  insert into public.profiles (id, nome, telefone, perfil)
   values (
     new.id,
     coalesce(new.raw_user_meta_data->>'nome', split_part(new.email, '@', 1)),
+    v_telefone,
     -- Todo cadastro novo nasce como 'cliente'. Promoção a admin ou
     -- revendedor é sempre ação deliberada, feita pelo backend.
     'cliente'
